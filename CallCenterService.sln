@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2027
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CallCenterService", "CallCenterService\CallCenterService.csproj", "{D587738B-5471-494D-9AB1-2BA8432876F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CallCenterService", "CallCenterService\CallCenterService.csproj", "{BB45E7B3-D5F5-4A18-9116-AD7E53C35C71}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D587738B-5471-494D-9AB1-2BA8432876F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D587738B-5471-494D-9AB1-2BA8432876F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D587738B-5471-494D-9AB1-2BA8432876F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D587738B-5471-494D-9AB1-2BA8432876F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB45E7B3-D5F5-4A18-9116-AD7E53C35C71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB45E7B3-D5F5-4A18-9116-AD7E53C35C71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB45E7B3-D5F5-4A18-9116-AD7E53C35C71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB45E7B3-D5F5-4A18-9116-AD7E53C35C71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {579FF8D8-8CAD-4EDA-93DD-5FDD13E6FC77}
+		SolutionGuid = {AF4E4857-4A76-4FE0-A103-8E527402C738}
 	EndGlobalSection
 EndGlobal
