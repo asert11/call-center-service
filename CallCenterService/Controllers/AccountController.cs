@@ -6,16 +6,23 @@ using CallCenterService.ViewModels;
 using CallCenterService.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace CallCenterService.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly DatabaseContext _dbContext;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AccountController(DatabaseContext dbContext, UserManager<ApplicationUser> userManager, 
+                                 SignInManager<ApplicationUser> signInManager)
         {
+            _dbContext = dbContext;
             _userManager = userManager;
             _signInManager = signInManager;
         }
@@ -44,34 +51,61 @@ namespace CallCenterService.Controllers
         }
 
         [HttpGet]
-        public IActionResult Register()
+        public IActionResult AddUser()
         {
-            return View();
+            var vm = new AddUserViewModel();
+
+            return View(vm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel vm)
+        public async Task<IActionResult> AddUser(AddUserViewModel vm)
         {
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = vm.Email, Email = vm.Email };
                 var result = await _userManager.CreateAsync(user, vm.Password);
 
-                if (result.Succeeded)
-                {
-                    await _signInManager.SignInAsync(user, false);
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error.Description);
-                    }
-                }
+                return RedirectToAction("Users");
             }
             return View(vm);
-
         }
+
+        public IActionResult Users()
+        {
+            var vm = new UsersViewModel()
+            {
+                Users = _dbContext.Users.OrderBy(u => u.Email).ToList()
+            };
+
+            return View(vm);
+        }
+
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Users");
+            }
+
+            var user = await GetUserById(id);
+            var logins = user.Logins;
+
+            using (var transaction = _dbContext.Database.BeginTransaction())
+            {
+                foreach (var login in logins.ToList())
+                {
+                    await _userManager.RemoveLoginAsync(user, login.LoginProvider, login.ProviderKey);
+                }
+
+                await _userManager.DeleteAsync(user);
+                transaction.Commit();
+            }
+
+            return RedirectToAction("Users");
+        }
+
+        private async Task<ApplicationUser> GetUserById(string id) =>
+           await _userManager.FindByIdAsync(id);
     }
 }

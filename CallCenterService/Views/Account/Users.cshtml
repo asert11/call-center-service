@@ -1,0 +1,23 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using CallCenterService.Models;
+@model CallCenterService.ViewModels.UsersViewModel
+@inject UserManager<ApplicationUser> userManager
+
+<table>
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td><a asp-controller="Account" asp-action="DeleteUser" asp-route-id="@user.Id">Delete User</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a asp-action="AddUser">Add User</a>
