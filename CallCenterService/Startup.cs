@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using CallCenterService.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using CallCenterService.Configuration;
 
 namespace CallCenterService
 {
@@ -66,6 +67,10 @@ namespace CallCenterService
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            new Seed(app.ApplicationServices.GetService<RoleManager<IdentityRole>>(),
+                     app.ApplicationServices.GetService<UserManager<ApplicationUser>>())
+                .SeedDatabase();
         }
     }
 }

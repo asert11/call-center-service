@@ -1,0 +1,9 @@
+﻿@model CallCenterService.ViewModels.EditUserViewModel
+
+<h3>Edit user @Model.Email</h3>
+<div asp-validation-summary="All"></div>
+<form asp-controller="Account" asp-action="EditUser">
+    <input asp-for="UserId" type="hidden" />
+    <select asp-for="Role" asp-items="Model.Roles"></select>
+    <input type="submit" value="Edit" />
+</form>

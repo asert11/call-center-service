@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace CallCenterService.ViewModels
 {
@@ -13,5 +14,10 @@ namespace CallCenterService.ViewModels
         [Required, MinLength(6), MaxLength(50), DataType(DataType.Password), Display(Name = "Confirm Password")]
         [Compare("Password", ErrorMessage = "The password does not match the confirmation password.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        public string Role { get; set; }
+
+        public SelectList Roles { get; set; }
     }
 }
