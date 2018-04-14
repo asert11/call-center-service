@@ -7,5 +7,7 @@ namespace CallCenterService.Models
     {
         public DatabaseContext(DbContextOptions<DatabaseContext> options): base(options)
         {}
+
+        public DbSet<Fault> Faults { get; set; }
     }
 }
