@@ -66,6 +66,26 @@ namespace CallCenterService.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("CallCenterService.Models.Fault", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ClientFirstName");
+
+                    b.Property<int>("ClientId");
+
+                    b.Property<string>("ClientSecondName");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("PaymentData");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Faults");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
