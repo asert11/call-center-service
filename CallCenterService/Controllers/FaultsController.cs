@@ -18,13 +18,13 @@ namespace CallCenterService.Controllers
             _context = context;
         }
 
-        // GET: Faults
+
         public async Task<IActionResult> Index()
         {
             return View(await _context.Faults.ToListAsync());
         }
 
-        // GET: Faults/Details/5
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -42,15 +42,12 @@ namespace CallCenterService.Controllers
             return View(fault);
         }
 
-        // GET: Faults/Create
+
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Faults/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,ClientFirstName,ClientSecondName,ClientId,Description,PaymentData")] Fault fault)
@@ -64,7 +61,7 @@ namespace CallCenterService.Controllers
             return View(fault);
         }
 
-        // GET: Faults/Edit/5
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -80,9 +77,6 @@ namespace CallCenterService.Controllers
             return View(fault);
         }
 
-        // POST: Faults/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,ClientFirstName,ClientSecondName,ClientId,Description,PaymentData")] Fault fault)
@@ -115,7 +109,7 @@ namespace CallCenterService.Controllers
             return View(fault);
         }
 
-        // GET: Faults/Delete/5
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -133,7 +127,7 @@ namespace CallCenterService.Controllers
             return View(fault);
         }
 
-        // POST: Faults/Delete/5
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
