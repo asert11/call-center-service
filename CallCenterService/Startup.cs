@@ -68,7 +68,9 @@ namespace CallCenterService
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            new Seed(app.ApplicationServices.GetService<RoleManager<IdentityRole>>(),
+
+            new Seed(app.ApplicationServices.GetService<DatabaseContext>(),
+                     app.ApplicationServices.GetService<RoleManager<IdentityRole>>(),
                      app.ApplicationServices.GetService<UserManager<ApplicationUser>>())
                 .SeedDatabase();
         }

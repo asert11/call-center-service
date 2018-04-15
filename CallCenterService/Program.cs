@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using CallCenterService.Models;
 
 namespace CallCenterService
 {
@@ -18,6 +20,11 @@ namespace CallCenterService
                 .UseStartup<Startup>()
                 .UseApplicationInsights()
                 .Build();
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                SeedFaults.InitializeFaults(services);
+            }
 
             host.Run();
         }

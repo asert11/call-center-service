@@ -10,11 +10,13 @@ namespace CallCenterService.Configuration
 {
     public class Seed
     {
+        private readonly DatabaseContext _dbContext;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public Seed(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
+        public Seed(DatabaseContext dbContext, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
         {
+            _dbContext = dbContext;
             _roleManager = roleManager;
             _userManager = userManager;
         }
@@ -23,6 +25,7 @@ namespace CallCenterService.Configuration
         {
             await new UserRoleSeed(_roleManager).Seed();
             await new UserSeed(_userManager).Seed();
+
         }
     }
 }
