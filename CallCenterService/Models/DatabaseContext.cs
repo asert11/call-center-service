@@ -9,5 +9,6 @@ namespace CallCenterService.Models
         {}
 
         public DbSet<Fault> Faults { get; set; }
+        public DbSet<EventHistory> EventHistory { get; set; }
     }
 }

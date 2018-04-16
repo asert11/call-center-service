@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CallCenterService.Models;
 
+
+
 namespace CallCenterService.Controllers
 {
     public class FaultsController : Controller
@@ -55,6 +57,15 @@ namespace CallCenterService.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(fault);
+
+                EventHistory ev = new EventHistory
+                {
+                    Id = fault.ClientId,      // this should be autoincremnted, and it set to be, but it becomes NULL and i dont know why
+                    Description = "Faults for client of Id: " + fault.ClientId + " has been added",
+                    Date = System.DateTime.Now
+                };
+
+                _context.Add(ev);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
