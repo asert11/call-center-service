@@ -86,6 +86,20 @@ namespace CallCenterService.Migrations
                     b.ToTable("Faults");
                 });
 
+            modelBuilder.Entity("CallCenterService.Models.ServicerFault", b =>
+                {
+                    b.Property<int>("IdFault")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<int>("IdServicer");
+
+                    b.HasKey("IdFault");
+
+                    b.ToTable("ServicerFault");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
                 {
                     b.Property<string>("Id")

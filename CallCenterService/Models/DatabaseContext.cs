@@ -9,5 +9,7 @@ namespace CallCenterService.Models
         {}
 
         public DbSet<Fault> Faults { get; set; }
+        public DbSet<ServicerFault> ServicerFault { get; set; }
+        
     }
 }

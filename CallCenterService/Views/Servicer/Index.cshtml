@@ -1,0 +1,42 @@
+@model IEnumerable<CallCenterService.Models.Fault>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Faults</h2>
+
+
+<table class="table">
+    <thead>
+        <tr>
+              
+                <th>
+                    @Html.DisplayNameFor(model => model.ClientId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+               
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+          
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientId)
+            </td>
+           
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentData)
+            </td>
+            <td>
+               
+
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
