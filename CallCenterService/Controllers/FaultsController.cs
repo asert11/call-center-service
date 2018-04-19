@@ -56,7 +56,7 @@ namespace CallCenterService.Controllers
             {
                 _context.Add(fault);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Registrant");
             }
             return View(fault);
         }
