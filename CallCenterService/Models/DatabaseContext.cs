@@ -8,7 +8,12 @@ namespace CallCenterService.Models
         public DatabaseContext(DbContextOptions<DatabaseContext> options): base(options)
         {}
 
+        public DbSet<Client> Clients { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Servicer> Servicers { get; set; }
+        public DbSet<Repair> Repairs { get; set; }
         public DbSet<Fault> Faults { get; set; }
+    
         public DbSet<ServicerFault> ServicerFault { get; set; }
         
     }
