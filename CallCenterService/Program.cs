@@ -23,7 +23,6 @@ namespace CallCenterService
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
-                SeedFaults.InitializeFaults(services);
             }
 
             host.Run();
