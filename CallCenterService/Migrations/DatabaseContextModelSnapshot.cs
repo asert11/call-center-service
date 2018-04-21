@@ -139,6 +139,10 @@ namespace CallCenterService.Migrations
 
                     b.Property<int?>("FaultId");
 
+                    b.Property<float>("PartsPrice");
+
+                    b.Property<float>("Price");
+
                     b.Property<int?>("ServicerId");
 
                     b.HasKey("RepairId");

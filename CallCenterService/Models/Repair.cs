@@ -16,5 +16,7 @@ namespace CallCenterService.Models
         public String Description { get; set; }
         [Required]
         public DateTime  Date { get; set; }
+        public float Price { get; set; }
+        public float PartsPrice { get; set; }
     }
 }
