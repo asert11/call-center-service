@@ -19,11 +19,35 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Clients
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchClientName, string searchClientSurname, string searchClientAddress)
         {
-            return View(await _context.Clients.ToListAsync());
-        }
+            var name = from m in _context.Clients
+                       select m;
 
+
+            if (!String.IsNullOrEmpty(searchClientName))
+            {
+                name = name.Where(s => s.FirstName.Equals(searchClientName));
+            }
+
+            if (!String.IsNullOrEmpty(searchClientSurname))
+            {
+                name = name.Where(s => s.SecondName.Equals(searchClientSurname));
+            }
+
+            if (!String.IsNullOrEmpty(searchClientAddress))
+            {
+                name = name.Where(s => s.Adress.Equals(searchClientAddress));
+            }
+
+            return View(await name.ToListAsync());
+
+        }
+        [HttpPost]
+        public string Index(string searchClientName, bool notUsed)
+        {
+            return "From [HttpPost]Index: filter on " + searchClientName ;
+        }
         // GET: Clients/Details/5
         public async Task<IActionResult> Details(int? id)
         {
