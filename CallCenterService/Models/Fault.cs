@@ -8,26 +8,22 @@ using System.Threading.Tasks;
 
 namespace CallCenterService.Models
 {
-    public class Fault : IValidatableObject
+    public class Fault
     {
         [Key]
         public int FaultId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [ForeignKey("ClientId")]
+        public int ClientId { get; set; }
+        public String ClientDescription { get; set; }
+        public String Status { get; set; }
+        public DateTime ApplicationDate { get; set; }
         public virtual Client Client { get; set; }
         public virtual Product Product { get; set; }
-        [Required]
-        public String ClientDescription { get; set; }
-        [Required]
-        public String Status { get; set; }
-        [Required]
-        public DateTime ApplicationDate { get; set; }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        public Fault()
         {
-            if (Status != "Open" || Status != "In progress" || Status != "Done")
-            {
-                yield return new ValidationResult
-                    ("Wrong Status!");
-            }
+            Status = "Open";
         }
-    }
+}
 }

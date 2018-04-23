@@ -17,5 +17,10 @@ namespace CallCenterService.Controllers
         {
             return RedirectToAction("Create", "Faults");
         }
+
+        public IActionResult AddClients()
+        {
+            return RedirectToAction("Index", "Clients");
+        }
     }
 }

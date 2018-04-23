@@ -53,7 +53,7 @@ namespace CallCenterService.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FaultId,ClientDescription,Status,ApplicationDate")] Fault fault)
+        public async Task<IActionResult> Create([Bind("FaultId,ClientId,ClientDescription,Status,ApplicationDate")] Fault fault)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +85,7 @@ namespace CallCenterService.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FaultId,ClientDescription,Status,ApplicationDate")] Fault fault)
+        public async Task<IActionResult> Edit(int id, [Bind("FaultId,ClientId,ClientDescription,Status,ApplicationDate")] Fault fault)
         {
             if (id != fault.FaultId)
             {
