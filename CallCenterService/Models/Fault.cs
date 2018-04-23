@@ -10,6 +10,12 @@ namespace CallCenterService.Models
 {
     public class Fault
     {
+
+        public Fault()
+        {
+            this.Status = "Open";
+        }
+
         [Key]
         public int FaultId { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -21,9 +27,6 @@ namespace CallCenterService.Models
         public virtual Client Client { get; set; }
         public virtual Product Product { get; set; }
 
-        public Fault()
-        {
-            Status = "Open";
-        }
+ 
 }
 }

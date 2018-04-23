@@ -55,8 +55,11 @@ namespace CallCenterService.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("FaultId,ClientId,ClientDescription,Status,ApplicationDate")] Fault fault)
         {
+
             if (ModelState.IsValid)
             {
+                fault.Status = "Open";
+                fault.ApplicationDate = DateTime.Now;
                 _context.Add(fault);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
