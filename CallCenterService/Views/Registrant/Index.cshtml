@@ -1,7 +1,43 @@
-<h2>Registrant panel</h2>
+@model IEnumerable<CallCenterService.Models.Fault>
 
-<p>
-    <br />
-    <br />
-    <a asp-action="AddFault">Add fault</a>
-</p>
+@{
+    ViewData["Title"] = "Registrant Panle";
+}
+
+<h2>Index</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ClientDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicationDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClientDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApplicationDate)
+                </td>
+                <td>
+                    <a asp-action="SetServicer" asp-route-id="@item.FaultId">Add Servicer</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

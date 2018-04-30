@@ -209,6 +209,14 @@ namespace CallCenterService.Controllers
             return View(vm);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Login", "Account");
+        }
+
         private async Task<ApplicationUser> GetUserById(string id) =>
            await _userManager.FindByIdAsync(id);
 

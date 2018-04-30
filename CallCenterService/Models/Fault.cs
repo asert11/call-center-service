@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CallCenterService.Models
 {
-    public class Fault : IValidatableObject
+    public class Fault //: IValidatableObject
     {
         [Key]
         public int FaultId { get; set; }
@@ -21,13 +21,13 @@ namespace CallCenterService.Models
         [Required]
         public DateTime ApplicationDate { get; set; }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (Status != "Open" || Status != "In progress" || Status != "Done")
-            {
-                yield return new ValidationResult
-                    ("Wrong Status!");
-            }
-        }
+        //public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        //{
+        //    if (Status != "Open" || Status != "In progress" || Status != "Done")
+        //    {
+        //        yield return new ValidationResult
+        //            ("Wrong Status!");
+        //    }
+        //}
     }
 }

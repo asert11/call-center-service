@@ -1,0 +1,44 @@
+﻿@model CallCenterService.ViewModels.SetServicerRegistrantViewModel
+
+<h2>Set Servicer</h2>
+
+<h3>Fault: @Model.FaultData.FaultId @Model.FaultData.ClientDescription @Model.FaultData.Status</h3>
+
+<div asp-validation-summary="All"></div>
+<form asp-controller="Registrant" asp-action="SetServicer">
+    <input asp-for="FaultId" type="hidden" />
+    <div><input type="submit" value="Set Servicer" /></div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Servicer Id
+                </th>
+                <th>
+                    First Name
+                </th>
+                <th>
+                    Last Name
+                </th>
+                <th>
+                    Specialization
+                </th>
+                <th>
+                    Option
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var servicer in Model.Servicers)
+            {
+                <tr>
+                    <td>@servicer.ServicerId</td>
+                    <td>@servicer.FirstName</td>
+                    <td>@servicer.SecondName</td>
+                    <td>@servicer.Specialization</td>
+                    <td><input asp-for="ServicerId" value="@servicer.ServicerId" type="radio" /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
