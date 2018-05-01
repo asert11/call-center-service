@@ -13,12 +13,9 @@ namespace CallCenterService.Models
         public DbSet<Servicer> Servicers { get; set; }
         public DbSet<Repair> Repairs { get; set; }
         public DbSet<Fault> Faults { get; set; }
-<<<<<<< HEAD
         public DbSet<EventHistory> EventHistory { get; set; }
-=======
-    
+
         public DbSet<ServicerFault> ServicerFault { get; set; }
-        
->>>>>>> 1013575470d6e80506e49ced4d6d5ff949062d51
+
     }
 }
