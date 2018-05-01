@@ -7,26 +7,24 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CallCenterService.Models;
 
-
-
 namespace CallCenterService.Controllers
 {
-    public class FaultsController : Controller
+    public class ProductsController : Controller
     {
         private readonly DatabaseContext _context;
 
-        public FaultsController(DatabaseContext context)
+        public ProductsController(DatabaseContext context)
         {
             _context = context;    
         }
 
-        // GET: Faults
+        // GET: Products
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Faults.ToListAsync());
+            return View(await _context.Products.ToListAsync());
         }
 
-        // GET: Faults/Details/5
+        // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,48 +32,39 @@ namespace CallCenterService.Controllers
                 return NotFound();
             }
 
-            var fault = await _context.Faults
-                .SingleOrDefaultAsync(m => m.FaultId == id);
-            if (fault == null)
+            var product = await _context.Products
+                .SingleOrDefaultAsync(m => m.ProductID == id);
+            if (product == null)
             {
                 return NotFound();
             }
 
-            return View(fault);
+            return View(product);
         }
 
-        // GET: Faults/Create
+        // GET: Products/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Faults/Create
+        // POST: Products/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FaultId,ClientDescription,Status,ApplicationDate")] Fault fault)
+        public async Task<IActionResult> Create([Bind("ProductID,Name,Type")] Product product)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(fault);
-
-                EventHistory ev = new EventHistory
-                {
-                    Id = fault.ClientId,      // this should be autoincremnted, and it set to be, but it becomes NULL and i dont know why
-                    Description = "Faults for client of Id: " + fault.ClientId + " has been added",
-                    Date = System.DateTime.Now
-                };
-
-                _context.Add(ev);
+                _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(fault);
+            return View(product);
         }
 
-        // GET: Faults/Edit/5
+        // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,22 +72,22 @@ namespace CallCenterService.Controllers
                 return NotFound();
             }
 
-            var fault = await _context.Faults.SingleOrDefaultAsync(m => m.FaultId == id);
-            if (fault == null)
+            var product = await _context.Products.SingleOrDefaultAsync(m => m.ProductID == id);
+            if (product == null)
             {
                 return NotFound();
             }
-            return View(fault);
+            return View(product);
         }
 
-        // POST: Faults/Edit/5
+        // POST: Products/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FaultId,ClientDescription,Status,ApplicationDate")] Fault fault)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductID,Name,Type")] Product product)
         {
-            if (id != fault.FaultId)
+            if (id != product.ProductID)
             {
                 return NotFound();
             }
@@ -107,12 +96,12 @@ namespace CallCenterService.Controllers
             {
                 try
                 {
-                    _context.Update(fault);
+                    _context.Update(product);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FaultExists(fault.FaultId))
+                    if (!ProductExists(product.ProductID))
                     {
                         return NotFound();
                     }
@@ -123,10 +112,10 @@ namespace CallCenterService.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(fault);
+            return View(product);
         }
 
-        // GET: Faults/Delete/5
+        // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,30 +123,30 @@ namespace CallCenterService.Controllers
                 return NotFound();
             }
 
-            var fault = await _context.Faults
-                .SingleOrDefaultAsync(m => m.FaultId == id);
-            if (fault == null)
+            var product = await _context.Products
+                .SingleOrDefaultAsync(m => m.ProductID == id);
+            if (product == null)
             {
                 return NotFound();
             }
 
-            return View(fault);
+            return View(product);
         }
 
-        // POST: Faults/Delete/5
+        // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var fault = await _context.Faults.SingleOrDefaultAsync(m => m.FaultId == id);
-            _context.Faults.Remove(fault);
+            var product = await _context.Products.SingleOrDefaultAsync(m => m.ProductID == id);
+            _context.Products.Remove(product);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool FaultExists(int id)
+        private bool ProductExists(int id)
         {
-            return _context.Faults.Any(e => e.FaultId == id);
+            return _context.Products.Any(e => e.ProductID == id);
         }
     }
 }

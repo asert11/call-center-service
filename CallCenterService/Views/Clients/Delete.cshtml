@@ -1,4 +1,4 @@
-@model CallCenterService.Models.Fault
+@model CallCenterService.Models.Client
 
 @{
     ViewData["Title"] = "Delete";
@@ -8,27 +8,27 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Fault</h4>
+    <h4>Client</h4>
     <hr />
     <dl class="dl-horizontal">
-        <input type="hidden" asp-for="FaultId" />
+        <input type="hidden" asp-for="ClientId" />
         <dt>
-            @Html.DisplayNameFor(model => model.ClientDescription)
+            @Html.DisplayNameFor(model => model.FirstName)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ClientDescription)
+            @Html.DisplayFor(model => model.FirstName)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Status)
+            @Html.DisplayNameFor(model => model.SecondName)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Status)
+            @Html.DisplayFor(model => model.SecondName)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.ApplicationDate)
+            @Html.DisplayNameFor(model => model.Adress)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ApplicationDate)
+            @Html.DisplayFor(model => model.Adress)
         </dd>
     </dl>
     

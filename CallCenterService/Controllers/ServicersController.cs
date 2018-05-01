@@ -7,26 +7,24 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CallCenterService.Models;
 
-
-
 namespace CallCenterService.Controllers
 {
-    public class FaultsController : Controller
+    public class ServicersController : Controller
     {
         private readonly DatabaseContext _context;
 
-        public FaultsController(DatabaseContext context)
+        public ServicersController(DatabaseContext context)
         {
             _context = context;    
         }
 
-        // GET: Faults
+        // GET: Servicers
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Faults.ToListAsync());
+            return View(await _context.Servicers.ToListAsync());
         }
 
-        // GET: Faults/Details/5
+        // GET: Servicers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,48 +32,39 @@ namespace CallCenterService.Controllers
                 return NotFound();
             }
 
-            var fault = await _context.Faults
-                .SingleOrDefaultAsync(m => m.FaultId == id);
-            if (fault == null)
+            var servicer = await _context.Servicers
+                .SingleOrDefaultAsync(m => m.ServicerId == id);
+            if (servicer == null)
             {
                 return NotFound();
             }
 
-            return View(fault);
+            return View(servicer);
         }
 
-        // GET: Faults/Create
+        // GET: Servicers/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Faults/Create
+        // POST: Servicers/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FaultId,ClientDescription,Status,ApplicationDate")] Fault fault)
+        public async Task<IActionResult> Create([Bind("ServicerId,FirstName,SecondName,Specialization")] Servicer servicer)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(fault);
-
-                EventHistory ev = new EventHistory
-                {
-                    Id = fault.ClientId,      // this should be autoincremnted, and it set to be, but it becomes NULL and i dont know why
-                    Description = "Faults for client of Id: " + fault.ClientId + " has been added",
-                    Date = System.DateTime.Now
-                };
-
-                _context.Add(ev);
+                _context.Add(servicer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(fault);
+            return View(servicer);
         }
 
-        // GET: Faults/Edit/5
+        // GET: Servicers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,22 +72,22 @@ namespace CallCenterService.Controllers
                 return NotFound();
             }
 
-            var fault = await _context.Faults.SingleOrDefaultAsync(m => m.FaultId == id);
-            if (fault == null)
+            var servicer = await _context.Servicers.SingleOrDefaultAsync(m => m.ServicerId == id);
+            if (servicer == null)
             {
                 return NotFound();
             }
-            return View(fault);
+            return View(servicer);
         }
 
-        // POST: Faults/Edit/5
+        // POST: Servicers/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FaultId,ClientDescription,Status,ApplicationDate")] Fault fault)
+        public async Task<IActionResult> Edit(int id, [Bind("ServicerId,FirstName,SecondName,Specialization")] Servicer servicer)
         {
-            if (id != fault.FaultId)
+            if (id != servicer.ServicerId)
             {
                 return NotFound();
             }
@@ -107,12 +96,12 @@ namespace CallCenterService.Controllers
             {
                 try
                 {
-                    _context.Update(fault);
+                    _context.Update(servicer);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FaultExists(fault.FaultId))
+                    if (!ServicerExists(servicer.ServicerId))
                     {
                         return NotFound();
                     }
@@ -123,10 +112,10 @@ namespace CallCenterService.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(fault);
+            return View(servicer);
         }
 
-        // GET: Faults/Delete/5
+        // GET: Servicers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,30 +123,30 @@ namespace CallCenterService.Controllers
                 return NotFound();
             }
 
-            var fault = await _context.Faults
-                .SingleOrDefaultAsync(m => m.FaultId == id);
-            if (fault == null)
+            var servicer = await _context.Servicers
+                .SingleOrDefaultAsync(m => m.ServicerId == id);
+            if (servicer == null)
             {
                 return NotFound();
             }
 
-            return View(fault);
+            return View(servicer);
         }
 
-        // POST: Faults/Delete/5
+        // POST: Servicers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var fault = await _context.Faults.SingleOrDefaultAsync(m => m.FaultId == id);
-            _context.Faults.Remove(fault);
+            var servicer = await _context.Servicers.SingleOrDefaultAsync(m => m.ServicerId == id);
+            _context.Servicers.Remove(servicer);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool FaultExists(int id)
+        private bool ServicerExists(int id)
         {
-            return _context.Faults.Any(e => e.FaultId == id);
+            return _context.Servicers.Any(e => e.ServicerId == id);
         }
     }
 }

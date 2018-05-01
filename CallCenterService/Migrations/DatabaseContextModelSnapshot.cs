@@ -66,24 +66,125 @@ namespace CallCenterService.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("CallCenterService.Models.Fault", b =>
+            modelBuilder.Entity("CallCenterService.Models.Client", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ClientId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ClientFirstName");
+                    b.Property<string>("Adress")
+                        .IsRequired();
 
-                    b.Property<int>("ClientId");
+                    b.Property<string>("FirstName")
+                        .IsRequired();
 
-                    b.Property<string>("ClientSecondName");
+                    b.Property<string>("SecondName")
+                        .IsRequired();
+
+                    b.HasKey("ClientId");
+
+                    b.ToTable("Clients");
+                });
+
+            modelBuilder.Entity("CallCenterService.Models.Fault", b =>
+                {
+                    b.Property<int>("FaultId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("ApplicationDate");
+
+                    b.Property<string>("ClientDescription")
+                        .IsRequired();
+
+                    b.Property<int?>("ClientId");
+
+                    b.Property<int?>("ProductID");
+
+                    b.Property<string>("Status")
+                        .IsRequired();
+
+                    b.HasKey("FaultId");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("ProductID");
+
+                    b.ToTable("Faults");
+                });
+
+            modelBuilder.Entity("CallCenterService.Models.Product", b =>
+                {
+                    b.Property<int>("ProductID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<string>("Type")
+                        .IsRequired();
+
+                    b.HasKey("ProductID");
+
+                    b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("CallCenterService.Models.Repair", b =>
+                {
+                    b.Property<int>("RepairId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<string>("Description")
+                        .IsRequired();
+
+                    b.Property<int?>("FaultId");
+
+                    b.Property<float>("PartsPrice");
+
+                    b.Property<float>("Price");
+
+                    b.Property<int?>("ServicerId");
+
+                    b.HasKey("RepairId");
+
+                    b.HasIndex("FaultId");
+
+                    b.HasIndex("ServicerId");
+
+                    b.ToTable("Repairs");
+                });
+
+            modelBuilder.Entity("CallCenterService.Models.Servicer", b =>
+                {
+                    b.Property<int>("ServicerId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("FirstName")
+                        .IsRequired();
+
+                    b.Property<string>("SecondName")
+                        .IsRequired();
+
+                    b.Property<string>("Specialization")
+                        .IsRequired();
+
+                    b.HasKey("ServicerId");
+
+                    b.ToTable("Servicers");
+                });
+
+            modelBuilder.Entity("CallCenterService.Models.ServicerFault", b =>
+                {
+                    b.Property<int>("IdFault")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("PaymentData");
+                    b.Property<int>("IdServicer");
 
-                    b.HasKey("Id");
+                    b.HasKey("IdFault");
 
-                    b.ToTable("Faults");
+                    b.ToTable("ServicerFault");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
@@ -191,6 +292,28 @@ namespace CallCenterService.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("CallCenterService.Models.Fault", b =>
+                {
+                    b.HasOne("CallCenterService.Models.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId");
+
+                    b.HasOne("CallCenterService.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductID");
+                });
+
+            modelBuilder.Entity("CallCenterService.Models.Repair", b =>
+                {
+                    b.HasOne("CallCenterService.Models.Fault", "Fault")
+                        .WithMany()
+                        .HasForeignKey("FaultId");
+
+                    b.HasOne("CallCenterService.Models.Servicer", "Servicer")
+                        .WithMany()
+                        .HasForeignKey("ServicerId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
