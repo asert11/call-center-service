@@ -63,8 +63,8 @@ namespace CallCenterService.Controllers
 
                 EventHistory ev = new EventHistory
                 {
-                    Id = fault.ClientId,      // this should be autoincremnted, and it set to be, but it becomes NULL and i dont know why
-                    Description = "Faults for client of Id: " + fault.ClientId + " has been added",
+                    Id = fault.FaultId,      // this should be autoincremnted, and it set to be, but it becomes NULL and i dont know why
+                    Description = "Faults for client of Id: " + fault.FaultId + " has been added",
                     Date = System.DateTime.Now
                 };
 
