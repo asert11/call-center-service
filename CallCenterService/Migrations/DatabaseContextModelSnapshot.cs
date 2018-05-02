@@ -85,6 +85,20 @@ namespace CallCenterService.Migrations
                     b.ToTable("Clients");
                 });
 
+            modelBuilder.Entity("CallCenterService.Models.EventHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EventHistory");
+                });
+
             modelBuilder.Entity("CallCenterService.Models.Fault", b =>
                 {
                     b.Property<int>("FaultId")
@@ -175,14 +189,16 @@ namespace CallCenterService.Migrations
 
             modelBuilder.Entity("CallCenterService.Models.ServicerFault", b =>
                 {
-                    b.Property<int>("IdFault")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Description");
 
+                    b.Property<int>("IdFault");
+
                     b.Property<int>("IdServicer");
 
-                    b.HasKey("IdFault");
+                    b.HasKey("Id");
 
                     b.ToTable("ServicerFault");
                 });

@@ -9,6 +9,7 @@ namespace CallCenterService.Models
     public class ServicerFault
     {
        [Key]
+        public int Id { get; set; }
         public int IdFault { get; set; }
         public int IdServicer { get; set; }
         public string Description { get; set; }
