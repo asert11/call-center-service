@@ -5,7 +5,7 @@ namespace CallCenterService.ViewModels
 {
     public class AddUserViewModel
     {
-        [Required, MaxLength(256), Display(Name = "Username")]
+        [Required, MinLength(6), MaxLength(256), Display(Name = "Username")]
         public string UserName { get; set; }
 
         [Required, EmailAddress, MaxLength(256), Display(Name = "Email Address")]

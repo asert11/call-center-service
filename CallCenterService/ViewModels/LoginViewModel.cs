@@ -4,8 +4,9 @@ namespace CallCenterService.ViewModels
 {
     public class LoginViewModel
     {
-        [Required]
+        [Required, Display(Name = "Username")]
         public string UserName { get; set; }
+
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }

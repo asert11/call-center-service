@@ -85,20 +85,31 @@ namespace CallCenterService.Controllers
                     var result = await _userManager.CreateAsync(user, vm.Password);
                     _dbContext.SaveChanges();
 
+                    if(!result.Succeeded)
+                    {
+                        transaction.Rollback();
+                        foreach(var error in result.Errors)
+                        {
+                            ModelState.AddModelError("", error.Description);
+                        }
+                        vm.Roles = GetUserRoles();
+                        return View(vm);
+                    }
+
                     user = await _userManager.FindByNameAsync(vm.UserName);
                     await _userManager.AddToRoleAsync(user, vm.Role);
                     _dbContext.SaveChanges();
 
                     transaction.Commit();
-
-                    return RedirectToAction("Users");
+                    
+                    return RedirectToAction("Index");
                 }
             }
             vm.Roles = GetUserRoles();
             return View(vm);
         }
 
-        public IActionResult Users()
+        public IActionResult Index()
         {
             var vm = new UsersViewModel()
             {
@@ -112,17 +123,20 @@ namespace CallCenterService.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction("Users");
+                return RedirectToAction("Index");
             }
 
             var user = await GetUserById(id);
+            if (user == null)
+                return RedirectToAction("Index");
+
             var logins = user.Logins;
             var rolesForUser = await _userManager.GetRolesAsync(user);
 
             foreach (var item in rolesForUser.ToList())
             {
                 if (item == "Admin")
-                    return RedirectToAction("Users");
+                    return RedirectToAction("Index");
             }
 
             using (var transaction = _dbContext.Database.BeginTransaction())
@@ -145,19 +159,22 @@ namespace CallCenterService.Controllers
                 transaction.Commit();
             }
 
-            return RedirectToAction("Users");
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
         public async Task<IActionResult> EditUser(string id)
         {
             var user = await GetUserById(id);
+            if (user == null)
+                return RedirectToAction("Index");
+
             var rolesForUser = await _userManager.GetRolesAsync(user);
             
             foreach (var item in rolesForUser.ToList())
             {
                 if (item == "Admin")
-                    return RedirectToAction("Users");
+                    return RedirectToAction("Index");
             }
 
             var vm = new EditUserViewModel
@@ -177,12 +194,15 @@ namespace CallCenterService.Controllers
         public async Task<IActionResult> EditUser(EditUserViewModel vm)
         {
             var user = await GetUserById(vm.UserId);
+            if (user == null)
+                return RedirectToAction("Index");
+
             var rolesForUser = await _userManager.GetRolesAsync(user);
 
             foreach(var item in rolesForUser.ToList())
             {
                 if(item == "Admin")
-                    return RedirectToAction("Users");
+                    return RedirectToAction("Index");
             }
 
             if (ModelState.IsValid)
@@ -218,7 +238,7 @@ namespace CallCenterService.Controllers
                     await _userManager.UpdateAsync(user);
 
                     transaction.Commit();
-                    return RedirectToAction("Users");
+                    return RedirectToAction("Index");
                 }
             }
             vm.Email = user.Email;
