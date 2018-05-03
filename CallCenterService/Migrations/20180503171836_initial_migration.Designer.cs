@@ -8,7 +8,7 @@ using CallCenterService.Models;
 namespace CallCenterService.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20180503134625_initial_migration")]
+    [Migration("20180503171836_initial_migration")]
     partial class initial_migration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,8 @@ namespace CallCenterService.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
+                    b.Property<string>("Address");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
@@ -31,6 +33,10 @@ namespace CallCenterService.Migrations
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("LastName");
 
                     b.Property<bool>("LockoutEnabled");
 

@@ -44,7 +44,7 @@ namespace CallCenterService.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(vm.Email, vm.Password, vm.RememberMe, false);
+                var result = await _signInManager.PasswordSignInAsync(vm.UserName, vm.Password, vm.RememberMe, false);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index", "Home");
@@ -79,11 +79,12 @@ namespace CallCenterService.Controllers
 
                 using (var transaction =_dbContext.Database.BeginTransaction())
                 {
-                    var user = new ApplicationUser { UserName = vm.Email, Email = vm.Email };
+                    var user = new ApplicationUser { UserName = vm.UserName, Email = vm.Email,
+                            FirstName = vm.FirstName, LastName = vm.LastName, Address = vm.Address};
                     var result = await _userManager.CreateAsync(user, vm.Password);
                     _dbContext.SaveChanges();
 
-                    user = await _userManager.FindByNameAsync(vm.Email);
+                    user = await _userManager.FindByNameAsync(vm.UserName);
                     await _userManager.AddToRoleAsync(user, vm.Role);
                     _dbContext.SaveChanges();
 
@@ -100,7 +101,7 @@ namespace CallCenterService.Controllers
         {
             var vm = new UsersViewModel()
             {
-                Users = _dbContext.Users.OrderBy(u => u.Email).Include(u => u.Roles).ToList()
+                Users = _dbContext.Users.OrderBy(u => u.UserName).Include(u => u.Roles).ToList()
             };
 
             return View(vm);
@@ -151,7 +152,7 @@ namespace CallCenterService.Controllers
         {
             var user = await GetUserById(id);
             var rolesForUser = await _userManager.GetRolesAsync(user);
-
+            
             foreach (var item in rolesForUser.ToList())
             {
                 if (item == "Admin")
@@ -162,7 +163,11 @@ namespace CallCenterService.Controllers
             {
                 Roles = GetUserRoles(),
                 UserId = id,
-                Email = user.Email
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Address = user.Address,
+                UserName = user.UserName
             };
             return View(vm);
         }
@@ -184,6 +189,10 @@ namespace CallCenterService.Controllers
                 if (vm.Role == "Admin")
                 {
                     vm.Email = user.Email;
+                    vm.UserName = user.UserName;
+                    vm.FirstName = user.FirstName;
+                    vm.LastName = user.LastName;
+                    vm.Address = user.Address;
                     vm.Roles = GetUserRoles();
                     return View(vm);
                 }
@@ -199,12 +208,23 @@ namespace CallCenterService.Controllers
                     }
 
                     await _userManager.AddToRoleAsync(user, vm.Role);
+                    await _userManager.SetEmailAsync(user, vm.Email);
+
+                    user.FirstName = vm.FirstName;
+                    user.LastName = vm.LastName;
+                    user.Address = vm.Address;
+
+                    await _userManager.UpdateAsync(user);
 
                     transaction.Commit();
                     return RedirectToAction("Users");
                 }
             }
             vm.Email = user.Email;
+            vm.UserName = user.UserName;
+            vm.FirstName = user.FirstName;
+            vm.LastName = user.LastName;
+            vm.Address = user.Address;
             vm.Roles = GetUserRoles();
             return View(vm);
         }

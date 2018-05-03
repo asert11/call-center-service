@@ -18,53 +18,53 @@ namespace CallCenterService.Configuration
 
         public async Task Seed()
         {
-            if ((await _userManager.FindByNameAsync("admin@admin.com")) == null)
+            if ((await _userManager.FindByNameAsync("admin")) == null)
             {
-                var user = new ApplicationUser { UserName = "admin@admin.com", Email = "admin@admin.com" };
+                var user = new ApplicationUser { UserName = "admin", Email = "admin@admin.com" };
                 var result = await _userManager.CreateAsync(user, "Admin123!");
-                if(result.Succeeded)
+                if (result.Succeeded)
                 {
-                    user = await _userManager.FindByNameAsync("admin@admin.com");
+                    user = await _userManager.FindByNameAsync("admin");
                     await _userManager.AddToRoleAsync(user, "Admin");
                 }
             }
-            if ((await _userManager.FindByNameAsync("Rejestrujacy@Rejestrujacy")) == null)
+            if ((await _userManager.FindByNameAsync("Rejestrujacy")) == null)
             {
-                var user = new ApplicationUser { UserName = "Rejestrujacy@Rejestrujacy", Email = "Rejestrujacy@Rejestrujacy" };
+                var user = new ApplicationUser { UserName = "Rejestrujacy", Email = "Rejestrujacy@Rejestrujacy" };
                 var result = await _userManager.CreateAsync(user, "Rejestrujący123!");
                 if (result.Succeeded)
                 {
-                    user = await _userManager.FindByNameAsync("Rejestrujacy@Rejestrujacy");
+                    user = await _userManager.FindByNameAsync("Rejestrujacy");
                     await _userManager.AddToRoleAsync(user, "Rejestrujący");
                 }
             }
-            if ((await _userManager.FindByNameAsync("Serwisant@Serwisant")) == null)
+            if ((await _userManager.FindByNameAsync("Serwisant")) == null)
             {
-                var user = new ApplicationUser { UserName = "Serwisant@Serwisant", Email = "Serwisant@Serwisant" };
+                var user = new ApplicationUser { UserName = "Serwisant", Email = "Serwisant@Serwisant" };
                 var result = await _userManager.CreateAsync(user, "Serwisant123!");
                 if (result.Succeeded)
                 {
-                    user = await _userManager.FindByNameAsync("Serwisant@Serwisant");
+                    user = await _userManager.FindByNameAsync("Serwisant");
                     await _userManager.AddToRoleAsync(user, "Serwisant");
                 }
             }
-            if ((await _userManager.FindByNameAsync("Kierownik@Kierownik")) == null)
+            if ((await _userManager.FindByNameAsync("Kierownik")) == null)
             {
-                var user = new ApplicationUser { UserName = "Kierownik@Kierownik", Email = "Kierownik@Kierownik" };
+                var user = new ApplicationUser { UserName = "Kierownik", Email = "Kierownik@Kierownik" };
                 var result = await _userManager.CreateAsync(user, "Kierownik123!");
                 if (result.Succeeded)
                 {
-                    user = await _userManager.FindByNameAsync("Kierownik@Kierownik");
+                    user = await _userManager.FindByNameAsync("Kierownik");
                     await _userManager.AddToRoleAsync(user, "Kierownik");
                 }
             }
-            if ((await _userManager.FindByNameAsync("Ksiegowa@Ksiegowa")) == null)
+            if ((await _userManager.FindByNameAsync("Ksiegowa")) == null)
             {
-                var user = new ApplicationUser { UserName = "Ksiegowa@Ksiegowa", Email = "Ksiegowa@Ksiegowa" };
+                var user = new ApplicationUser { UserName = "Ksiegowa", Email = "Ksiegowa@Ksiegowa" };
                 var result = await _userManager.CreateAsync(user, "Ksiegowa123!");
                 if (result.Succeeded)
                 {
-                    user = await _userManager.FindByNameAsync("Ksiegowa@Ksiegowa");
+                    user = await _userManager.FindByNameAsync("Ksiegowa");
                     await _userManager.AddToRoleAsync(user, "Księgowa");
                 }
             }

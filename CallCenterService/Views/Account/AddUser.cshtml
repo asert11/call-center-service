@@ -4,11 +4,30 @@
 
 <form method="post" asp-controller="Account" asp-action="AddUser">
     <div asp-validation-summary="All"></div>
-
+    <div>
+        <label asp-for="UserName"></label>
+        <input asp-for="UserName" />
+        <span asp-validation-for="UserName"></span>
+    </div>
     <div>
         <label asp-for="Email"></label>
         <input asp-for="Email" />
         <span asp-validation-for="Email"></span>
+    </div>
+    <div>
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" />
+        <span asp-validation-for="FirstName"></span>
+    </div>
+    <div>
+        <label asp-for="LastName"></label>
+        <input asp-for="LastName" />
+        <span asp-validation-for="LastName"></span>
+    </div>
+    <div>
+        <label asp-for="Address"></label>
+        <input asp-for="Address" />
+        <span asp-validation-for="Address"></span>
     </div>
     <div>
         <label asp-for="Password"></label>
