@@ -13,7 +13,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace CallCenterService.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin , Serwisant , Kierownik , Ksiêgowa , Rejestruj¹cy")]
+
     public class AccountController : Controller
     {
         private readonly DatabaseContext _dbContext;
