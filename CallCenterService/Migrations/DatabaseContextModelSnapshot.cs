@@ -106,15 +106,13 @@ namespace CallCenterService.Migrations
 
                     b.Property<DateTime>("ApplicationDate");
 
-                    b.Property<string>("ClientDescription")
-                        .IsRequired();
+                    b.Property<string>("ClientDescription");
 
-                    b.Property<int?>("ClientId");
+                    b.Property<int>("ClientId");
 
                     b.Property<int?>("ProductID");
 
-                    b.Property<string>("Status")
-                        .IsRequired();
+                    b.Property<string>("Status");
 
                     b.HasKey("FaultId");
 
@@ -314,7 +312,8 @@ namespace CallCenterService.Migrations
                 {
                     b.HasOne("CallCenterService.Models.Client", "Client")
                         .WithMany()
-                        .HasForeignKey("ClientId");
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("CallCenterService.Models.Product", "Product")
                         .WithMany()

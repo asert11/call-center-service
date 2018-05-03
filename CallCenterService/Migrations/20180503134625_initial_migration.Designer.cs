@@ -8,8 +8,8 @@ using CallCenterService.Models;
 namespace CallCenterService.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20180420211104_TestMigration3")]
-    partial class TestMigration3
+    [Migration("20180503134625_initial_migration")]
+    partial class initial_migration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -86,6 +86,20 @@ namespace CallCenterService.Migrations
                     b.ToTable("Clients");
                 });
 
+            modelBuilder.Entity("CallCenterService.Models.EventHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EventHistory");
+                });
+
             modelBuilder.Entity("CallCenterService.Models.Fault", b =>
                 {
                     b.Property<int>("FaultId")
@@ -93,15 +107,13 @@ namespace CallCenterService.Migrations
 
                     b.Property<DateTime>("ApplicationDate");
 
-                    b.Property<string>("ClientDescription")
-                        .IsRequired();
+                    b.Property<string>("ClientDescription");
 
-                    b.Property<int?>("ClientId");
+                    b.Property<int>("ClientId");
 
                     b.Property<int?>("ProductID");
 
-                    b.Property<string>("Status")
-                        .IsRequired();
+                    b.Property<string>("Status");
 
                     b.HasKey("FaultId");
 
@@ -140,6 +152,10 @@ namespace CallCenterService.Migrations
 
                     b.Property<int?>("FaultId");
 
+                    b.Property<float>("PartsPrice");
+
+                    b.Property<float>("Price");
+
                     b.Property<int?>("ServicerId");
 
                     b.HasKey("RepairId");
@@ -172,14 +188,16 @@ namespace CallCenterService.Migrations
 
             modelBuilder.Entity("CallCenterService.Models.ServicerFault", b =>
                 {
-                    b.Property<int>("IdFault")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Description");
 
+                    b.Property<int>("IdFault");
+
                     b.Property<int>("IdServicer");
 
-                    b.HasKey("IdFault");
+                    b.HasKey("Id");
 
                     b.ToTable("ServicerFault");
                 });
@@ -295,7 +313,8 @@ namespace CallCenterService.Migrations
                 {
                     b.HasOne("CallCenterService.Models.Client", "Client")
                         .WithMany()
-                        .HasForeignKey("ClientId");
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("CallCenterService.Models.Product", "Product")
                         .WithMany()

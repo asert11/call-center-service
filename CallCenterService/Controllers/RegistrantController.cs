@@ -114,5 +114,10 @@ namespace CallCenterService.Controllers
                 return RedirectToAction("Index");
             }
         }
+
+        public IActionResult AddClients()
+        {
+            return RedirectToAction("Index", "Clients");
+        }
     }
 }
