@@ -22,7 +22,7 @@ namespace CallCenterService.Controllers
         {
             var vm = new List<IndexRegistrantViewModel>();
 
-            var faults = _context.Faults.ToList();
+            var faults = _context.Faults.Where(f => f.Status == "Open").ToList();
             foreach(var fault in faults)
             {
                 var ivm = new IndexRegistrantViewModel();
@@ -54,6 +54,36 @@ namespace CallCenterService.Controllers
 
             return View(vm);
         }
+
+        public async Task<IActionResult> assigned_faults()
+        {
+            var faults = from m in _context.Faults
+                         select m;
+            string ss = "In-Progress";
+            if (!String.IsNullOrEmpty(ss))
+            {
+                faults = faults.Where(s => s.Status.Equals("In-Progress"));
+            }
+            return View(await faults.ToListAsync());
+        }
+
+        public async Task<IActionResult> Closed_assigned_faults()
+        {
+            var faults = from m in _context.Faults
+                         select m;
+            string ss = "Closed";
+            if (!String.IsNullOrEmpty(ss))
+            {
+                faults = faults.Where(s => s.Status.Equals("Closed"));
+            }
+            return View(await faults.ToListAsync());
+        }
+
+        public IActionResult FaultsList()
+        {
+            return RedirectToAction("", "Faults");
+        }
+
 
         public IActionResult AddFault()
         {

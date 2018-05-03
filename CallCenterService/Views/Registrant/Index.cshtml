@@ -4,16 +4,21 @@
     ViewData["Title"] = "Registrant Panel";
 }
 
-<h2>Index</h2>
+<h2>Not Assigned Faults</h2>
+<p>
+    <a asp-action="assigned_faults">Assigned Faults</a>
+</p>
+<p>
+    <a asp-action="Closed_assigned_faults">Closed Assigned Faults</a>
+</p>
 
 <p>
     <br />
     <br />
     <a asp-action="AddFault">Add fault</a>
     <a asp-action="AddClients">Clients</a>
-
+    <a asp-action="FaultsList">All Faults</a>
 </p>
-
 <table class="table">
     <thead>
         <tr>
