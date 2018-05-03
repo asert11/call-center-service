@@ -20,8 +20,45 @@ namespace CallCenterService.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Faults.ToListAsync());
+            var faults = from m in _context.Faults
+                         select m;
+            string ss = "open";
+            if (!String.IsNullOrEmpty(ss))
+            {
+                faults = faults.Where(s => s.Status.Equals("Open"));
+            }
+            return View(await faults.ToListAsync());
         }
+
+        public async Task<IActionResult> assigned_faults()
+        {
+            var faults = from m in _context.Faults
+                         select m;
+            string ss = "In-Progress";
+            if (!String.IsNullOrEmpty(ss))
+            {
+                faults = faults.Where(s => s.Status.Equals("In-Progress"));
+            }
+            return View(await faults.ToListAsync());
+        }
+
+        public async Task<IActionResult> Closed_assigned_faults()
+        {
+            var faults = from m in _context.Faults
+                         select m;
+            string ss = "Closed";
+            if (!String.IsNullOrEmpty(ss))
+            {
+                faults = faults.Where(s => s.Status.Equals("Closed"));
+            }
+            return View(await faults.ToListAsync());
+        }
+
+        public IActionResult FaultsList()
+        {
+            return RedirectToAction("", "Faults");
+        }
+
 
         public IActionResult AddFault()
         {
