@@ -34,13 +34,13 @@
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Registrant">Registrant</a></li>
-                    <li><a asp-area="" asp-controller="Account" asp-action="AddUser">Account</a></li>
+                    <li><a asp-area="" asp-controller="Account" asp-action="Users">Account</a></li>
                     <li><a asp-area="" asp-controller="Clients">Clients</a></li>
                     <li><a asp-area="" asp-controller="Faults">Faults</a></li>
                     <li><a asp-area="" asp-controller="FaultsHistory">FaultsHistory</a></li>
                     <li><a asp-area="" asp-controller="Products">Products</a></li>
                     <li><a asp-area="" asp-controller="Repairs">Repairs</a></li>
-                    <li><a asp-area="" asp-controller="Services" asp-action="Index">Services</a></li>
+                    <li><a asp-area="" asp-controller="Servicers" asp-action="Index">Services</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
