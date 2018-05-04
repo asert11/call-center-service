@@ -6,22 +6,36 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CallCenterService.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace CallCenterService.Controllers
 {
     public class RepairsController : Controller
     {
         private readonly DatabaseContext _context;
-
-        public RepairsController(DatabaseContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public string id;
+        public RepairsController(DatabaseContext context, UserManager<ApplicationUser> userManager)
         {
-            _context = context;    
+            _context = context;
+            _userManager = userManager;
         }
+      
+
+       
 
         // GET: Repairs
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Repairs.ToListAsync());
+            ApplicationUser usr = await _userManager.GetUserAsync(HttpContext.User);
+          
+
+          // int id = Int32.Parse(usr.Id);
+          // var repairs = _context.Repairs.Include(r => r.Servicer).Where(s => s.Servicer.ServicerId == id);
+           var repairs= _context.Repairs.Include(r => r.Servicer).Where(s => s.Servicer.ServicerId == 1);
+            
+            return View(await repairs.ToListAsync());
+
         }
 
         // GET: Repairs/Details/5
