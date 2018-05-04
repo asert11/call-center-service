@@ -18,41 +18,9 @@ namespace CallCenterService.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var vm = new List<IndexRegistrantViewModel>();
-
-            var faults = _context.Faults.Where(f => f.Status == "Open").ToList();
-            foreach(var fault in faults)
-            {
-                var ivm = new IndexRegistrantViewModel();
-                ivm.FaultData = fault;
-
-                var sf = _context.ServicerFault.FirstOrDefault(f => f.IdFault == fault.FaultId);
-                if(sf == null)
-                {
-                    ivm.Servicer = new Servicer();
-                    ivm.Servicer.FirstName = "";
-                    ivm.Servicer.SecondName = "";
-                    ivm.Servicer.Specialization = "";
-                }
-                else
-                {
-                    var servicer = _context.Servicers.FirstOrDefault(f => f.ServicerId == sf.IdServicer);
-                    if (servicer == null)
-                    {
-                        ivm.Servicer = new Servicer();
-                        ivm.Servicer.FirstName = "";
-                        ivm.Servicer.SecondName = "";
-                        ivm.Servicer.Specialization = "";
-                    }
-                    else
-                        ivm.Servicer = servicer;
-                }
-                vm.Add(ivm);
-            }
-
-            return View(vm);
+            return View(await _context.Faults.Include(f => f.Client).ToListAsync());
         }
 
         public async Task<IActionResult> assigned_faults()
@@ -116,10 +84,13 @@ namespace CallCenterService.Controllers
         [HttpPost]
         public async Task<IActionResult> SetServicer(SetServicerRegistrantViewModel vm)
         {
-            if (vm.ServicerId == 0 || ModelState.IsValid == false)
+            var servicer = await _context.Servicers.FirstOrDefaultAsync(s => s.ServicerId == vm.ServicerId);
+            var fault = await _context.Faults.FirstOrDefaultAsync(f => f.FaultId == vm.FaultId);
+
+            if (vm.ServicerId == 0 || ModelState.IsValid == false || servicer == null)
             {
                 vm.Servicers = _context.Servicers.ToList();
-                vm.FaultData = _context.Faults.FirstOrDefault(f => f.FaultId == vm.FaultId);
+                vm.FaultData = fault;
 
                 if (vm.FaultData == null)
                 {
@@ -131,16 +102,25 @@ namespace CallCenterService.Controllers
 
             else
             {
-                ServicerFault sf = new ServicerFault
+                using (var transaction = _context.Database.BeginTransaction())
                 {
-                    IdFault = vm.FaultId,
-                    IdServicer = vm.ServicerId
-                };
+                    fault.Status = "In progress";
+                    await _context.SaveChangesAsync();
 
-                _context.ServicerFault.RemoveRange(_context.ServicerFault.Where(x => x.IdFault == vm.FaultId));
+                    Repair sf = new Repair
+                    {
+                        Fault = fault,
+                        Servicer = servicer
+                    };
 
-                await _context.ServicerFault.AddAsync(sf);
-                await _context.SaveChangesAsync();
+                    //_context.ServicerFault.RemoveRange(_context.ServicerFault.Where(x => x.IdFault == vm.FaultId));
+
+                    await _context.Repairs.AddAsync(sf);
+                    await _context.SaveChangesAsync();
+
+                    transaction.Commit();
+                }
+
                 return RedirectToAction("Index");
             }
         }

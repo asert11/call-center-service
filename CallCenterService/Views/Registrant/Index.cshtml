@@ -1,4 +1,4 @@
-@model IEnumerable<CallCenterService.ViewModels.IndexRegistrantViewModel>
+@model IEnumerable<CallCenterService.Models.Fault>
 
 @{
     ViewData["Title"] = "Registrant Panel";
@@ -23,22 +23,22 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FaultData.ClientDescription)
+                @Html.DisplayNameFor(model => model.ClientDescription)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FaultData.Status)
+                @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FaultData.ApplicationDate)
+                @Html.DisplayNameFor(model => model.ApplicationDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Servicer.FirstName)
+                @Html.DisplayNameFor(model => model.Client.FirstName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Servicer.SecondName)
+                @Html.DisplayNameFor(model => model.Client.SecondName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Servicer.Specialization)
+                @Html.DisplayNameFor(model => model.Client.Adress)
             </th>
             <th></th>
         </tr>
@@ -48,25 +48,25 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FaultData.ClientDescription)
+                    @Html.DisplayFor(modelItem => item.ClientDescription)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FaultData.Status)
+                    @Html.DisplayFor(modelItem => item.Status)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FaultData.ApplicationDate)
+                    @Html.DisplayFor(modelItem => item.ApplicationDate)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Servicer.FirstName)
+                    @Html.DisplayFor(modelItem => item.Client.FirstName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Servicer.SecondName)
+                    @Html.DisplayFor(modelItem => item.Client.SecondName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Servicer.Specialization)
+                    @Html.DisplayFor(modelItem => item.Client.Adress)
                 </td>
                 <td>
-                    <a asp-action="SetServicer" asp-route-id="@item.FaultData.FaultId">Add Servicer</a>
+                    <a asp-action="SetServicer" asp-route-id="@item.FaultId">Add Servicer</a>
                 </td>
             </tr>
         }

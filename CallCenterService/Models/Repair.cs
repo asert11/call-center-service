@@ -12,7 +12,6 @@ namespace CallCenterService.Models
         public int RepairId { get; set; }
         public virtual Fault Fault { get; set; }
         public virtual Servicer Servicer { get; set; }
-        [Required]
         public String Description { get; set; }
         [Required]
         public DateTime  Date { get; set; }

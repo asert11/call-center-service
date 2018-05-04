@@ -8,7 +8,7 @@ using CallCenterService.Models;
 namespace CallCenterService.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20180503171836_initial_migration")]
+    [Migration("20180504122109_initial_migration")]
     partial class initial_migration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -153,8 +153,7 @@ namespace CallCenterService.Migrations
 
                     b.Property<DateTime>("Date");
 
-                    b.Property<string>("Description")
-                        .IsRequired();
+                    b.Property<string>("Description");
 
                     b.Property<int?>("FaultId");
 
@@ -190,22 +189,6 @@ namespace CallCenterService.Migrations
                     b.HasKey("ServicerId");
 
                     b.ToTable("Servicers");
-                });
-
-            modelBuilder.Entity("CallCenterService.Models.ServicerFault", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description");
-
-                    b.Property<int>("IdFault");
-
-                    b.Property<int>("IdServicer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ServicerFault");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>

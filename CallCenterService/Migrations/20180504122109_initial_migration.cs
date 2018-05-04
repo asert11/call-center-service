@@ -96,21 +96,6 @@ namespace CallCenterService.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ServicerFault",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(nullable: true),
-                    IdFault = table.Column<int>(nullable: false),
-                    IdServicer = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ServicerFault", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -260,7 +245,7 @@ namespace CallCenterService.Migrations
                     RepairId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Date = table.Column<DateTime>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
                     FaultId = table.Column<int>(nullable: true),
                     PartsPrice = table.Column<float>(nullable: false),
                     Price = table.Column<float>(nullable: false),
@@ -348,9 +333,6 @@ namespace CallCenterService.Migrations
 
             migrationBuilder.DropTable(
                 name: "Repairs");
-
-            migrationBuilder.DropTable(
-                name: "ServicerFault");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
