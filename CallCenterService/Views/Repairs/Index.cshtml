@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<h2>Your Tasks</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -12,24 +12,43 @@
 <table class="table">
     <thead>
         <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Date)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Price)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PartsPrice)
-                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Servicer.ServicerId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Fault.ClientDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Fault.Status)
+            </th>
+            
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PartsPrice)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Servicer.ServicerId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fault.ClientDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fault.Status)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
