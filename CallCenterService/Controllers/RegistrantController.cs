@@ -23,6 +23,18 @@ namespace CallCenterService.Controllers
             return View(await _context.Faults.Include(f => f.Client).ToListAsync());
         }
 
+        public async Task<IActionResult> Opened_faults()
+        {
+            var faults = from m in _context.Faults
+                         select m;
+            string ss = "Open";
+            if (!String.IsNullOrEmpty(ss))
+            {
+                faults = faults.Where(s => s.Status.Equals("Open"));
+            }
+            return View(await faults.ToListAsync());
+        }
+
         public async Task<IActionResult> assigned_faults()
         {
             var faults = from m in _context.Faults
