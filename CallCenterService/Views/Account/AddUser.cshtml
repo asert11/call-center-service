@@ -39,6 +39,13 @@
         <input asp-for="ConfirmPassword" />
         <span asp-validation-for="ConfirmPassword"></span>
     </div>
-    <select asp-for="Role" asp-items="Model.Roles"></select>
+    <div>
+        <select asp-for="Role" asp-items="Model.Roles"></select>
+    </div>
+    <div>
+        <label asp-for="Specialization"></label>
+        <input asp-for="Specialization" />
+        <span asp-validation-for="Specialization"></span>
+    </div>
     <div><input type="submit" value="Add User" /></div>
 </form>

@@ -55,6 +55,8 @@ namespace CallCenterService.Migrations
 
                     b.Property<string>("SecurityStamp");
 
+                    b.Property<string>("Specialization");
+
                     b.Property<bool>("TwoFactorEnabled");
 
                     b.Property<string>("UserName")

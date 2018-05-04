@@ -81,7 +81,9 @@ namespace CallCenterService.Controllers
                 using (var transaction =_dbContext.Database.BeginTransaction())
                 {
                     var user = new ApplicationUser { UserName = vm.UserName, Email = vm.Email,
-                            FirstName = vm.FirstName, LastName = vm.LastName, Address = vm.Address};
+                        FirstName = vm.FirstName, LastName = vm.LastName, Address = vm.Address,
+                        Specialization = vm.Specialization};
+
                     var result = await _userManager.CreateAsync(user, vm.Password);
                     _dbContext.SaveChanges();
 
@@ -185,7 +187,8 @@ namespace CallCenterService.Controllers
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Address = user.Address,
-                UserName = user.UserName
+                UserName = user.UserName,
+                Specialization = user.Specialization
             };
             return View(vm);
         }
@@ -214,6 +217,7 @@ namespace CallCenterService.Controllers
                     vm.FirstName = user.FirstName;
                     vm.LastName = user.LastName;
                     vm.Address = user.Address;
+                    vm.Specialization = user.Specialization;
                     vm.Roles = GetUserRoles();
                     return View(vm);
                 }
@@ -234,6 +238,7 @@ namespace CallCenterService.Controllers
                     user.FirstName = vm.FirstName;
                     user.LastName = vm.LastName;
                     user.Address = vm.Address;
+                    user.Specialization = vm.Specialization;
 
                     await _userManager.UpdateAsync(user);
 
@@ -246,6 +251,7 @@ namespace CallCenterService.Controllers
             vm.FirstName = user.FirstName;
             vm.LastName = user.LastName;
             vm.Address = user.Address;
+            vm.Specialization = user.Specialization;
             vm.Roles = GetUserRoles();
             return View(vm);
         }

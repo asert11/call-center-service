@@ -8,7 +8,7 @@ using CallCenterService.Models;
 namespace CallCenterService.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20180504122109_initial_migration")]
+    [Migration("20180504155653_initial_migration")]
     partial class initial_migration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,6 +55,8 @@ namespace CallCenterService.Migrations
                     b.Property<bool>("PhoneNumberConfirmed");
 
                     b.Property<string>("SecurityStamp");
+
+                    b.Property<string>("Specialization");
 
                     b.Property<bool>("TwoFactorEnabled");
 
