@@ -32,11 +32,11 @@
             @foreach (var servicer in Model.Servicers)
             {
                 <tr>
-                    <td>@servicer.ServicerId</td>
+                    <td>@servicer.Id</td>
                     <td>@servicer.FirstName</td>
-                    <td>@servicer.SecondName</td>
+                    <td>@servicer.LastName</td>
                     <td>@servicer.Specialization</td>
-                    <td><input asp-for="ServicerId" value="@servicer.ServicerId" type="radio" /></td>
+                    <td><input asp-for="ServicerId" value="@servicer.Id" type="radio" /></td>
                 </tr>
             }
         </tbody>

@@ -8,7 +8,7 @@ using CallCenterService.Models;
 namespace CallCenterService.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20180504155653_initial_migration")]
+    [Migration("20180504161514_initial_migration")]
     partial class initial_migration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -163,7 +163,7 @@ namespace CallCenterService.Migrations
 
                     b.Property<float>("Price");
 
-                    b.Property<int?>("ServicerId");
+                    b.Property<string>("ServicerId");
 
                     b.HasKey("RepairId");
 
@@ -172,25 +172,6 @@ namespace CallCenterService.Migrations
                     b.HasIndex("ServicerId");
 
                     b.ToTable("Repairs");
-                });
-
-            modelBuilder.Entity("CallCenterService.Models.Servicer", b =>
-                {
-                    b.Property<int>("ServicerId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("FirstName")
-                        .IsRequired();
-
-                    b.Property<string>("SecondName")
-                        .IsRequired();
-
-                    b.Property<string>("Specialization")
-                        .IsRequired();
-
-                    b.HasKey("ServicerId");
-
-                    b.ToTable("Servicers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
@@ -318,7 +299,7 @@ namespace CallCenterService.Migrations
                         .WithMany()
                         .HasForeignKey("FaultId");
 
-                    b.HasOne("CallCenterService.Models.Servicer", "Servicer")
+                    b.HasOne("CallCenterService.Models.ApplicationUser", "Servicer")
                         .WithMany()
                         .HasForeignKey("ServicerId");
                 });

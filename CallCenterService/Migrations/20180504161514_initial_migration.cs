@@ -82,21 +82,6 @@ namespace CallCenterService.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Servicers",
-                columns: table => new
-                {
-                    ServicerId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    FirstName = table.Column<string>(nullable: false),
-                    SecondName = table.Column<string>(nullable: false),
-                    Specialization = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Servicers", x => x.ServicerId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -250,7 +235,7 @@ namespace CallCenterService.Migrations
                     FaultId = table.Column<int>(nullable: true),
                     PartsPrice = table.Column<float>(nullable: false),
                     Price = table.Column<float>(nullable: false),
-                    ServicerId = table.Column<int>(nullable: true)
+                    ServicerId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -262,10 +247,10 @@ namespace CallCenterService.Migrations
                         principalColumn: "FaultId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Repairs_Servicers_ServicerId",
+                        name: "FK_Repairs_AspNetUsers_ServicerId",
                         column: x => x.ServicerId,
-                        principalTable: "Servicers",
-                        principalColumn: "ServicerId",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -352,9 +337,6 @@ namespace CallCenterService.Migrations
 
             migrationBuilder.DropTable(
                 name: "Faults");
-
-            migrationBuilder.DropTable(
-                name: "Servicers");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CallCenterService.Models;
 using CallCenterService.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,9 +13,11 @@ namespace CallCenterService.Controllers
     public class RegistrantController : Controller
     {
         private readonly DatabaseContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public RegistrantController(DatabaseContext context)
+        public RegistrantController(DatabaseContext context, UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _context = context;
         }
 
@@ -59,7 +62,7 @@ namespace CallCenterService.Controllers
         }
 
         [HttpGet]
-        public IActionResult SetServicer(int? id)
+        public async Task<IActionResult> SetServicer(int? id)
         {
             if (id == null)
             {
@@ -69,7 +72,7 @@ namespace CallCenterService.Controllers
             var vm = new SetServicerRegistrantViewModel
             {
                 FaultId = (int)id,
-                Servicers = _context.Servicers.ToList(),
+                Servicers = await _userManager.GetUsersInRoleAsync("Serwisant"),
                 FaultData = _context.Faults.FirstOrDefault(f => f.FaultId == id)
             };
 
@@ -84,12 +87,26 @@ namespace CallCenterService.Controllers
         [HttpPost]
         public async Task<IActionResult> SetServicer(SetServicerRegistrantViewModel vm)
         {
-            var servicer = await _context.Servicers.FirstOrDefaultAsync(s => s.ServicerId == vm.ServicerId);
             var fault = await _context.Faults.FirstOrDefaultAsync(f => f.FaultId == vm.FaultId);
 
-            if (vm.ServicerId == 0 || ModelState.IsValid == false || servicer == null)
+            if(vm.ServicerId == null)
             {
-                vm.Servicers = _context.Servicers.ToList();
+                vm.Servicers = await _userManager.GetUsersInRoleAsync("Serwisant");
+                vm.FaultData = fault;
+
+                if (vm.FaultData == null)
+                {
+                    return NotFound();
+                }
+
+                return View(vm);
+            }
+
+            var servicer = await _userManager.FindByIdAsync(vm.ServicerId);
+
+            if (ModelState.IsValid == false || servicer == null)
+            {
+                vm.Servicers = await _userManager.GetUsersInRoleAsync("Serwisant");
                 vm.FaultData = fault;
 
                 if (vm.FaultData == null)
