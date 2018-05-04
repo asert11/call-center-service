@@ -15,27 +15,26 @@ namespace CallCenterService.Controllers
         private readonly DatabaseContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         public string id;
+
         public RepairsController(DatabaseContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
       
-
-       
-
         // GET: Repairs
         public async Task<IActionResult> Index()
         {
             ApplicationUser usr = await _userManager.GetUserAsync(HttpContext.User);
-          
+            string id = usr?.Id;
+            if (id == null)
+                return NotFound();
 
-          // int id = Int32.Parse(usr.Id);
-          // var repairs = _context.Repairs.Include(r => r.Servicer).Where(s => s.Servicer.ServicerId == id);
-           var repairs= _context.Repairs.Include(r => r.Servicer).Where(s => s.Servicer.ServicerId == 1);
+            var repairs = _context.Repairs.Include(r => r.Servicer).Include(r => r.Fault)
+                .Include(r => r.Fault.Product).Where(s => s.Servicer.Id == id)
+                .Where(s => s.Fault.Status == "In progress");
             
             return View(await repairs.ToListAsync());
-
         }
 
         // GET: Repairs/Details/5

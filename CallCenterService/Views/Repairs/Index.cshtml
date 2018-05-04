@@ -13,7 +13,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Servicer.ServicerId)
+                @Html.DisplayNameFor(model => model.Fault.Product.Name)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Fault.ClientDescription)
@@ -21,7 +21,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Fault.Status)
             </th>
-            
             <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
@@ -41,7 +40,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Servicer.ServicerId)
+                @Html.DisplayFor(modelItem => item.Fault.Product.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Fault.ClientDescription)
