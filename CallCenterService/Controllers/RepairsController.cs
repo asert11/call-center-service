@@ -22,17 +22,6 @@ namespace CallCenterService.Controllers
         }
       
 
-       /* [HttpGet]
-        public async Task<string> GetCurrentUserId()
-        {
-            ApplicationUser usr = await _userManager.GetUserAsync(HttpContext.User);
-            id = usr.Id;
-            return usr?.Id;
-        }*/
-
-      //  private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
-
-        
        
 
         // GET: Repairs
@@ -44,8 +33,9 @@ namespace CallCenterService.Controllers
           // int id = Int32.Parse(usr.Id);
           // var repairs = _context.Repairs.Include(r => r.Servicer).Where(s => s.Servicer.ServicerId == id);
            var repairs= _context.Repairs.Include(r => r.Servicer).Where(s => s.Servicer.ServicerId == 1);
+            
             return View(await repairs.ToListAsync());
-          
+
         }
 
         // GET: Repairs/Details/5
