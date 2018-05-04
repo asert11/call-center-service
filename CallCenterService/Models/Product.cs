@@ -14,5 +14,6 @@ namespace CallCenterService.Models
         public String Name { get; set; }
         [Required]
         public String Type { get; set; }
+
     }
 }
