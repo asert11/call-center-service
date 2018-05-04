@@ -45,9 +45,17 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Faults/Create
-        public IActionResult Create()
+        public IActionResult Create(int ? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Fault f = new Fault();
+            f.ClientId = (int)id;
+
+            return View(f);
         }
 
         // POST: Faults/Create
