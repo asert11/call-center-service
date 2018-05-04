@@ -27,10 +27,10 @@ namespace CallCenterService.Controllers
         {
             var faults = from m in _context.Faults
                          select m;
-            string ss = "In-Progress";
+            string ss = "In progress";
             if (!String.IsNullOrEmpty(ss))
             {
-                faults = faults.Where(s => s.Status.Equals("In-Progress"));
+                faults = faults.Where(s => s.Status.Equals("In progress"));
             }
             return View(await faults.ToListAsync());
         }
@@ -39,10 +39,10 @@ namespace CallCenterService.Controllers
         {
             var faults = from m in _context.Faults
                          select m;
-            string ss = "Closed";
+            string ss = "Done";
             if (!String.IsNullOrEmpty(ss))
             {
-                faults = faults.Where(s => s.Status.Equals("Closed"));
+                faults = faults.Where(s => s.Status.Equals("Done"));
             }
             return View(await faults.ToListAsync());
         }
