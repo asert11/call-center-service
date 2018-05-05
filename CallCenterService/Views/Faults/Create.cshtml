@@ -28,37 +28,37 @@
             <input type="submit" value="Create" class="btn btn-default" />
         </div>
     </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Product Id
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Type
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model.Products)
+            {
+                <tr>
+                    <td>@product.ProductID</td>
+                    <td>@product.Name</td>
+                    <td>@product.Type</td>
+
+                    <td><input asp-for="ProductId" value="@product.ProductID" type="radio" /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
 </form>
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Product Id
-            </th>
-            <th>
-                Name
-            </th>
-            <th>
-                Type 
-            </th>
-    
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var product in Model.Products)
-        {
-            <tr>
-                <td>@product.ProductID</td>
-                <td>@product.Name</td>
-                <td>@product.Type</td>
- 
-                <td><input asp-for="ProductId" value="@product.ProductID" type="radio" /></td>
-            </tr>
-        }
-    </tbody>
-</table>
