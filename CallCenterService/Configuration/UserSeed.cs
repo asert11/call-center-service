@@ -38,13 +38,63 @@ namespace CallCenterService.Configuration
                     await _userManager.AddToRoleAsync(user, "Rejestrujący");
                 }
             }
-            if ((await _userManager.FindByNameAsync("Serwisant")) == null)
+            if ((await _userManager.FindByNameAsync("AntoniNowak")) == null)
             {
-                var user = new ApplicationUser { UserName = "Serwisant", Email = "Serwisant@Serwisant" };
-                var result = await _userManager.CreateAsync(user, "Serwisant123!");
+                var user = new ApplicationUser { UserName = "AntoniNowak", Email = "AntoniNowak@AntoniNowak",Specialization = "RTV" };
+                var result = await _userManager.CreateAsync(user, "AntoniNowak123!");
                 if (result.Succeeded)
                 {
-                    user = await _userManager.FindByNameAsync("Serwisant");
+                    user = await _userManager.FindByNameAsync("AntoniNowak");
+                    await _userManager.AddToRoleAsync(user, "Serwisant");
+                }
+            }
+            if ((await _userManager.FindByNameAsync("AdamNowak")) == null)
+            {
+                var user = new ApplicationUser { UserName = "AdamNowak", Email = "AdamNowak@AdamNowak", Specialization = "RTV" };
+                var result = await _userManager.CreateAsync(user, "AdamNowak123!");
+                if (result.Succeeded)
+                {
+                    user = await _userManager.FindByNameAsync("AdamNowak");
+                    await _userManager.AddToRoleAsync(user, "Serwisant");
+                }
+            }
+            if ((await _userManager.FindByNameAsync("ArturKopytko")) == null)
+            {
+                var user = new ApplicationUser { UserName = "ArturKopytko", Email = "ArturKopytko@ArturKopytko", Specialization = "RTV" };
+                var result = await _userManager.CreateAsync(user, "ArturKopytko123!");
+                if (result.Succeeded)
+                {
+                    user = await _userManager.FindByNameAsync("ArturKopytko");
+                    await _userManager.AddToRoleAsync(user, "Serwisant");
+                }
+            }
+            if ((await _userManager.FindByNameAsync("JanPrus")) == null)
+            {
+                var user = new ApplicationUser { UserName = "JanPrus", Email = "JanPrus@JanPrus", Specialization = "AGD" };
+                var result = await _userManager.CreateAsync(user, "JanPrus123!");
+                if (result.Succeeded)
+                {
+                    user = await _userManager.FindByNameAsync("JanPrus");
+                    await _userManager.AddToRoleAsync(user, "Serwisant");
+                }
+            }
+            if ((await _userManager.FindByNameAsync("KonradKania")) == null)
+            {
+                var user = new ApplicationUser { UserName = "KonradKania", Email = "KonradKania@KonradKania", Specialization = "AGD" };
+                var result = await _userManager.CreateAsync(user, "KonradKania123!");
+                if (result.Succeeded)
+                {
+                    user = await _userManager.FindByNameAsync("KonradKania");
+                    await _userManager.AddToRoleAsync(user, "Serwisant");
+                }
+            }
+            if ((await _userManager.FindByNameAsync("KamilBem")) == null)
+            {
+                var user = new ApplicationUser { UserName = "KamilBem", Email = "KamilBem@KamilBem", Specialization = "AGD" };
+                var result = await _userManager.CreateAsync(user, "KamilBem123!");
+                if (result.Succeeded)
+                {
+                    user = await _userManager.FindByNameAsync("KamilBem");
                     await _userManager.AddToRoleAsync(user, "Serwisant");
                 }
             }
