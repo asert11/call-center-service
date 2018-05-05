@@ -41,6 +41,7 @@ namespace CallCenterService.Controllers
             return NotFound();
         }
 
+<<<<<<< HEAD
         return View(fault);
     }
 
@@ -50,6 +51,20 @@ namespace CallCenterService.Controllers
         if (id == null)
         {
             return NotFound();
+=======
+        // GET: Faults/Create
+        public IActionResult Create(int ? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Fault f = new Fault();
+            f.ClientId = (int)id;
+
+            return View(f);
+>>>>>>> 5173cc41a0b3b27cede398ebbbd38f6651c68e14
         }
 
         AddProductFaultModel f = new AddProductFaultModel
