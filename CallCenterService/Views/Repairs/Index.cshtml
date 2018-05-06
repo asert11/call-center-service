@@ -4,6 +4,34 @@
     ViewData["Title"] = "Index";
 }
 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.3.0/bootbox.min.js"></script>
+
+<script>
+    function checkIfDone(getId) {
+            jQuery.ajax({
+                type: "GET",
+                url: "/Repairs/CheckIfDone/" + getId,
+                success: function (data)
+                {
+                    if (data == 1) {
+                        bootbox.alert("Status set as done!");
+                        location.reload();
+                    }
+                    else if (data == 0) {
+                        bootbox.alert("You haven't set price or date!");
+                    }
+                },
+
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
+    }
+</script>
+
 <h2>Your Tasks</h2>
 
 <p>
@@ -37,35 +65,38 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fault.Product.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fault.ClientDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fault.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PartsPrice)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.RepairId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.RepairId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.RepairId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fault.Product.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fault.ClientDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fault.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PartsPrice)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.RepairId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.RepairId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.RepairId">Delete</a> |
+                    <a href="javascript:checkIfDone(@item.RepairId);" id="done">Mark as done</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
