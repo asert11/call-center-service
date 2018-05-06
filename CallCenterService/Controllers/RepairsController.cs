@@ -79,7 +79,7 @@ namespace CallCenterService.Controllers
 
         // GET: Repairs/Edit/5
         public async Task<IActionResult> Edit(int? id)
-        {
+            {
             if (id == null)
             {
                 return NotFound();
@@ -98,8 +98,16 @@ namespace CallCenterService.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("RepairId,Description,Date,Price,PartsPrice")] Repair repair)
+        public async Task<IActionResult> Edit(int id, Repair repair)
         {
+
+            var repairTmp = _context.Repairs.SingleOrDefault(m => m.RepairId == id);
+
+            repairTmp.Date = repair.Date;
+            repairTmp.Description = repair.Description;
+            repairTmp.Price = repair.Price;
+            repairTmp.PartsPrice = repair.PartsPrice;
+
             if (id != repair.RepairId)
             {
                 return NotFound();
@@ -108,8 +116,8 @@ namespace CallCenterService.Controllers
             if (ModelState.IsValid)
             {
                 try
-                {
-                    _context.Update(repair);
+                { 
+                    _context.Update(repairTmp);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -125,7 +133,7 @@ namespace CallCenterService.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(repair);
+            return View(repairTmp);
         }
 
         // GET: Repairs/Delete/5
@@ -155,6 +163,31 @@ namespace CallCenterService.Controllers
             _context.Repairs.Remove(repair);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public int CheckIfDone(int? id)
+        {
+            if (id == null)
+            {
+                return 0;
+            }
+
+            var repair = _context.Repairs.SingleOrDefault(m => m.RepairId == id);
+
+            if (repair.Price == 0)
+                return 0;
+            else if (repair.Date == new DateTime(0001, 01, 01, 00, 00, 00))
+                return 0;
+
+            var fault = _context.Faults.SingleOrDefault(m => m.FaultId == repair.FaultId);
+            if (fault != null)
+            {
+                fault.Status = "Done";
+                _context.SaveChanges();
+            }
+
+            return 1;
         }
 
         private bool RepairExists(int id)
