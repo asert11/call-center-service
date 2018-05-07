@@ -31,8 +31,8 @@
                 <td>@(string.Join(",", await userManager.GetRolesAsync(user)))</td>
                 @if (user.UserName != "admin@admin.com")
                 {
-                    <td><a asp-controller="Account" asp-action="EditUser" asp-route-id="@user.Id">Edytuj</a> |
-                    <a asp-controller="Account" asp-action="DeleteUser" asp-route-id="@user.Id">Usuń</a></td>
+                    <td><a asp-controller="Account" asp-action="EditUser" asp-route-id="@user.Id">Edytuj</a>
+                    @*<a asp-controller="Account" asp-action="DeleteUser" asp-route-id="@user.Id">Usuń</a>*@</td>
                 }
                 else
                 {

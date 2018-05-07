@@ -18,7 +18,7 @@
                 {
                     if (data == 1) {
                         bootbox.alert("Naprawa oznaczona jako wykonana.");
-                        location.reload();
+                        location.reload();                  // dla prezesa do poprawy
                     }
                     else if (data == 0) {
                         bootbox.alert("Żeby zatwierdzić naprawę musisz podać jej cenę i datę.");
@@ -55,9 +55,9 @@
             <th>
                Opis naprawy
             </th>
-            <th>
+            @*<th>
                 Data
-            </th>
+            </th>*@
             @*<th>
                 Cena
             </th>
@@ -86,9 +86,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
-            <td>
+            @*<td>
                 @Html.DisplayFor(modelItem => item.Date)
-            </td>
+            </td>*@
             @*<td>
                 @Html.DisplayFor(modelItem => item.Price)
             </td>

@@ -1,27 +1,27 @@
 ﻿@model CallCenterService.ViewModels.LoginViewModel
 
-    <form method="post" asp-controller="Account" asp-action="Login">
-        <div asp-validation-summary="All"></div>
+<form method="post" asp-controller="Account" asp-action="Login">
+    <div asp-validation-summary="All"></div>
 
-        <div>
-            <label asp-for="UserName">Login:</label>
-            <input asp-for="UserName" />
-            <span asp-validation-for="UserName"></span>
-        </div>
-        <div>
-            <label asp-for="Password">Hasło:</label>
-            <input asp-for="Password" />
-            <span asp-validation-for="Password"></span>
-        </div>
-        <div>
-            <label asp-for="RememberMe">Zapamiętaj mnie:</label>
-            <input asp-for="RememberMe" />
-            <span asp-validation-for="RememberMe"></span>
-        </div>
-        <div><p><input type="submit" value="Zaloguj" /></p></div>
+    <div>
+        <label asp-for="UserName">Login:</label>
+        <input asp-for="UserName" />
+        <span asp-validation-for="UserName"></span>
+    </div>
+    <div>
+        <label asp-for="Password">Hasło:</label>
+        <input asp-for="Password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div>
+        <label asp-for="RememberMe">Zapamiętaj mnie:</label>
+        <input asp-for="RememberMe" />
+        <span asp-validation-for="RememberMe"></span>
+    </div>
+    <div><p><input type="submit" value="Zaloguj" /></p></div>
 
-        <p>
-            Login: admin<br />
-            Password: Admin123!<br /><br />
-        </p>
-    </form>
+    <p>
+        Login: admin<br />
+        Password: Admin123!<br /><br />
+    </p>
+</form>

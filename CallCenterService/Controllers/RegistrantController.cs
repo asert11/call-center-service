@@ -60,11 +60,15 @@ namespace CallCenterService.Controllers
                 return NotFound();
             }
 
+            var FaultTmp = _context.Faults.Include(m => m.Product).FirstOrDefault(f => f.FaultId == id);
+
             var vm = new SetServicerRegistrantViewModel
             {
                 FaultId = (int)id,
-                Servicers = await _userManager.GetUsersInRoleAsync("Serwisant"),
-                FaultData = _context.Faults.FirstOrDefault(f => f.FaultId == id)
+                // Servicers = await _userManager.GetUsersInRoleAsync("Serwisant"),
+
+                FaultData = await _context.Faults.FirstOrDefaultAsync(f => f.FaultId == id),
+                Servicers = _context.Users.Where(m => m.Specialization == FaultTmp.Product.Type).ToList()
             };
 
             if (vm.FaultData == null)
