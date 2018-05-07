@@ -1,35 +1,88 @@
-@model CallCenterService.Models.Repair
+﻿@model CallCenterService.Models.Repair
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
+<h2>Szczegóły</h2>
 
 <div>
-    <h4>Repair</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Description)
+            ID naprawy:
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RepairId)
+        </dd>
+        <dt>
+            ID klienta:
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Fault.Client.ClientId)
+        </dd>
+        <dt>
+            Imię klienta:
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Fault.Client.FirstName)
+        </dd>
+        <dt>
+            Nazwisko klienta:
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Fault.Client.SecondName)
+        </dd>
+        <dt>
+            Adres klienta:
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Fault.Client.Adress)
+        </dd>
+        <dt>
+            ID usterki:
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Fault.FaultId)
+        </dd>
+        <dt>
+            ID produktu:
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Fault.Product.ProductID)
+        </dd>
+        <dt>
+            Nazwa produktu:
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Fault.Product.Name)
+        </dd>
+        <dt>
+            Opis klienta:
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Fault.ClientDescription)
+        </dd>
+        <dt>
+            Opis naprawy:
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Description)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Date)
+            Data naprawy:
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Date)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Price)
+            Cena naprawy:
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Price)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.PartsPrice)
+            Cena części zew.:
         </dt>
         <dd>
             @Html.DisplayFor(model => model.PartsPrice)
@@ -37,6 +90,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.RepairId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.RepairId">Edytuj</a> |
+    <a asp-action="Index">Wróć</a>
 </div>

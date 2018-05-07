@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - CallCenterService</title>
-
+	
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
@@ -32,14 +32,14 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Registrant" asp-action="Index">Registrant</a></li>
-                    <li><a asp-area="" asp-controller="Account" asp-action="Index">Account</a></li>
-                    <li><a asp-area="" asp-controller="Clients" asp-action="Index">Clients</a></li>
-                    <li><a asp-area="" asp-controller="Faults" asp-action="Index">Faults</a></li>
-                    <li><a asp-area="" asp-controller="FaultsHistory" asp-action="Index">FaultsHistory</a></li>
-                    <li><a asp-area="" asp-controller="Products" asp-action="Index">Products</a></li>
-                    <li><a asp-area="" asp-controller="Repairs" asp-action="Index">Repairs</a></li>
+                    @*<li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>*@
+                    <li><a asp-area="" asp-controller="Registrant" asp-action="Index">Rejestrujący</a></li>
+                    <li><a asp-area="" asp-controller="Account" asp-action="Index">Użytkownicy</a></li>
+                    <li><a asp-area="" asp-controller="Clients" asp-action="Index">Klienci</a></li>
+                    <li><a asp-area="" asp-controller="Faults" asp-action="Index">Usterki</a></li>
+                    <li><a asp-area="" asp-controller="FaultsHistory" asp-action="Index">Historia zmian</a></li>
+                    <li><a asp-area="" asp-controller="Products" asp-action="Index">Produkty</a></li>
+                    <li><a asp-area="" asp-controller="Repairs" asp-action="Index">Naprawy</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>

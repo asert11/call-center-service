@@ -1,33 +1,32 @@
-@model CallCenterService.Models.Client
+﻿@model CallCenterService.Models.Client
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h2>Edit</h2>
+<h2>Edytuj dane klienta</h2>
 
 <form asp-action="Edit">
     <div class="form-horizontal">
-        <h4>Client</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="ClientId" />
         <div class="form-group">
-            <label asp-for="FirstName" class="col-md-2 control-label"></label>
+            <label asp-for="FirstName" class="col-md-2 control-label">Imię:</label>
             <div class="col-md-10">
                 <input asp-for="FirstName" class="form-control" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="SecondName" class="col-md-2 control-label"></label>
+            <label asp-for="SecondName" class="col-md-2 control-label">Nazwisko:</label>
             <div class="col-md-10">
                 <input asp-for="SecondName" class="form-control" />
                 <span asp-validation-for="SecondName" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="Adress" class="col-md-2 control-label"></label>
+            <label asp-for="Adress" class="col-md-2 control-label">Adres:</label>
             <div class="col-md-10">
                 <input asp-for="Adress" class="form-control" />
                 <span asp-validation-for="Adress" class="text-danger"></span>
@@ -35,13 +34,13 @@
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Zapisz" class="btn btn-default" />
             </div>
         </div>
     </div>
 </form>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Wróć</a>
 </div>
 

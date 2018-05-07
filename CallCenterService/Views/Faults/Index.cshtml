@@ -1,53 +1,70 @@
-@model IEnumerable<CallCenterService.Models.Fault>
+﻿@model IEnumerable<CallCenterService.Models.Fault>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Usterki";
 }
 
-<h2>Index</h2>
+<h2>Usterki</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@*<p>
+    <a asp-action="Create">Dodaj usterkę</a>
+</p>*@
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ClientId)
+                ID usterki
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ClientDescription)
+                Opis klienta
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                Status
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ApplicationDate)
+                Data zgłoszenia
+            </th>
+            <th>
+                Imię klienta
+            </th>
+            <th>
+                Nazwisko klienta
+            </th>
+            <th>
+                Adres klienta
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClientId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClientDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ApplicationDate)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.FaultId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.FaultId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.FaultId">Delete</a> |
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FaultId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClientDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApplicationDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Client.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Client.SecondName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Client.Adress)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.FaultId">Edytuj</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

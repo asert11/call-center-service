@@ -1,31 +1,30 @@
-@model CallCenterService.Models.Client
+﻿@model CallCenterService.Models.Client
 
 @{
     ViewData["Title"] = "Delete";
 }
 
-<h2>Delete</h2>
+<h2>Usuń</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Czy na pewno chcesz usunąć tego klienta?</h3>
 <div>
-    <h4>Client</h4>
     <hr />
     <dl class="dl-horizontal">
         <input type="hidden" asp-for="ClientId" />
         <dt>
-            @Html.DisplayNameFor(model => model.FirstName)
+            Imię:
         </dt>
         <dd>
             @Html.DisplayFor(model => model.FirstName)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.SecondName)
+            Nazwisko:
         </dt>
         <dd>
             @Html.DisplayFor(model => model.SecondName)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Adress)
+            Adres:
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Adress)
@@ -34,8 +33,8 @@
     
     <form asp-action="Delete">
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            <a asp-action="Index">Back to List</a>
+            <input type="submit" value="Usuń" class="btn btn-default" /> |
+            <a asp-action="Index">Wróć</a>
         </div>
     </form>
 </div>

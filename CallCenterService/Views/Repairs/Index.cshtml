@@ -1,4 +1,4 @@
-@model IEnumerable<CallCenterService.Models.Repair>
+﻿@model IEnumerable<CallCenterService.Models.Repair>
 
 @{
     ViewData["Title"] = "Index";
@@ -17,11 +17,11 @@
                 success: function (data)
                 {
                     if (data == 1) {
-                        bootbox.alert("Status set as done!");
+                        bootbox.alert("Naprawa oznaczona jako wykonana.");
                         location.reload();
                     }
                     else if (data == 0) {
-                        bootbox.alert("You haven't set price or date!");
+                        bootbox.alert("Żeby zatwierdzić naprawę musisz podać jej cenę i datę.");
                     }
                 },
 
@@ -32,70 +32,76 @@
     }
 </script>
 
-<h2>Your Tasks</h2>
+<h2>Twoje zlecenia</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    @*<a asp-action="Create">Create New</a>*@ &nbsp;
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Fault.Product.Name)
+                ID naprawy
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Fault.ClientDescription)
+                Imię klienta
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Fault.Status)
+                Nazwisko klienta
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                Nazwa produktu
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Date)
+               Opis naprawy
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                Data
+            </th>
+            @*<th>
+                Cena
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PartsPrice)
-            </th>
+                Cena części
+            </th>*@
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Fault.Product.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Fault.ClientDescription)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Fault.Status)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Date)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PartsPrice)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.RepairId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.RepairId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.RepairId">Delete</a> |
-                    <a href="javascript:checkIfDone(@item.RepairId);" id="done">Mark as done</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RepairId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fault.Client.FirstName)
+            </td>
+            <th>
+                @Html.DisplayFor(modelItem => item.Fault.Client.SecondName)
+            </th>
+            <th>
+                @Html.DisplayFor(modelItem => item.Fault.Product.Name)
+            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PartsPrice)
+            </td>*@
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.RepairId">Edytuj</a> |
+                <a asp-action="Details" asp-route-id="@item.RepairId">Szczegóły</a> |
+                @*<a asp-action="Delete" asp-route-id="@item.RepairId">Delete</a> |*@
+                <a href="javascript:checkIfDone(@item.RepairId);" id="done">Oznacz jako wykonane</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

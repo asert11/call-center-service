@@ -23,7 +23,7 @@ namespace CallCenterService.Controllers
         // GET: Faults
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Faults.ToListAsync());
+            return View(await _context.Faults.Include(f => f.Client).ToListAsync());
         }
 
         // GET: Faults/Details/5
@@ -52,7 +52,8 @@ namespace CallCenterService.Controllers
                 return NotFound();
             }
 
-            Fault f = new Fault();
+            //Fault f = new Fault();
+            ViewModels.AddProductFaultModel f = new ViewModels.AddProductFaultModel(_context);
             f.ClientId = (int)id;
 
             return View(f);
@@ -63,13 +64,15 @@ namespace CallCenterService.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FaultId,ClientId,ClientDescription,Status,ApplicationDate")] Fault fault)
+        public async Task<IActionResult> Create(int ? ProductId,[Bind("FaultId,ClientId,ClientDescription,Status,ApplicationDate,ProductId")] Fault fault)
         {
 
             if (ModelState.IsValid)
             {
                 fault.Status = "Open";
                 fault.ApplicationDate = DateTime.Now;
+                fault.Client = _context.Clients.FirstOrDefault(m => m.ClientId == fault.ClientId);
+                fault.Product = _context.Products.FirstOrDefault(m => m.ProductID == ProductId);
                 _context.Add(fault);
 
                 EventHistory ev = new EventHistory
@@ -81,7 +84,7 @@ namespace CallCenterService.Controllers
 
                 _context.Add(ev);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Registrant");
             }
             return View(fault);
         }

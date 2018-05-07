@@ -23,43 +23,22 @@ namespace CallCenterService.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Faults.Include(f => f.Client).ToListAsync());
+            return View(await _context.Faults.Include(f => f.Client).Where(f => f.Status.Equals("Open")).ToListAsync());
         }
 
         public async Task<IActionResult> Opened_faults()
-        {
-            var faults = from m in _context.Faults
-                         select m;
-            string ss = "Open";
-            if (!String.IsNullOrEmpty(ss))
-            {
-                faults = faults.Where(s => s.Status.Equals("Open"));
-            }
-            return View(await faults.ToListAsync());
+        {       
+            return View(await _context.Faults.Include(f => f.Client).Where(s => s.Status.Equals("Open")).ToListAsync());
         }
 
         public async Task<IActionResult> assigned_faults()
         {
-            var faults = from m in _context.Faults
-                         select m;
-            string ss = "In progress";
-            if (!String.IsNullOrEmpty(ss))
-            {
-                faults = faults.Where(s => s.Status.Equals("In progress"));
-            }
-            return View(await faults.ToListAsync());
+            return View(await _context.Faults.Include(f => f.Client).Where(s => s.Status.Equals("In progress")).ToListAsync());
         }
 
         public async Task<IActionResult> Closed_assigned_faults()
         {
-            var faults = from m in _context.Faults
-                         select m;
-            string ss = "Done";
-            if (!String.IsNullOrEmpty(ss))
-            {
-                faults = faults.Where(s => s.Status.Equals("Done"));
-            }
-            return View(await faults.ToListAsync());
+            return View(await _context.Faults.Include(f => f.Client).Where(s => s.Status.Equals("Done")).ToListAsync());
         }
 
         public IActionResult FaultsList()

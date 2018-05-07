@@ -1,22 +1,22 @@
-@model IEnumerable<CallCenterService.Models.Client>
+﻿@model IEnumerable<CallCenterService.Models.Client>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<h2>Klienci</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Dodaj klienta</a>
 </p>
 
 
 <form asp-controller="Clients" asp-action="Index" method="get">
     <p>
-        Name: <input type="text" name="searchClientName">
-        Surname: <input type="text" name="searchClientSurname">
-        Address: <input type="text" name="searchClientAddress">
-        <input type="submit" value="Filter" />
+         Imię: <input type="text" name="searchClientName">
+         Nazwisko: <input type="text" name="searchClientSurname">
+         Adres: <input type="text" name="searchClientAddress">
+        <input type="submit" value="Szukaj" />
     </p>
 </form>
 
@@ -24,16 +24,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ClientId)
+                ID
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+                Imię
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SecondName)
+                Nazwisko
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Adress)
+                Adres
             </th>
             <th></th>
         </tr>
@@ -55,10 +55,10 @@
                 @Html.DisplayFor(modelItem => item.Adress)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ClientId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ClientId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ClientId">Delete</a> |
-                <a asp-controller="Faults" asp-action="Create" asp-route-id="@item.ClientId">Add Fault</a>
+                <a asp-action="Edit" asp-route-id="@item.ClientId">Edytuj</a> |
+                @*<a asp-action="Details" asp-route-id="@item.ClientId">Details</a> |*@
+                <a asp-action="Delete" asp-route-id="@item.ClientId">Usuń</a> |
+                <a asp-controller="Faults" asp-action="Create" asp-route-id="@item.ClientId">Dodaj usterkę</a>
             </td>
         </tr>
         }

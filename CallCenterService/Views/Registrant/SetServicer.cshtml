@@ -2,29 +2,29 @@
 
 <h2>Set Servicer</h2>
 
-<h3>Fault: @Model.FaultData.FaultId @Model.FaultData.ClientDescription @Model.FaultData.Status</h3>
+<h3>ID usterki: @Model.FaultData.FaultId</h3>
 
 <div asp-validation-summary="All"></div>
 <form asp-controller="Registrant" asp-action="SetServicer">
     <input asp-for="FaultId" type="hidden" />
-    <div><input type="submit" value="Set Servicer" /></div>
+    <div><input type="submit" value="Przypisz serwisanta" /></div>
     <table class="table">
         <thead>
             <tr>
                 <th>
-                    Servicer Id
+                    ID serwisanta
                 </th>
                 <th>
-                    First Name
+                    Imię
                 </th>
                 <th>
-                    Last Name
+                    Nazwisko
                 </th>
                 <th>
-                    Specialization
+                    Specjalizacja
                 </th>
                 <th>
-                    Option
+                    
                 </th>
             </tr>
         </thead>

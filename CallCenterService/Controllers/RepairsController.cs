@@ -31,7 +31,7 @@ namespace CallCenterService.Controllers
                 return NotFound();
 
             var repairs = _context.Repairs.Include(r => r.Servicer).Include(r => r.Fault)
-                .Include(r => r.Fault.Product).Where(s => s.Servicer.Id == id)
+                .Include(r => r.Fault.Product).Include(r => r.Fault.Client).Where(s => s.Servicer.Id == id)
                 .Where(s => s.Fault.Status == "In progress");
             
             return View(await repairs.ToListAsync());
@@ -46,6 +46,9 @@ namespace CallCenterService.Controllers
             }
 
             var repair = await _context.Repairs
+                .Include(f => f.Fault)
+                .Include(f => f.Fault.Client)
+                .Include(f => f.Fault.Product)
                 .SingleOrDefaultAsync(m => m.RepairId == id);
             if (repair == null)
             {

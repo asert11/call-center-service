@@ -1,44 +1,24 @@
-@model CallCenterService.ViewModels.AddProductFaultModel
+﻿@model CallCenterService.ViewModels.AddProductFaultModel
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h2>Create</h2>
+<h2>Dodaj usterkę</h2>
 
 <form asp-action="Create">
-    <div class="form-horizontal">
-        <h4>Fault</h4>
-        <hr />
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <input type="hidden" asp-for="ClientId" />
-            <input type="hidden" asp-for="Status" />
-        </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="ClientDescription" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="ClientDescription" class="form-control" />
-            <span asp-validation-for="ClientDescription" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
-        </div>
-    </div>
+
     <table class="table">
         <thead>
             <tr>
                 <th>
-                    Product Id
+                    ID produktu
                 </th>
                 <th>
-                    Name
+                    Nazwa
                 </th>
                 <th>
-                    Type
+                    Typ
                 </th>
 
             </tr>
@@ -56,7 +36,29 @@
             }
         </tbody>
     </table>
+
+    <div class="form-horizontal">
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <input type="hidden" asp-for="ClientId" />
+            <input type="hidden" asp-for="Status" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="ClientDescription" class="col-md-2 control-label">Opis klienta:</label>
+        <div class="col-md-10">
+            <input asp-for="ClientDescription" class="form-control" />
+            <span asp-validation-for="ClientDescription" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <br />
+            <input type="submit" value="Dodaj" class="btn btn-default" />
+        </div>
+    </div>
 </form>
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Wróć</a>
 </div>

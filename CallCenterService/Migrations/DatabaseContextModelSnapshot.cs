@@ -156,7 +156,7 @@ namespace CallCenterService.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<int?>("FaultId");
+                    b.Property<int>("FaultId");
 
                     b.Property<float>("PartsPrice");
 
@@ -296,7 +296,8 @@ namespace CallCenterService.Migrations
                 {
                     b.HasOne("CallCenterService.Models.Fault", "Fault")
                         .WithMany()
-                        .HasForeignKey("FaultId");
+                        .HasForeignKey("FaultId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("CallCenterService.Models.ApplicationUser", "Servicer")
                         .WithMany()

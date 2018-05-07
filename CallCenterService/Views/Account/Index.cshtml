@@ -1,19 +1,22 @@
-﻿@using Microsoft.AspNetCore.Identity;
+﻿    @using Microsoft.AspNetCore.Identity;
 @using CallCenterService.Models;
 @model CallCenterService.ViewModels.UsersViewModel
 @inject UserManager<ApplicationUser> userManager
 
+
+<h2>Użytkownicy</h2>
+<br />
 <table class="table">
+    <a asp-action="AddUser">Dodaj użytkownika</a>
     <thead>
         <tr>
-            <th>Username</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Address</th>
+            <th>Login</th>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+            @*<th>Address</th>*@
             <th>Email</th>
-            <th>Roles</th>
-            <th>Edit</th>
-            <th>Delete</th>
+            <th>Rola</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -23,21 +26,20 @@
                 <td>@user.UserName</td>
                 <td>@user.FirstName</td>
                 <td>@user.LastName</td>
-                <td>@user.Address</td>
+                @*<td>@user.Address</td>*@
                 <td>@user.Email</td>
                 <td>@(string.Join(",", await userManager.GetRolesAsync(user)))</td>
-            @if (user.UserName != "admin@admin.com")
-            {
-                <td><a asp-controller="Account" asp-action="EditUser" asp-route-id="@user.Id">Edit User</a></td>
-                <td><a asp-controller="Account" asp-action="DeleteUser" asp-route-id="@user.Id">Delete User</a></td>
-            }
-            else {
-                <td></td>
-                <td></td>
-            }
+                @if (user.UserName != "admin@admin.com")
+                {
+                    <td><a asp-controller="Account" asp-action="EditUser" asp-route-id="@user.Id">Edytuj</a> |
+                    <a asp-controller="Account" asp-action="DeleteUser" asp-route-id="@user.Id">Usuń</a></td>
+                }
+                else
+                {
+                    <td></td>
+                    <td></td>
+                }
             </tr>
         }
     </tbody>
 </table>
-
-<a asp-action="AddUser">Add User</a>

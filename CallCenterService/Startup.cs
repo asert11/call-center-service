@@ -12,6 +12,8 @@ using CallCenterService.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using CallCenterService.Configuration;
+using System.IO;
+using System.Text;
 
 namespace CallCenterService
 {
@@ -25,6 +27,7 @@ namespace CallCenterService
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+
         }
 
         public IConfigurationRoot Configuration { get; }

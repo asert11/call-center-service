@@ -1,48 +1,59 @@
-@model IEnumerable<CallCenterService.Models.Fault>
+﻿@model IEnumerable<CallCenterService.Models.Fault>
 
 @{
     ViewData["Title"] = "Registrant Panel";
 }
 
-<h2>Not Assigned Faults</h2>
+<h2>Panel rejestrującego</h2>
 <p>
-    <a asp-action="assigned_faults">Assigned Faults</a>
+    <a asp-action="assigned_faults">Przypisane usterki</a>
 </p>
 <p>
-    <a asp-action="Closed_assigned_faults">Closed Assigned Faults</a>
+    <a asp-action="Closed_assigned_faults">Zamknięte usterki</a>
 </p>
 
 <p>
-    <a asp-action="Opened_faults">Opened Faults</a>
+    <a asp-action="Opened_faults">Otwarte usterki</a>
+</p>
+<p>
+    <a asp-action="FaultsList">Wszystkie usterki</a>
 </p>
 
 <p>
     <br />
+    @*<br />
+    <a asp-action="AddFault">Add fault</a>*@
     <br />
-    <a asp-action="AddFault">Add fault</a>
-    <a asp-action="AddClients">Clients</a>
-    <a asp-action="FaultsList">All Faults</a>
+    <a asp-action="AddClients">Lista klientów</a>
+    @*<br />
+    <a asp-action="FaultsList">All Faults</a>*@
 </p>
+
+<br />
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ClientDescription)
+                ID usterki
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                Opis klienta
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ApplicationDate)
+                Status
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Client.FirstName)
+                Data zgłoszenia
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Client.SecondName)
+                Imię klienta
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Client.Adress)
+                Nazwisko klienta
+            </th>
+            <th>
+                Adres klienta
             </th>
             <th></th>
         </tr>
@@ -50,29 +61,32 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ClientDescription)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ApplicationDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Client.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Client.SecondName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Client.Adress)
-                </td>
-                <td>
-                    <a asp-action="SetServicer" asp-route-id="@item.FaultId">Add Servicer</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FaultId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Client.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Client.SecondName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Client.Adress)
+            </td>
+            <td>
+                <a asp-action="SetServicer" asp-route-id="@item.FaultId">Dodaj serwisanta</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

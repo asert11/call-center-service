@@ -14,5 +14,10 @@ namespace CallCenterService.ViewModels
         public int ProductId { get; set; }
 
         public List<Product> Products { get; set; }
+
+        public AddProductFaultModel(DatabaseContext context)
+        {
+            Products = context.Products.ToList();
+        }
     }
 }

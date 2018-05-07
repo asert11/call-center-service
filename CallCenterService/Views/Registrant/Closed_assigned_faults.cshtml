@@ -1,42 +1,64 @@
-@model IEnumerable<CallCenterService.Models.Fault>
+﻿@model IEnumerable<CallCenterService.Models.Fault>
 @{
-    ViewData["Title"] = "Closed_assigned_faults";
+    ViewData["Title"] = "Zamknięte usterki";
 }
 
-    <h2>Closed_assigned_faults</h2>
-
+    <h2>Zamknięte usterki</h2>
 
 
     <table class="table">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.ClientDescription)
+                    ID usterki
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Status)
+                    Opis klienta
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.ApplicationDate)
+                    Status
+                </th>
+                <th>
+                    Data zgłoszenia
+                </th>
+                <th>
+                    Imię klienta
+                </th>
+                <th>
+                    Nazwisko klienta
+                </th>
+                <th>
+                    Adres klienta
                 </th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ClientDescription)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ApplicationDate)
-                    </td>
-
-                </tr>
-            }
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FaultId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClientDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApplicationDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Client.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Client.SecondName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Client.Adress)
+                </td>
+            </tr>
+    }
         </tbody>
     </table>

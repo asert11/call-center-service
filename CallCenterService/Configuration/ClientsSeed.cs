@@ -18,7 +18,7 @@ namespace CallCenterService.Configuration
 
         public async Task Seed()
         {
-            if ((await _dbContext.Clients.SingleOrDefaultAsync(x => x.FirstName == "Jan" && x.SecondName == "Kowalski" && x.Adress == "ul Jagiellońska 28, Kraków")) == null)
+            if ((await _dbContext.Clients.SingleOrDefaultAsync(x => x.FirstName == "Jan" && x.SecondName == "Kowalski" && x.Adress == "ul Jagiellońska 28, Kraków") == null))
             {
                 await _dbContext.Clients.AddAsync(
                     new Client
@@ -30,7 +30,7 @@ namespace CallCenterService.Configuration
                     });
                 _dbContext.SaveChanges();
             }
-            if ((await _dbContext.Clients.SingleOrDefaultAsync(x => x.FirstName == "Jan" && x.SecondName == "Kowalski" && x.Adress == "ul Czarnogórska 28, Kraków")) == null)
+            if ((await _dbContext.Clients.SingleOrDefaultAsync(x => x.FirstName == "Jan" && x.SecondName == "Kowalski" && x.Adress == "ul Czarnogórska 28, Kraków") == null))
             {
                 await _dbContext.Clients.AddAsync(
                     new Client
@@ -42,7 +42,7 @@ namespace CallCenterService.Configuration
                     });
                 _dbContext.SaveChanges();
             }
-            if ((await _dbContext.Clients.SingleOrDefaultAsync(x => x.FirstName == "Janina" && x.SecondName == "Kowalska" && x.Adress == "ul Nowy Sad 12, Bielsko-Biała")) == null)
+            if ((await _dbContext.Clients.SingleOrDefaultAsync(x => x.FirstName == "Janina" && x.SecondName == "Kowalska" && x.Adress == "ul Nowy Sad 12, Bielsko-Biała") == null))
             {
                 await _dbContext.Clients.AddAsync(
                     new Client
@@ -54,18 +54,18 @@ namespace CallCenterService.Configuration
                     });
                 _dbContext.SaveChanges();
             }
-            if ((await _dbContext.Clients.SingleOrDefaultAsync(x => x.FirstName == "Bogdan" && x.SecondName == "Nowak" && x.Adress == "ul Krzywa 24, Przemyśl") == null))
-            {
-                await _dbContext.Clients.AddAsync(
-                    new Client
-                    {
-                        FirstName = "Bodan",
-                        SecondName = "Nowak",
-                        Adress = "ul Krzywa 24, Przemyśl"
+            //if ((await _dbContext.Clients.SingleOrDefaultAsync(x => x.FirstName == "Bogdan" && x.SecondName == "Nowak" && x.Adress == "ul Krzywa 24, Przemyśl") == null))
+            //{
+            //    await _dbContext.Clients.AddAsync(
+            //        new Client
+            //        {
+            //            FirstName = "Bogdan",
+            //            SecondName = "Nowak",
+            //            Adress = "ul Krzywa 24, Przemyśl"
 
-                    });
-                _dbContext.SaveChanges();
-            }
+            //        });
+            //    _dbContext.SaveChanges();
+            //}
             if ((await _dbContext.Clients.SingleOrDefaultAsync(x => x.FirstName == "Jakub" && x.SecondName == "Smoczek" && x.Adress == "ul Szarych Szeregów 15, Warszawa") == null))
             {
                 await _dbContext.Clients.AddAsync(
