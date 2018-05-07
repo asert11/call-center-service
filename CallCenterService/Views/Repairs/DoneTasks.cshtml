@@ -1,0 +1,69 @@
+﻿@model IEnumerable<CallCenterService.Models.Repair>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Your Tasks</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Fault.Product.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Fault.ClientDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Fault.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PartsPrice)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+    {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fault.Product.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fault.ClientDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fault.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PartsPrice)
+                </td>
+            </tr>
+
+    
+}
+    </tbody>
+</table>

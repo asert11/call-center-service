@@ -161,5 +161,12 @@ namespace CallCenterService.Controllers
         {
             return _context.Repairs.Any(e => e.RepairId == id);
         }
+
+        public async Task<IActionResult> DoneTasks()
+        {
+
+            var repairs = _context.Repairs.Include(r => r.Servicer).Where(s => s.Servicer.Id == id).Where(m => m.Fault.Status == "closed");
+            return View(await repairs.ToListAsync());
+        }
     }
 }
