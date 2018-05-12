@@ -1,29 +1,39 @@
-@model CallCenterService.ViewModels.LoginViewModel
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<link href="~/css/loginSite.css" rel="stylesheet">
+<div class="container">
+    <img alt="error" src="https://upload.wikimedia.org/wikipedia/commons/c/ca/Crystal_Clear_app_Login_Manager.png">
+    <form method="post" class="form-horizontal" asp-controller="Account" asp-action="Login">
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="username"><span class="glyphicon glyphicon-user"></span></label>
+            <div class="col-sm-7">
+                <input type="text" class="form-control" id="UserName" placeholder="Enter Username" name="username">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="password"><span class="glyphicon glyphicon-briefcase"></span></label>
+            <div class="col-sm-7">
+                <input type="password" class="form-control" id="password" placeholder="Enter password" name="password">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-4 col-sm-4">
+                <button type="submit" class="btn btn-default">
+                    Login
+                </button>
+            </div>
+        </div>
 
-<form method="post" asp-controller="Account" asp-action="Login">
-    <div asp-validation-summary="All"></div>
+      
 
-    <div>
-        <label asp-for="UserName"></label>
-        <input asp-for="UserName" />
-        <span asp-validation-for="UserName"></span>
-    </div>
-    <div>
-        <label asp-for="Password"></label>
-        <input asp-for="Password" />
-        <span asp-validation-for="Password"></span>
-    </div>
-    <div>
-        <label asp-for="RememberMe"></label>
-        <input asp-for="RememberMe" />
-        <span asp-validation-for="RememberMe"></span>
-    </div>
-    <div><p><input type="submit" value="Log In" /></p></div>
 
-    <p>
-        Admin<br />
-        Login: admin<br />
-        Password: Admin123!<br /><br />
-        User management: http://localhost:xxxxx/account/users
-    </p>
-</form>
+    </form>
+</div>
+
+<p>
+    Admin<br />
+    Login: admin<br />
+    Password: Admin123!<br /><br />
+    User management: http://localhost:xxxxx/account/users
+</p>
