@@ -1,47 +1,50 @@
+<link href="~/css/tableStyle.css" rel="stylesheet">
 @model IEnumerable<CallCenterService.Models.Fault>
 
 @{
     ViewData["Title"] = "Index";
 }
+<body style="background-color:powderblue;">
+    <h2>Faults History</h2>
 
-<h2>Faults History</h2>
 
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ClientDescription)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ApplicationDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FaultId)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClientDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicationDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FaultId)
+                    </td>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ClientDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ApplicationDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FaultId)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClientDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ApplicationDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FaultId)
-            </td>
-
-        </tr>
-}
-    </tbody>
-</table>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </body>

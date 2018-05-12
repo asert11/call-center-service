@@ -1,44 +1,45 @@
 ﻿@model CallCenterService.ViewModels.SetServicerRegistrantViewModel
+<body style="background-color:powderblue;">
+    <h2>Set Servicer</h2>
 
-<h2>Set Servicer</h2>
+    <h3>Fault: @Model.FaultData.FaultId @Model.FaultData.ClientDescription @Model.FaultData.Status</h3>
 
-<h3>Fault: @Model.FaultData.FaultId @Model.FaultData.ClientDescription @Model.FaultData.Status</h3>
-
-<div asp-validation-summary="All"></div>
-<form asp-controller="Registrant" asp-action="SetServicer">
-    <input asp-for="FaultId" type="hidden" />
-    <div><input type="submit" value="Set Servicer" /></div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Servicer Id
-                </th>
-                <th>
-                    First Name
-                </th>
-                <th>
-                    Last Name
-                </th>
-                <th>
-                    Specialization
-                </th>
-                <th>
-                    Option
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var servicer in Model.Servicers)
-            {
+    <div asp-validation-summary="All"></div>
+    <form asp-controller="Registrant" asp-action="SetServicer">
+        <input asp-for="FaultId" type="hidden" />
+        <div><input type="submit" value="Set Servicer" /></div>
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@servicer.Id</td>
-                    <td>@servicer.FirstName</td>
-                    <td>@servicer.LastName</td>
-                    <td>@servicer.Specialization</td>
-                    <td><input asp-for="ServicerId" value="@servicer.Id" type="radio" /></td>
+                    <th>
+                        Servicer Id
+                    </th>
+                    <th>
+                        First Name
+                    </th>
+                    <th>
+                        Last Name
+                    </th>
+                    <th>
+                        Specialization
+                    </th>
+                    <th>
+                        Option
+                    </th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</form>
+            </thead>
+            <tbody>
+                @foreach (var servicer in Model.Servicers)
+                {
+                    <tr>
+                        <td>@servicer.Id</td>
+                        <td>@servicer.FirstName</td>
+                        <td>@servicer.LastName</td>
+                        <td>@servicer.Specialization</td>
+                        <td><input asp-for="ServicerId" value="@servicer.Id" type="radio" /></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
+    </body>

@@ -3,34 +3,35 @@
 @{
     ViewData["Title"] = "Details";
 }
+<body style="background-color:powderblue;">
+    <h2>Details</h2>
 
-<h2>Details</h2>
-
-<div>
-    <h4>Fault</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.ClientDescription)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ClientDescription)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ApplicationDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ApplicationDate)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.FaultId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div>
+        <h4>Fault</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.ClientDescription)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ClientDescription)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Status)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Status)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.ApplicationDate)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ApplicationDate)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.FaultId">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>
+    </body>

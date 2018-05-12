@@ -1,78 +1,80 @@
+<link href="~/css/tableStyle.css" rel="stylesheet">
 @model IEnumerable<CallCenterService.Models.Fault>
 
 @{
     ViewData["Title"] = "Registrant Panel";
 }
+<body style="background-color:powderblue;">
+    <h2>Not Assigned Faults</h2>
+    <p>
+        <a asp-action="assigned_faults">Assigned Faults</a>
+    </p>
+    <p>
+        <a asp-action="Closed_assigned_faults">Closed Assigned Faults</a>
+    </p>
 
-<h2>Not Assigned Faults</h2>
-<p>
-    <a asp-action="assigned_faults">Assigned Faults</a>
-</p>
-<p>
-    <a asp-action="Closed_assigned_faults">Closed Assigned Faults</a>
-</p>
+    <p>
+        <a asp-action="Opened_faults">Opened Faults</a>
+    </p>
 
-<p>
-    <a asp-action="Opened_faults">Opened Faults</a>
-</p>
-
-<p>
-    <br />
-    <br />
-    <a asp-action="AddFault">Add fault</a>
-    <a asp-action="AddClients">Clients</a>
-    <a asp-action="FaultsList">All Faults</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ClientDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ApplicationDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Client.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Client.SecondName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Client.Adress)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+    <p>
+        <br />
+        <br />
+        <a asp-action="AddFault">Add fault</a>
+        <a asp-action="AddClients">Clients</a>
+        <a asp-action="FaultsList">All Faults</a>
+    </p>
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ClientDescription)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ApplicationDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Client.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Client.SecondName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Client.Adress)
-                </td>
-                <td>
-                    <a asp-action="SetServicer" asp-route-id="@item.FaultId">Add Servicer</a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.ClientDescription)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ApplicationDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Client.FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Client.SecondName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Client.Adress)
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClientDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicationDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Client.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Client.SecondName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Client.Adress)
+                    </td>
+                    <td>
+                        <a asp-action="SetServicer" asp-route-id="@item.FaultId">Add Servicer</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </body>

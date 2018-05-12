@@ -3,46 +3,47 @@
 @{
     ViewData["Title"] = "Edit";
 }
+<body style="background-color:powderblue;">
+    <h2>Edit</h2>
 
-<h2>Edit</h2>
+    <form asp-action="Edit">
+        <div class="form-horizontal">
+            <h4>Fault</h4>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="FaultId" />
+            <input type="hidden" asp-for="ClientId" />
+            <div class="form-group">
+                <label asp-for="ClientDescription" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="ClientDescription" class="form-control" />
+                    <span asp-validation-for="ClientDescription" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Status" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Status" class="form-control" />
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="ApplicationDate" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="ApplicationDate" class="form-control" />
+                    <span asp-validation-for="ApplicationDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    </form>
 
-<form asp-action="Edit">
-    <div class="form-horizontal">
-        <h4>Fault</h4>
-        <hr />
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="FaultId" />
-    <input type="hidden" asp-for="ClientId" />
-        <div class="form-group">
-            <label asp-for="ClientDescription" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="ClientDescription" class="form-control" />
-                <span asp-validation-for="ClientDescription" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Status" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="ApplicationDate" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="ApplicationDate" class="form-control" />
-                <span asp-validation-for="ApplicationDate" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </div>
+    <div>
+        <a asp-action="Index">Back to List</a>
     </div>
-</form>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
+    </body>

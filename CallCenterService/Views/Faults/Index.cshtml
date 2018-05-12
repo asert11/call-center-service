@@ -1,53 +1,56 @@
+<link href="~/css/tableStyle.css" rel="stylesheet">
 @model IEnumerable<CallCenterService.Models.Fault>
 
 @{
     ViewData["Title"] = "Index";
 }
+<body style="background-color:powderblue;">
+    <h2>Index</h2>
 
-<h2>Index</h2>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ClientId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ClientDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ApplicationDate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClientId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClientDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ApplicationDate)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.FaultId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.FaultId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.FaultId">Delete</a> |
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ClientId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ClientDescription)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ApplicationDate)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClientId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClientDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicationDate)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.FaultId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.FaultId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.FaultId">Delete</a> |
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </body>
