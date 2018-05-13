@@ -58,6 +58,7 @@
                 <a asp-action="Edit" asp-route-id="@item.ClientId">Edytuj</a> |
                 @*<a asp-action="Details" asp-route-id="@item.ClientId">Details</a> |*@
                 @*<a asp-action="Delete" asp-route-id="@item.ClientId">Usuń</a>*@
+                <a asp-controller="Products" asp-action="Create" asp-route-id="@item.ClientId">Dodaj produkt</a> |
                 <a asp-controller="Faults" asp-action="Create" asp-route-id="@item.ClientId">Dodaj usterkę</a>
             </td>
         </tr>

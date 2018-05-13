@@ -25,8 +25,8 @@ namespace CallCenterService.Configuration
         {
             await new UserRoleSeed(_roleManager).Seed();
             await new UserSeed(_userManager).Seed();
-            await new ProductsSeed(_dbContext).Seed();
             await new ClientsSeed(_dbContext).Seed();
+            await new ProductsSeed(_dbContext).Seed();
             await new FaultsSeed(_dbContext).Seed();
             await new RepairsSeed(_dbContext,_userManager).Seed();
 

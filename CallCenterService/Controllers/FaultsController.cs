@@ -53,8 +53,8 @@ namespace CallCenterService.Controllers
             }
 
             //Fault f = new Fault();
-            ViewModels.AddProductFaultModel f = new ViewModels.AddProductFaultModel(_context);
-            f.ClientId = (int)id;
+            ViewModels.AddProductFaultModel f = new ViewModels.AddProductFaultModel(_context, (int)id);
+           // f.ClientId = (int)id;
 
             return View(f);
         }

@@ -136,6 +136,8 @@ namespace CallCenterService.Migrations
                     b.Property<int>("ProductID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("ClientId");
+
                     b.Property<string>("Name")
                         .IsRequired();
 
@@ -143,6 +145,8 @@ namespace CallCenterService.Migrations
                         .IsRequired();
 
                     b.HasKey("ProductID");
+
+                    b.HasIndex("ClientId");
 
                     b.ToTable("Products");
                 });
@@ -290,6 +294,13 @@ namespace CallCenterService.Migrations
                     b.HasOne("CallCenterService.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductID");
+                });
+
+            modelBuilder.Entity("CallCenterService.Models.Product", b =>
+                {
+                    b.HasOne("CallCenterService.Models.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId");
                 });
 
             modelBuilder.Entity("CallCenterService.Models.Repair", b =>

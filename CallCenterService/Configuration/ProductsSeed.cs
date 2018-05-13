@@ -25,7 +25,8 @@ namespace CallCenterService.Configuration
                         new Product()
                         {
                             Name = "Pralka A+++ BEKO WRE 6511 BWW",
-                            Type = "AGD"
+                            Type = "AGD",
+                            ClientId = 1
                         });
                         
                 _dbContext.SaveChanges();
@@ -36,7 +37,8 @@ namespace CallCenterService.Configuration
                         new Product()
                         {
                             Name = "Pralka GORENJE W 6503/S",
-                            Type = "AGD"
+                            Type = "AGD",
+                            ClientId = 1
                         });
 
                 _dbContext.SaveChanges();
@@ -47,7 +49,8 @@ namespace CallCenterService.Configuration
                         new Product()
                         {
                             Name = "Pralka BEKO WTV6533BS",
-                            Type = "AGD"
+                            Type = "AGD",
+                            ClientId = 2
                         });
 
                 _dbContext.SaveChanges();
@@ -58,7 +61,8 @@ namespace CallCenterService.Configuration
                         new Product()
                         {
                             Name = "Zmywarka SIEMENS SN215I01AE",
-                            Type = "AGD"
+                            Type = "AGD",
+                            ClientId = 3
                         });
 
                 _dbContext.SaveChanges();
@@ -69,7 +73,8 @@ namespace CallCenterService.Configuration
                         new Product()
                         {
                             Name = "Zmywarka BOSCH SMS46GI04E",
-                            Type = "AGD"
+                            Type = "AGD",
+                            ClientId = 4
                         });
 
                 _dbContext.SaveChanges();
@@ -80,7 +85,8 @@ namespace CallCenterService.Configuration
                         new Product()
                         {
                             Name = "Telewizor Lin 32LHD",
-                            Type = "RTV"
+                            Type = "RTV",
+                            ClientId = 2
                         });
 
                 _dbContext.SaveChanges();
@@ -91,7 +97,8 @@ namespace CallCenterService.Configuration
                         new Product()
                         {
                             Name = "Telewizor MANTA LED320E10",
-                            Type = "RTV"
+                            Type = "RTV",
+                            ClientId = 5
                         });
 
                 _dbContext.SaveChanges();
@@ -102,7 +109,8 @@ namespace CallCenterService.Configuration
                         new Product()
                         {
                             Name = "myPhone Prime Plus",
-                            Type = "RTV"
+                            Type = "RTV",
+                            ClientId = 6
                         });
 
                 _dbContext.SaveChanges();
@@ -113,7 +121,8 @@ namespace CallCenterService.Configuration
                         new Product()
                         {
                             Name = "MaxCom MM916",
-                            Type = "RTV"
+                            Type = "RTV",
+                            ClientId = 7
                         });
 
                 _dbContext.SaveChanges();
@@ -124,7 +133,8 @@ namespace CallCenterService.Configuration
                         new Product()
                         {
                             Name = "Samsung Galaxy j5 2016 16 GB SM-J510F (Dual Sim) Złoty",
-                            Type = "RTV"
+                            Type = "RTV",
+                            ClientId = 6
                         });
 
                  _dbContext.SaveChanges();

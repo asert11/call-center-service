@@ -21,7 +21,7 @@ namespace CallCenterService.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Products.ToListAsync());
+            return View(await _context.Products.Include(m => m.Client).ToListAsync());
         }
 
         // GET: Products/Details/5
@@ -43,9 +43,17 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Products/Create
-        public IActionResult Create()
+        public IActionResult Create(int ? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Product p = new Product();
+            p.ClientId = (int)id;
+
+            return View(p);
         }
 
         // POST: Products/Create
@@ -53,15 +61,17 @@ namespace CallCenterService.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductID,Name,Type")] Product product)
+        public async Task<IActionResult> Create(int ? id, [Bind("ProductID,Name,Type")] Product product)
         {
             if (ModelState.IsValid)
             {
+                product.Client = _context.Clients.FirstOrDefault(m => m.ClientId == id);
+
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(product);
+            return RedirectToAction("Index", "Clients");
         }
 
         // GET: Products/Edit/5
