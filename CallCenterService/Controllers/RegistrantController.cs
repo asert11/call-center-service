@@ -21,9 +21,33 @@ namespace CallCenterService.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? searchIDFault, string searchClientName, string searchClientSurname, string searchClientAddress)
         {
-            return View(await _context.Faults.Include(f => f.Client).Where(f => f.Status.Equals("Open")).ToListAsync());
+            var name = from m in _context.Faults
+                       select m;
+
+            if (searchIDFault!=null)
+            {
+                name = name.Where(s => s.FaultId.Equals(searchIDFault));
+            }
+
+            if (!String.IsNullOrEmpty(searchClientName))
+            {
+                name = name.Where(s => s.Client.FirstName.Equals(searchClientName));
+            }
+
+            if (!String.IsNullOrEmpty(searchClientSurname))
+            {
+                name = name.Where(s => s.Client.SecondName.Equals(searchClientSurname));
+            }
+
+            if (!String.IsNullOrEmpty(searchClientAddress))
+            {
+                name = name.Where(s => s.Client.Adress.Equals(searchClientAddress));
+            }
+
+            return View(await name.Include(f => f.Client).Where(f => f.Status.Equals("Open")).ToListAsync());
+            //return View(await _context.Faults.Include(f => f.Client).Where(f => f.Status.Equals("Open")).ToListAsync());
         }
 
         public async Task<IActionResult> Opened_faults()

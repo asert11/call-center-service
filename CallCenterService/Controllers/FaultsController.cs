@@ -21,9 +21,33 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Faults
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchFaultStatus, string searchClientName, string searchClientSurname, string searchClientAddress)
         {
-            return View(await _context.Faults.Include(f => f.Client).ToListAsync());
+
+            var name = from m in _context.Faults
+                       select m;
+
+        
+            if (!String.IsNullOrEmpty(searchFaultStatus))
+            {
+                name = name.Where(s => s.Status.Equals(searchFaultStatus));
+            }
+            if (!String.IsNullOrEmpty(searchClientName))
+            {
+                name = name.Where(s => s.Client.FirstName.Equals(searchClientName));
+            }
+
+            if (!String.IsNullOrEmpty(searchClientSurname))
+            {
+                name = name.Where(s => s.Client.SecondName.Equals(searchClientSurname));
+            }
+
+            if (!String.IsNullOrEmpty(searchClientAddress))
+            {
+                name = name.Where(s => s.Client.Adress.Equals(searchClientAddress));
+            }
+
+            return View(await name.Include(f => f.Client).ToListAsync());
         }
 
         // GET: Faults/Details/5

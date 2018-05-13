@@ -37,6 +37,18 @@
 <p>
     @*<a asp-action="Create">Create New</a>*@ &nbsp;
 </p>
+
+<form asp-controller="Repairs" asp-action="Index" method="get">
+    <p>
+        <b>ID naprawy:</b> <input type="text" name="searchIdRepair">
+        <b>Imie klienta: </b> <input type="text" name="searchClientName">
+        <b>Nazwisko klienta:</b>  <input type="text" name="searchClientSurname">
+        <b>Nazwa produktu: </b> <input type="text" name="searchNameProduct">
+        <input type="submit" value="Szukaj" />
+    </p>
+</form>
+
+
 <table class="table">
     <thead>
         <tr>

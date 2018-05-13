@@ -19,9 +19,28 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int ? searchIdProduct, string searchNameProduct, string searchTypeProduct)
         {
-            return View(await _context.Products.Include(m => m.Client).ToListAsync());
+
+            var name = from m in _context.Products
+                       select m;
+
+
+            if (searchIdProduct!=null)
+            {
+                name = name.Where(s => s.ProductID.Equals(searchIdProduct));
+            }
+            if (!String.IsNullOrEmpty(searchNameProduct))
+            {
+                name = name.Where(s => s.Name.Contains(searchNameProduct));
+            }
+
+            if (!String.IsNullOrEmpty(searchTypeProduct))
+            {
+                name = name.Where(s => s.Type.Equals(searchTypeProduct));
+            }
+
+            return View(await name.Include(m => m.Client).ToListAsync());
         }
 
         // GET: Products/Details/5

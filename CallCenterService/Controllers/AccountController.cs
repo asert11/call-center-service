@@ -111,13 +111,35 @@ namespace CallCenterService.Controllers
             return View(vm);
         }
 
-        public IActionResult Index()
+        public async Task <IActionResult> Index(string searchUserLogin, string searchUserEmail, string searchUserRole)
         {
+
+            var name = from m in _dbContext.Users
+                       select m;
+
+            var role  = from n in _userManager.Users
+                        select n;
+
+
+            if (!String.IsNullOrEmpty(searchUserLogin))
+            {
+                name = name.Where(s=>s.UserName.Equals(searchUserLogin));
+            }
+
+            if (!String.IsNullOrEmpty(searchUserEmail))
+            {
+                name = name.Where(s => s.Email.Equals(searchUserEmail));
+            }
+
+            if (!String.IsNullOrEmpty(searchUserRole))
+            {
+                role = role.Where(s => s.Roles.OrderBy(r=>r.RoleId).Equals(searchUserRole));//
+            }
+                 
             var vm = new UsersViewModel()
             {
-                Users = _dbContext.Users.OrderBy(u => u.UserName).Include(u => u.Roles).ToList()
+                Users = name.ToList()
             };
-
             return View(vm);
         }
 
