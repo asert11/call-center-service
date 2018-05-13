@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CallCenterService.Models;
+using CallCenterService.ViewModels;
 
 namespace CallCenterService.Controllers
 {
@@ -48,6 +49,16 @@ namespace CallCenterService.Controllers
         {
             return "From [HttpPost]Index: filter on " + searchClientName ;
         }
+
+        // GET
+        public async Task<IActionResult> History(int ? id)
+        {
+            ClientFaultHistoryViewModel vm = new ClientFaultHistoryViewModel();
+            vm.Faults = await _context.Faults.Include(m => m.Client).Include(m => m.Product).Where(m => m.ClientId == id).ToListAsync();
+
+            return View(vm);
+        }
+
         // GET: Clients/Details/5
         public async Task<IActionResult> Details(int? id)
         {

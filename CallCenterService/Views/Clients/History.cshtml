@@ -1,0 +1,41 @@
+@model CallCenterService.ViewModels.ClientFaultHistoryViewModel
+
+    <h2>History</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    ID usterki
+                </th>
+                <th>
+                    Opis klienta
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    ID produktu
+                </th>
+                <th>
+                    Nazwa produktu
+                </th>
+                <th>
+                    
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var fault in Model.Faults)
+            {
+            <tr>
+                <td>@fault.FaultId</td>
+                <td>@fault.ClientDescription</td>
+                <td>@fault.Status</td>
+                <td>@fault.Product.ProductID</td>
+                <td>@fault.Product.Name</td>
+                <td><a asp-controller="Repairs" asp-action="Details" asp-route-id="@fault.FaultId">Przejdü do naprawy</a></td>
+            </tr>
+            }
+        </tbody>
+    </table>
