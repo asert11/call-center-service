@@ -23,14 +23,41 @@ namespace CallCenterService.Controllers
         }
       
         // GET: Repairs
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int ? searchIdRepair,string searchClientName, string searchClientSurname, string searchNameProduct)
         {
+            var name = from m in _context.Repairs
+                       select m;
+
+
+            if (searchIdRepair!=null)
+            {
+                name = name.Where(s => s.RepairId.Equals(searchIdRepair));
+            }
+            if (!String.IsNullOrEmpty(searchClientName))
+            {
+                name = name.Where(s => s.Fault.Client.FirstName.Equals(searchClientName));
+            }
+
+            if (!String.IsNullOrEmpty(searchClientSurname))
+            {
+                name = name.Where(s => s.Fault.Client.SecondName.Equals(searchClientSurname));
+            }
+
+            if (!String.IsNullOrEmpty(searchNameProduct))
+            {
+                name = name.Where(s => s.Fault.Product.Name.Contains(searchNameProduct));
+            }
+
+
+
+
+
             ApplicationUser usr = await _userManager.GetUserAsync(HttpContext.User);
             string id = usr?.Id;
             if (id == null)
                 return NotFound();
 
-            var repairs = _context.Repairs.Include(r => r.Servicer).Include(r => r.Fault)
+            var repairs = name.Include(r => r.Servicer).Include(r => r.Fault)
                 .Include(r => r.Fault.Product).Include(r => r.Fault.Client).Where(s => s.Servicer.Id == id)
                 .Where(s => s.Fault.Status == "In progress");
             

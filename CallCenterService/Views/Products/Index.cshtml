@@ -10,6 +10,15 @@
 <p>
     <a asp-action="Create">Dodaj produkt</a>
 </p>
+<form asp-controller="Products" asp-action="Index" method="get">
+    <p>
+        <b>ID Produktu: </b> <input type="text" name="searchIdProduct">
+        <b>Nazwa:</b>  <input type="text" name="searchNameProduct">
+        <b>Typ:</b>  <input type="text" name="searchTypeProduct">
+        <input type="submit" value="Szukaj" />
+    </p>
+</form>
+
 <table class="table">
     <thead>
         <tr>

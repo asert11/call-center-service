@@ -31,7 +31,15 @@
 </p>
 
 <br />
-
+<form asp-controller="Registrant" asp-action="Index" method="get">
+    <p>
+        <b> ID usterki</b> <input type="text" name="searchIDFault">
+        <b> Imię klienta:</b> <input type="text" name="searchClientName">
+        <b> Nazwisko klienta: </b> <input type="text" name="searchClientSurname">
+        <b> Adres klienta: </b><input type="text" name="searchClientAddress">
+        <input type="submit" value="Szukaj" />
+</p>
+</form>
 <table class="table">
     <thead>
         <tr>
