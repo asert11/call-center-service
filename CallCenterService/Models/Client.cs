@@ -11,11 +11,9 @@ namespace CallCenterService.Models
     {
         [Key]
         public int ClientId { get; set; }
-        [Required]
-        [RegularExpression("[a-zA-Z ]")]
+        [Required, RegularExpression("^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]*$", ErrorMessage = "Imię powinno zaczynać się z dużej litery i zawierać wyłącznie znaki alfabetu")]
         public String FirstName { get; set; }
-        [Required]
-        [RegularExpression("[a-zA-Z ]")]
+        [Required, RegularExpression("^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]*$", ErrorMessage = "Nazwisko powinno zaczynać się z dużej litery i zawierać wyłącznie znaki alfabetu")]
         public String SecondName { get; set; }
         [Required]
         public String Adress { get; set; }

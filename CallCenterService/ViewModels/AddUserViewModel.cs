@@ -11,13 +11,13 @@ namespace CallCenterService.ViewModels
         [Required, EmailAddress, MaxLength(256), Display(Name = "Email Address")]
         public string Email { get; set; }
 
-        [Required]
+        [Required, RegularExpression("^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]*$", ErrorMessage = "Imię powinno zaczynać się z dużej litery i zawierać wyłącznie znaki alfabetu")]
         public string FirstName { get; set; }
 
-        [Required]
+        [Required, RegularExpression("^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]*$", ErrorMessage = "Nazwisko powinno zaczynać się z dużej litery i zawierać wyłącznie znaki alfabetu")]
         public string LastName { get; set; }
 
-        [Required]
+        
         public string Address { get; set; }
 
         [Required, MinLength(6), MaxLength(50), DataType(DataType.Password), Display(Name = "Password")]

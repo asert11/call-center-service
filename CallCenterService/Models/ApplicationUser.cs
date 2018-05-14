@@ -6,9 +6,9 @@ namespace CallCenterService.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        [Required]
+        [Required, RegularExpression("^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]*$", ErrorMessage = "Imię powinno zaczynać się z dużej litery i zawierać wyłącznie znaki alfabetu")]
         public string FirstName { get; set; }
-        [Required]
+        [Required, RegularExpression("^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]*$", ErrorMessage = "Nazwisko powinno zaczynać się z dużej litery i zawierać wyłącznie znaki alfabetu")]
         public string LastName { get; set; }
         public string Address { get; set; }
         public string Specialization { get; set; }
