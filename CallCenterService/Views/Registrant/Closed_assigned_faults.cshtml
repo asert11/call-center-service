@@ -31,6 +31,9 @@
                 <th>
                     Adres klienta
                 </th>
+                <th>
+                    
+                </th>
                 <th></th>
             </tr>
         </thead>
@@ -59,6 +62,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Client.Adress)
                 </td>
+                <td><a asp-action="GoToRepair" asp-route-id="@item.FaultId">Przejdź do naprawy</a></td>
             </tr>
     }
         </tbody>

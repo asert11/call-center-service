@@ -31,35 +31,39 @@
             <th>
                 Adres klienta
             </th>
+            <th>
+
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FaultId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ClientDescription)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ApplicationDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Client.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Client.SecondName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Client.Adress)
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FaultId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Client.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Client.SecondName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Client.Adress)
+            </td>
+            <td><a asp-action="GoToRepair" asp-route-id="@item.FaultId">Przejdź do naprawy</a></td>
+        </tr>
         }
     </tbody>
 </table>

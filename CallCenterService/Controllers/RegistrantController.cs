@@ -71,6 +71,14 @@ namespace CallCenterService.Controllers
         }
 
 
+        public IActionResult GoToRepair(int ? id)
+        {
+            var repair = _context.Repairs.SingleOrDefault(m => m.FaultId == id);
+            int new_id = repair.RepairId;
+
+            return RedirectToAction("Details", "Repairs", new { id = new_id});
+        }
+
         public IActionResult AddFault()
         {
             return RedirectToAction("Create", "Faults");
