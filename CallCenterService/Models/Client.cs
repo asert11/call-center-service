@@ -12,8 +12,10 @@ namespace CallCenterService.Models
         [Key]
         public int ClientId { get; set; }
         [Required]
+        [RegularExpression("[a-zA-Z ]")]
         public String FirstName { get; set; }
         [Required]
+        [RegularExpression("[a-zA-Z ]")]
         public String SecondName { get; set; }
         [Required]
         public String Adress { get; set; }

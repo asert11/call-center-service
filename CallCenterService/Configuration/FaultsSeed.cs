@@ -24,7 +24,7 @@ namespace CallCenterService.Configuration
                     new Fault
                     {
                         ClientId = 1,
-                        ApplicationDate = new DateTime(10000000000000),
+                        ApplicationDate = new DateTime(2018, 1, 21, 12, 30, 20),
                         Status = "Open",
                         ClientDescription = "Nie działa system namaczania.",
                         Product = await _dbContext.Products.FirstOrDefaultAsync(x => x.ProductID == 3)
@@ -38,7 +38,7 @@ namespace CallCenterService.Configuration
                     new Fault
                     {
                         ClientId = 4,
-                        ApplicationDate = new DateTime(19430000000000),
+                        ApplicationDate = new DateTime(2018, 3, 12, 9, 12, 30),
                         Status = "Open",
                         ClientDescription = "Telefon się zawiesza",
                         Product = await _dbContext.Products.FirstOrDefaultAsync(x => x.ProductID == 7)
@@ -51,7 +51,7 @@ namespace CallCenterService.Configuration
                     new Fault
                     {
                         ClientId = 5,
-                        ApplicationDate = new DateTime(10000000000000),
+                        ApplicationDate = new DateTime(2018, 4, 9, 8, 42, 33),
                         Status = "Open",
                         ClientDescription = "W telewizorze nie działa Bluetooth",
                         Product = await _dbContext.Products.FirstOrDefaultAsync(x => x.ProductID == 6)
@@ -65,7 +65,7 @@ namespace CallCenterService.Configuration
                     new Fault
                     {
                         ClientId = 2,
-                        ApplicationDate = new DateTime(17430000000000),
+                        ApplicationDate = new DateTime(2018, 2, 11, 11, 11, 11),
                         Status = "In progress",
                         ClientDescription = "Nie można włączyć telewizora pilotem",
                         Product = await _dbContext.Products.FirstOrDefaultAsync(x => x.ProductID == 6)
@@ -78,7 +78,7 @@ namespace CallCenterService.Configuration
                     new Fault
                     {
                         ClientId = 4,
-                        ApplicationDate = new DateTime(17310000000000),
+                        ApplicationDate = new DateTime(2018, 5, 12, 14, 27, 53),
                         Status = "In progress",
                         ClientDescription = "Pralka przecieka",
                         Product = await _dbContext.Products.FirstOrDefaultAsync(x => x.ProductID == 2)
@@ -91,7 +91,7 @@ namespace CallCenterService.Configuration
                     new Fault
                     {
                         ClientId = 2,
-                        ApplicationDate = new DateTime(10000000000000),
+                        ApplicationDate = new DateTime(2018, 5, 9, 22, 10, 10),
                         Status = "In progress",
                         ClientDescription = "Zmywarka pokazuje błąd E7",
                         Product = await _dbContext.Products.FirstOrDefaultAsync(x => x.ProductID == 4)
@@ -104,7 +104,7 @@ namespace CallCenterService.Configuration
                     new Fault
                     {
                         ClientId = 3,
-                        ApplicationDate = new DateTime(10000000000000),
+                        ApplicationDate = new DateTime(2018, 3, 10, 9, 45, 40),
                         Status = "In progress",
                         ClientDescription = "Zmywarka nie wypuszcza saszetki",
                         Product = await _dbContext.Products.FirstOrDefaultAsync(x => x.ProductID == 5)
@@ -117,7 +117,7 @@ namespace CallCenterService.Configuration
                     new Fault
                     {
                         ClientId = 7,
-                        ApplicationDate = new DateTime(1453200000000),
+                        ApplicationDate = new DateTime(2018, 4, 23, 15, 15, 20),
                         Status = "Done",
                         ClientDescription = "Telewizor świeci się na zielono",
                         Product = await _dbContext.Products.FirstOrDefaultAsync(x => x.ProductID == 1)
@@ -130,7 +130,7 @@ namespace CallCenterService.Configuration
                     new Fault
                     {
                         ClientId = 6,
-                        ApplicationDate = new DateTime(164325000000000),
+                        ApplicationDate = new DateTime(2018, 5, 3, 13, 20, 35),
                         Status = "Done",
                         ClientDescription = "Telefon nie wykrywa karty sim",
                         Product = await _dbContext.Products.FirstOrDefaultAsync(x => x.ProductID == 10)
@@ -143,7 +143,7 @@ namespace CallCenterService.Configuration
                     new Fault
                     {
                         ClientId = 1,
-                        ApplicationDate = new DateTime(113634250000000000),
+                        ApplicationDate = new DateTime(2018, 5, 6, 11, 10, 3),
                         Status = "Done",
                         ClientDescription = "Zmywarka pokazuje błąd E154 R4313503",
                         Product = await _dbContext.Products.FirstOrDefaultAsync(x => x.ProductID == 5)
