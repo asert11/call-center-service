@@ -114,28 +114,32 @@ namespace CallCenterService.Controllers
         public async Task <IActionResult> Index(string searchUserLogin, string searchUserEmail, string searchUserRole)
         {
 
-            var name = from m in _dbContext.Users
-                       select m;
+            //var name = (from m in _dbContext.Users
+            //           select m);
 
-            var role  = from n in _userManager.Users
-                        select n;
+            //var role  = from n in _userManager.Users
+            //            select n;
 
+
+            IList<ApplicationUser> name;
+
+            if (!String.IsNullOrEmpty(searchUserRole))
+            {
+                name = await _userManager.GetUsersInRoleAsync(searchUserRole);
+            }
+            else
+                name = _userManager.Users.ToList();
 
             if (!String.IsNullOrEmpty(searchUserLogin))
             {
-                name = name.Where(s=>s.UserName.Equals(searchUserLogin));
+                name = name.Where(s=>s.UserName.Equals(searchUserLogin)).ToList();
             }
 
             if (!String.IsNullOrEmpty(searchUserEmail))
             {
-                name = name.Where(s => s.Email.Equals(searchUserEmail));
+                name = name.Where(s => s.Email.Equals(searchUserEmail)).ToList();
             }
 
-            if (!String.IsNullOrEmpty(searchUserRole))
-            {
-                role = role.Where(s => s.Roles.OrderBy(r=>r.RoleId).Equals(searchUserRole));//
-            }
-                 
             var vm = new UsersViewModel()
             {
                 Users = name.ToList()
