@@ -76,6 +76,7 @@ namespace CallCenterService.Controllers
                 .Include(f => f.Fault)
                 .Include(f => f.Fault.Client)
                 .Include(f => f.Fault.Product)
+                .Include(f => f.Servicer)
                 .SingleOrDefaultAsync(m => m.RepairId == id);
             if (repair == null)
             {
