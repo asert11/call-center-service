@@ -1,5 +1,5 @@
 ﻿
-<link rel="stylesheet" href="~/css/tableStyle.css">
+@*<link rel="stylesheet" href="~/css/tableStyle.css">*@
 
 
 @model IEnumerable<CallCenterService.Models.Fault>
@@ -80,7 +80,7 @@
                     @Html.DisplayFor(modelItem => item.Client.SecondName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Client.Adress)
+                    @Html.DisplayFor(modelItem => item.Client.Street)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.FaultId">Edytuj</a>

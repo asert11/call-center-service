@@ -22,11 +22,31 @@
         <span asp-validation-for="LastName"></span>
     </div>
     <br />
-    @*<div>
-        <label asp-for="Address"></label>
-        <input asp-for="Address" />
-        <span asp-validation-for="Address"></span>
-    </div>*@
+    <div>
+        <label asp-for="Street"></label>
+        <input asp-for="Street" />
+        <span asp-validation-for="Street"></span>
+    </div>
+    <div>
+        <label asp-for="StreetNumber"></label>
+        <input asp-for="StreetNumber" />
+        <span asp-validation-for="StreetNumber"></span>
+    </div>
+    <div>
+        <label asp-for="ApartmentNumber"></label>
+        <input asp-for="ApartmentNumber" />
+        <span asp-validation-for="ApartmentNumber"></span>
+    </div>
+    <div>
+        <label asp-for="PostCode"></label>
+        <input asp-for="PostCode" />
+        <span asp-validation-for="PostCode"></span>
+    </div>
+    <div>
+        <label asp-for="City"></label>
+        <input asp-for="City" />
+        <span asp-validation-for="City"></span>
+    </div>
     <div>
         <b>Rola:</b>
         <select asp-for="Role" asp-items="Model.Roles"></select>
@@ -34,20 +54,20 @@
     <br />
     <div>
         @*<label asp-for="Specialization">Specjalizacja:</label>
-        <input asp-for="Specialization" />
-        <span asp-validation-for="Specialization"></span>*@
+            <input asp-for="Specialization" />
+            <span asp-validation-for="Specialization"></span>*@
         @{
-        List<SelectListItem> listItems = new List<SelectListItem>();
-        listItems.Add(new SelectListItem
-        {
-            Text = "RTV",
-            Value = "RTV"
-        });
-        listItems.Add(new SelectListItem
-        {
-            Text = "AGD",
-            Value = "AGD"
-        });
+            List<SelectListItem> listItems = new List<SelectListItem>();
+            listItems.Add(new SelectListItem
+            {
+                Text = "RTV",
+                Value = "RTV"
+            });
+            listItems.Add(new SelectListItem
+            {
+                Text = "AGD",
+                Value = "AGD"
+            });
         }
         <label>Specjalizacja: @Html.DropDownListFor(model => model.Specialization, listItems, "")</label>
     </div>

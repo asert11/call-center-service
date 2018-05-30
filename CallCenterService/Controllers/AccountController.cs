@@ -81,7 +81,9 @@ namespace CallCenterService.Controllers
                 using (var transaction =_dbContext.Database.BeginTransaction())
                 {
                     var user = new ApplicationUser { UserName = vm.UserName, Email = vm.Email,
-                        FirstName = vm.FirstName, LastName = vm.LastName, Address = vm.Address,
+                        FirstName = vm.FirstName, LastName = vm.LastName, Street = vm.Street,
+                        StreetNumber = vm.StreetNumber, ApartmentNumber = vm.ApartmentNumber,
+                        PostCode = vm.PostCode, City = vm.City,
                         Specialization = vm.Specialization};
 
                     var result = await _userManager.CreateAsync(user, vm.Password);
@@ -212,7 +214,11 @@ namespace CallCenterService.Controllers
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Address = user.Address,
+                Street = user.Street,
+                StreetNumber = user.StreetNumber,
+                ApartmentNumber = user.ApartmentNumber,
+                PostCode = user.PostCode,
+                City = user.City,
                 UserName = user.UserName,
                 Specialization = user.Specialization
             };
@@ -242,7 +248,11 @@ namespace CallCenterService.Controllers
                     vm.UserName = user.UserName;
                     vm.FirstName = user.FirstName;
                     vm.LastName = user.LastName;
-                    vm.Address = user.Address;
+                    vm.Street = user.Street;
+                    vm.StreetNumber = user.StreetNumber;
+                    vm.ApartmentNumber = user.ApartmentNumber;
+                    vm.PostCode = user.PostCode;
+                    vm.City = user.City;
                     vm.Specialization = user.Specialization;
                     vm.Roles = GetUserRoles();
                     return View(vm);
@@ -263,7 +273,11 @@ namespace CallCenterService.Controllers
 
                     user.FirstName = vm.FirstName;
                     user.LastName = vm.LastName;
-                    user.Address = vm.Address;
+                    user.Street = vm.Street;
+                    user.StreetNumber = vm.StreetNumber;
+                    user.ApartmentNumber = vm.ApartmentNumber;
+                    user.PostCode = vm.PostCode;
+                    user.City = vm.City;
                     user.Specialization = vm.Specialization;
 
                     await _userManager.UpdateAsync(user);
@@ -276,7 +290,11 @@ namespace CallCenterService.Controllers
             vm.UserName = user.UserName;
             vm.FirstName = user.FirstName;
             vm.LastName = user.LastName;
-            vm.Address = user.Address;
+            vm.Street = user.Street;
+            vm.StreetNumber = user.StreetNumber;
+            vm.ApartmentNumber = user.ApartmentNumber;
+            vm.PostCode = user.PostCode;
+            vm.City = user.City;
             vm.Specialization = user.Specialization;
             vm.Roles = GetUserRoles();
             return View(vm);

@@ -1,7 +1,7 @@
 
 @using Microsoft.AspNetCore.Identity;
 
-﻿<link rel="stylesheet" href="~/css/tableStyle.css"> 
+﻿@*<link rel="stylesheet" href="~/css/tableStyle.css">*@ 
 @using Microsoft.AspNetCore.Identity;
 @using CallCenterService.Models;
 @model CallCenterService.ViewModels.UsersViewModel
@@ -19,14 +19,18 @@
         <input type="submit" value="Szukaj" />
     </p>
 </form>
+<a asp-action="AddUser">Dodaj użytkownika</a>
 <table class="table">
-    <a asp-action="AddUser">Dodaj użytkownika</a>
     <thead>
         <tr>
             <th>Login</th>
             <th>Imię</th>
             <th>Nazwisko</th>
-            @*<th>Address</th>*@
+            <th>Ulica</th>
+            <th>Numer domu</th>
+            <th>Numer mieszkania</th>
+            <th>Kod pocztowy</th>
+            <th>Miasto</th>
             <th>Email</th>
             <th>Rola</th>
             <th></th>
@@ -39,7 +43,11 @@
             <td>@user.UserName</td>
             <td>@user.FirstName</td>
             <td>@user.LastName</td>
-            @*<td>@user.Address</td>*@
+            <td>@user.Street</td>
+            <td>@user.StreetNumber</td>
+            <td>@user.ApartmentNumber</td>
+            <td>@user.PostCode</td>
+            <td>@user.City</td>
             <td>@user.Email</td>
             <td>@(string.Join(",", await userManager.GetRolesAsync(user)))</td>
 

@@ -17,8 +17,22 @@ namespace CallCenterService.ViewModels
         [Required, RegularExpression("^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]*$", ErrorMessage = "Nazwisko powinno zaczynać się z dużej litery i zawierać wyłącznie znaki alfabetu")]
         public string LastName { get; set; }
 
-        
-        public string Address { get; set; }
+        [Required]
+        public string Street { get; set; }
+
+        [Required]
+        [RegularExpression("^[0-9]+[A-Z]?$")]
+        public string StreetNumber { get; set; }
+
+        [RegularExpression("^[0-9]*$")]
+        public string ApartmentNumber { get; set; }
+
+        [Required]
+        public string City { get; set; }
+
+        [Required]
+        [RegularExpression("^[0-9]{2}-[0-9]{3}$")]
+        public string PostCode { get; set; }
 
         [Required, MinLength(6), MaxLength(50), DataType(DataType.Password), Display(Name = "Password")]
         public string Password { get; set; }

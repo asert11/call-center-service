@@ -38,7 +38,7 @@ namespace CallCenterService.Controllers
 
             if (!String.IsNullOrEmpty(searchClientAddress))
             {
-                name = name.Where(s => s.Adress.Equals(searchClientAddress));
+                name = name.Where(s => s.Street.Equals(searchClientAddress));
             }
 
             return View(await name.ToListAsync());
@@ -88,7 +88,8 @@ namespace CallCenterService.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClientId,FirstName,SecondName,Adress")] Client client)
+        public async Task<IActionResult> Create(
+            [Bind("ClientId,FirstName,SecondName,Street,StreetNumber,ApartmentNumber,City,PostCode")] Client client)
         {
             if (ModelState.IsValid)
             {
@@ -120,7 +121,8 @@ namespace CallCenterService.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClientId,FirstName,SecondName,Adress")] Client client)
+        public async Task<IActionResult> Edit(int id, 
+            [Bind("ClientId,FirstName,SecondName,Street,StreetNumber,ApartmentNumber,City,PostCode")] Client client)
         {
             if (id != client.ClientId)
             {

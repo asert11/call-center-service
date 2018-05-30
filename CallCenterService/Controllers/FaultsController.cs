@@ -44,7 +44,7 @@ namespace CallCenterService.Controllers
 
             if (!String.IsNullOrEmpty(searchClientAddress))
             {
-                name = name.Where(s => s.Client.Adress.Equals(searchClientAddress));
+                name = name.Where(s => s.Client.Street.Equals(searchClientAddress));
             }
 
             return View(await name.Include(f => f.Client).ToListAsync());

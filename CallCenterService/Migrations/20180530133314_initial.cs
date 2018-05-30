@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace CallCenterService.Migrations
 {
-    public partial class initial_migration : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,12 +15,13 @@ namespace CallCenterService.Migrations
                 {
                     Id = table.Column<string>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    Address = table.Column<string>(nullable: true),
+                    ApartmentNumber = table.Column<string>(nullable: true),
+                    City = table.Column<string>(nullable: false),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
+                    FirstName = table.Column<string>(nullable: false),
+                    LastName = table.Column<string>(nullable: false),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
@@ -28,8 +29,11 @@ namespace CallCenterService.Migrations
                     PasswordHash = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    PostCode = table.Column<string>(nullable: false),
                     SecurityStamp = table.Column<string>(nullable: true),
                     Specialization = table.Column<string>(nullable: true),
+                    Street = table.Column<string>(nullable: false),
+                    StreetNumber = table.Column<string>(nullable: false),
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     UserName = table.Column<string>(maxLength: 256, nullable: true)
                 },
@@ -44,9 +48,13 @@ namespace CallCenterService.Migrations
                 {
                     ClientId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Adress = table.Column<string>(nullable: false),
+                    ApartmentNumber = table.Column<string>(nullable: true),
+                    City = table.Column<string>(nullable: false),
                     FirstName = table.Column<string>(nullable: false),
-                    SecondName = table.Column<string>(nullable: false)
+                    PostCode = table.Column<string>(nullable: false),
+                    SecondName = table.Column<string>(nullable: false),
+                    Street = table.Column<string>(nullable: false),
+                    StreetNumber = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -65,20 +73,6 @@ namespace CallCenterService.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_EventHistory", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Products",
-                columns: table => new
-                {
-                    ProductID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: false),
-                    Type = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Products", x => x.ProductID);
                 });
 
             migrationBuilder.CreateTable(
@@ -151,32 +145,24 @@ namespace CallCenterService.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Faults",
+                name: "Products",
                 columns: table => new
                 {
-                    FaultId = table.Column<int>(nullable: false)
+                    ProductID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ApplicationDate = table.Column<DateTime>(nullable: false),
-                    ClientDescription = table.Column<string>(nullable: true),
                     ClientId = table.Column<int>(nullable: false),
-                    ProductID = table.Column<int>(nullable: true),
-                    Status = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: false),
+                    Type = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Faults", x => x.FaultId);
+                    table.PrimaryKey("PK_Products", x => x.ProductID);
                     table.ForeignKey(
-                        name: "FK_Faults_Clients_ClientId",
+                        name: "FK_Products_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "ClientId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Faults_Products_ProductID",
-                        column: x => x.ProductID,
-                        principalTable: "Products",
-                        principalColumn: "ProductID",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -225,6 +211,35 @@ namespace CallCenterService.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Faults",
+                columns: table => new
+                {
+                    FaultId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ApplicationDate = table.Column<DateTime>(nullable: false),
+                    ClientDescription = table.Column<string>(nullable: true),
+                    ClientId = table.Column<int>(nullable: false),
+                    ProductID = table.Column<int>(nullable: true),
+                    Status = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Faults", x => x.FaultId);
+                    table.ForeignKey(
+                        name: "FK_Faults_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "ClientId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Faults_Products_ProductID",
+                        column: x => x.ProductID,
+                        principalTable: "Products",
+                        principalColumn: "ProductID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Repairs",
                 columns: table => new
                 {
@@ -232,9 +247,9 @@ namespace CallCenterService.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Date = table.Column<DateTime>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    FaultId = table.Column<int>(nullable: true),
-                    PartsPrice = table.Column<float>(nullable: false),
-                    Price = table.Column<float>(nullable: false),
+                    FaultId = table.Column<int>(nullable: false),
+                    PartsPrice = table.Column<decimal>(nullable: false),
+                    Price = table.Column<decimal>(nullable: false),
                     ServicerId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -245,7 +260,7 @@ namespace CallCenterService.Migrations
                         column: x => x.FaultId,
                         principalTable: "Faults",
                         principalColumn: "FaultId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Repairs_AspNetUsers_ServicerId",
                         column: x => x.ServicerId,
@@ -274,6 +289,11 @@ namespace CallCenterService.Migrations
                 name: "IX_Faults_ProductID",
                 table: "Faults",
                 column: "ProductID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_ClientId",
+                table: "Products",
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Repairs_FaultId",
@@ -345,10 +365,10 @@ namespace CallCenterService.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Clients");
+                name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "Clients");
         }
     }
 }

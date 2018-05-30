@@ -23,7 +23,10 @@ namespace CallCenterService.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
-                    b.Property<string>("Address");
+                    b.Property<string>("ApartmentNumber");
+
+                    b.Property<string>("City")
+                        .IsRequired();
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -33,9 +36,11 @@ namespace CallCenterService.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<string>("FirstName");
+                    b.Property<string>("FirstName")
+                        .IsRequired();
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("LastName")
+                        .IsRequired();
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -53,9 +58,18 @@ namespace CallCenterService.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
+                    b.Property<string>("PostCode")
+                        .IsRequired();
+
                     b.Property<string>("SecurityStamp");
 
                     b.Property<string>("Specialization");
+
+                    b.Property<string>("Street")
+                        .IsRequired();
+
+                    b.Property<string>("StreetNumber")
+                        .IsRequired();
 
                     b.Property<bool>("TwoFactorEnabled");
 
@@ -79,13 +93,24 @@ namespace CallCenterService.Migrations
                     b.Property<int>("ClientId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Adress")
+                    b.Property<string>("ApartmentNumber");
+
+                    b.Property<string>("City")
                         .IsRequired();
 
                     b.Property<string>("FirstName")
                         .IsRequired();
 
+                    b.Property<string>("PostCode")
+                        .IsRequired();
+
                     b.Property<string>("SecondName")
+                        .IsRequired();
+
+                    b.Property<string>("Street")
+                        .IsRequired();
+
+                    b.Property<string>("StreetNumber")
                         .IsRequired();
 
                     b.HasKey("ClientId");
@@ -136,7 +161,7 @@ namespace CallCenterService.Migrations
                     b.Property<int>("ProductID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("ClientId");
+                    b.Property<int>("ClientId");
 
                     b.Property<string>("Name")
                         .IsRequired();
@@ -162,9 +187,9 @@ namespace CallCenterService.Migrations
 
                     b.Property<int>("FaultId");
 
-                    b.Property<float>("PartsPrice");
+                    b.Property<decimal>("PartsPrice");
 
-                    b.Property<float>("Price");
+                    b.Property<decimal>("Price");
 
                     b.Property<string>("ServicerId");
 
@@ -300,7 +325,8 @@ namespace CallCenterService.Migrations
                 {
                     b.HasOne("CallCenterService.Models.Client", "Client")
                         .WithMany()
-                        .HasForeignKey("ClientId");
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("CallCenterService.Models.Repair", b =>
