@@ -30,7 +30,7 @@ namespace CallCenterService.Configuration
                         {
                             Fault = await _dbContext.Faults.FirstOrDefaultAsync(x => x.FaultId == 4),
                             Servicer = await _userManager.FindByNameAsync("AntoniNowak"),
-                            Date = new DateTime(1534753945273948523),
+                            Date = new DateTime(2018, 5, 12),
                             Description = "Naprawa przebiegła bez problemu",
                             PartsPrice = 10.54m,
                             Price = 24.32m
@@ -46,7 +46,7 @@ namespace CallCenterService.Configuration
                         {
                             Fault = await _dbContext.Faults.FirstOrDefaultAsync(x => x.FaultId == 5),
                             Servicer = await _userManager.FindByNameAsync("JanPrus"),
-                            Date = new DateTime(1134753945273948523),
+                            Date = new DateTime(2018, 11, 11),
                             Description = "Wymieniono uszczelke, problem zniknął",
                             PartsPrice = 12.74m,
                             Price = 124.32m
@@ -62,7 +62,7 @@ namespace CallCenterService.Configuration
                         {
                             Fault = await _dbContext.Faults.FirstOrDefaultAsync(x => x.FaultId == 6),
                             Servicer = await _userManager.FindByNameAsync("KonradKania"),
-                            Date = new DateTime(1334753945273948523),
+                            Date = new DateTime(2018, 3, 28),
                             Description = "Wymiana pompy wodnej",
                             PartsPrice = 25.74m,
                             Price = 86.32m
@@ -78,7 +78,7 @@ namespace CallCenterService.Configuration
                         {
                             Fault = await _dbContext.Faults.FirstOrDefaultAsync(x => x.FaultId == 7),
                             Servicer = await _userManager.FindByNameAsync("KamilBem"),
-                            Date = new DateTime(124753945273948523),
+                            Date = new DateTime(2017, 1, 12),
                             Description = "Naprawa systemu podawania tabletki",
                             PartsPrice = 125.74m,
                             Price = 386.32m
@@ -94,7 +94,7 @@ namespace CallCenterService.Configuration
                         {
                             Fault = await _dbContext.Faults.FirstOrDefaultAsync(x => x.FaultId == 8),
                             Servicer = await _userManager.FindByNameAsync("ArturKopytko"),
-                            Date = new DateTime(114753945273948523),
+                            Date = new DateTime(2017, 8, 23),
                             Description = "Wymiana wyświetlacza",
                             PartsPrice = 525.74m,
                             Price = 786.32m
@@ -110,7 +110,7 @@ namespace CallCenterService.Configuration
                         {
                             Fault = await _dbContext.Faults.FirstOrDefaultAsync(x => x.FaultId == 9),
                             Servicer = await _userManager.FindByNameAsync("ArturKopytko"),
-                            Date = new DateTime(114753945273948523),
+                            Date = new DateTime(2018, 2, 17),
                             Description = "Wymiana gniazda karty sim",
                             PartsPrice = 25.74m,
                             Price = 125.32m
@@ -126,7 +126,7 @@ namespace CallCenterService.Configuration
                         {
                             Fault = await _dbContext.Faults.FirstOrDefaultAsync(x => x.FaultId == 10),
                             Servicer = await _userManager.FindByNameAsync("JanPrus"),
-                            Date = new DateTime(14753945273948523),
+                            Date = new DateTime(2018, 4, 22),
                             Description = "Wyczyszczenie zapchanego filtra",
                             PartsPrice = 22.74m,
                             Price = 29.32m

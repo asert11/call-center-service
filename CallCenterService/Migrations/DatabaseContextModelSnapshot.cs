@@ -181,7 +181,7 @@ namespace CallCenterService.Migrations
                     b.Property<int>("RepairId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("Date");
+                    b.Property<DateTime?>("Date");
 
                     b.Property<string>("Description");
 

@@ -15,8 +15,7 @@ namespace CallCenterService.Models
         public virtual ApplicationUser Servicer { get; set; }
         public string ServicerId { get; set; }
         public String Description { get; set; }
-        [Required]
-        public DateTime  Date { get; set; }
+        public DateTime?  Date { get; set; }
         public decimal Price { get; set; }
         public decimal PartsPrice { get; set; }
     }

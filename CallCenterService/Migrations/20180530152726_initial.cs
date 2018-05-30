@@ -245,7 +245,7 @@ namespace CallCenterService.Migrations
                 {
                     RepairId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Date = table.Column<DateTime>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     FaultId = table.Column<int>(nullable: false),
                     PartsPrice = table.Column<decimal>(nullable: false),
