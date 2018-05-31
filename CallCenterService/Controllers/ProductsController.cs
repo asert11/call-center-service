@@ -25,7 +25,6 @@ namespace CallCenterService.Controllers
             var name = from m in _context.Products
                        select m;
 
-
             if (searchIdProduct!=null)
             {
                 name = name.Where(s => s.ProductID.Equals(searchIdProduct));

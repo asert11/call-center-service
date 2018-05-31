@@ -72,10 +72,10 @@ namespace CallCenterService
             });
 
 
-            new Seed(app.ApplicationServices.GetService<DatabaseContext>(),
-                     app.ApplicationServices.GetService<RoleManager<IdentityRole>>(),
-                     app.ApplicationServices.GetService<UserManager<ApplicationUser>>())
-                .SeedDatabase();
+            //new Seed(app.ApplicationServices.GetService<DatabaseContext>(),
+            //         app.ApplicationServices.GetService<RoleManager<IdentityRole>>(),
+            //         app.ApplicationServices.GetService<UserManager<ApplicationUser>>())
+            //    .SeedDatabase();
         }
     }
 }

@@ -28,6 +28,15 @@
             <th>
                 Typ
             </th>
+            <th>
+                Id Klienta
+            </th>
+            <th>
+                Imię
+            </th>
+            <th>
+                Nazwisko
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -42,6 +51,15 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Type.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Client.ClientId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Client.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Client.SecondName)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ProductID">Edytuj</a>

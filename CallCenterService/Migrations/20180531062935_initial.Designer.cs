@@ -8,7 +8,7 @@ using CallCenterService.Models;
 namespace CallCenterService.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20180531040924_initial")]
+    [Migration("20180531062935_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

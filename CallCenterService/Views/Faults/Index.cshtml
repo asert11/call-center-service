@@ -52,7 +52,19 @@
                 Nazwisko klienta
             </th>
             <th>
-                Adres klienta
+                Ulica
+            </th>
+            <th>
+                Numer domu
+            </th>
+            <th>
+                Numer mieszkania
+            </th>
+            <th>
+                Kod pocztowy
+            </th>
+            <th>
+                Miasto
             </th>
             <th></th>
         </tr>
@@ -81,6 +93,18 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Product.Client.Street)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.Client.StreetNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.Client.ApartmentNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.Client.PostCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.Client.City)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.FaultId">Edytuj</a>

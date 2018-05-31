@@ -76,9 +76,10 @@ namespace CallCenterService.Controllers
                 return NotFound();
             }
 
-            //Fault f = new Fault();
-            ViewModels.AddProductFaultModel f = new ViewModels.AddProductFaultModel(_context, (int)id);
-           // f.ClientId = (int)id;
+            Fault f = new Fault();
+            //ViewModels.AddProductFaultModel f = new ViewModels.AddProductFaultModel(_context, (int)id);
+            f.ClientId = (int)id;
+            f.Products = _context.Products.Include(m => m.Client).Where(m => m.Client.ClientId == f.ClientId).ToList();
 
             return View(f);
         }
@@ -88,15 +89,22 @@ namespace CallCenterService.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int ? ProductId,[Bind("FaultId,ClientId,ClientDescription,Status,ApplicationDate,ProductId")] Fault fault)
+        public async Task<IActionResult> Create([Bind("FaultId,ClientId,ClientDescription,Status,ApplicationDate,ProductId")] Fault fault)
         {
 
             if (ModelState.IsValid)
             {
                 fault.Status = "Open";
                 fault.ApplicationDate = DateTime.Now;
-                fault.Product = _context.Products.Include(m => m.Client).FirstOrDefault(m => m.ProductID == ProductId);
-                _context.Add(fault);
+                fault.Product = _context.Products.FirstOrDefault(m => m.ProductID == fault.ProductId);
+
+                if(fault.Product == null)
+                {
+                    fault.Products = _context.Products.Include(m => m.Client)
+                        .Where(m => m.Client.ClientId == fault.ClientId).ToList();
+                    return View(fault);
+                }
+                _context.Faults.Add(fault);
 
                 EventHistory ev = new EventHistory
                 {
@@ -109,6 +117,8 @@ namespace CallCenterService.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Registrant");
             }
+            fault.Products = _context.Products.Include(m => m.Client)
+                .Where(m => m.Client.ClientId == fault.ClientId).ToList();
             return View(fault);
         }
 
