@@ -54,7 +54,7 @@ namespace CallCenterService.Controllers
         public async Task<IActionResult> History(int ? id)
         {
             ClientFaultHistoryViewModel vm = new ClientFaultHistoryViewModel();
-            vm.Faults = await _context.Faults.Include(m => m.Client).Include(m => m.Product).Where(m => m.ClientId == id).ToListAsync();
+            vm.Faults = await _context.Faults.Include(m => m.Product).Where(m => m.Product.ClientId == id).ToListAsync();
 
             return View(vm);
         }
@@ -175,9 +175,38 @@ namespace CallCenterService.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var client = await _context.Clients.SingleOrDefaultAsync(m => m.ClientId == id);
-            _context.Clients.Remove(client);
-            await _context.SaveChangesAsync();
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                var client = await _context.Clients.SingleOrDefaultAsync(m => m.ClientId == id);
+
+                var products = _context.Products.Include(m => m.Client)
+                    .Where(m => m.Client.ClientId == id).ToList();
+
+                foreach (var product in products)
+                {
+                    var faults = _context.Faults.Include(m => m.Product)
+                        .Where(m => m.Product.ProductID == product.ProductID).ToList();
+
+                    foreach (var fault in faults)
+                    {
+                        var repairs = _context.Repairs.Include(m => m.Fault)
+                            .Where(m => m.Fault.FaultId == fault.FaultId).ToList();
+
+                        _context.Repairs.RemoveRange(repairs);
+
+                        _context.Faults.Remove(fault);
+                    }
+
+                    _context.Products.Remove(product);
+                }
+
+                _context.Clients.Remove(client);
+
+                await _context.SaveChangesAsync();
+
+                transaction.Commit();
+            }
+
             return RedirectToAction("Index");
         }
 

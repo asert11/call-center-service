@@ -35,12 +35,12 @@ namespace CallCenterService.Controllers
             }
             if (!String.IsNullOrEmpty(searchClientName))
             {
-                name = name.Where(s => s.Fault.Client.FirstName.Equals(searchClientName));
+                name = name.Where(s => s.Fault.Product.Client.FirstName.Equals(searchClientName));
             }
 
             if (!String.IsNullOrEmpty(searchClientSurname))
             {
-                name = name.Where(s => s.Fault.Client.SecondName.Equals(searchClientSurname));
+                name = name.Where(s => s.Fault.Product.Client.SecondName.Equals(searchClientSurname));
             }
 
             if (!String.IsNullOrEmpty(searchNameProduct))
@@ -57,8 +57,8 @@ namespace CallCenterService.Controllers
             if (id == null)
                 return NotFound();
 
-            var repairs = name.Include(r => r.Servicer).Include(r => r.Fault)
-                .Include(r => r.Fault.Product).Include(r => r.Fault.Client).Where(s => s.Servicer.Id == id)
+            var repairs = name.Include(r => r.Fault)
+                .Include(r => r.Fault.Product).Include(r => r.Fault.Product.Client).Where(s => s.ServicerId == id)
                 .Where(s => s.Fault.Status == "In progress");
             
             return View(await repairs.ToListAsync());
@@ -74,14 +74,15 @@ namespace CallCenterService.Controllers
 
             var repair = await _context.Repairs
                 .Include(f => f.Fault)
-                .Include(f => f.Fault.Client)
                 .Include(f => f.Fault.Product)
-                .Include(f => f.Servicer)
+                .Include(f => f.Fault.Product.Client)
                 .SingleOrDefaultAsync(m => m.RepairId == id);
+
             if (repair == null)
             {
                 return NotFound();
             }
+            repair.user = await _userManager.FindByIdAsync(repair.ServicerId);
 
             return View(repair);
         }

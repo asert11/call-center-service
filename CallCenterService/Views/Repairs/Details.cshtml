@@ -13,13 +13,13 @@
             Imię serwisanta:
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Servicer.FirstName)
+            @Html.DisplayFor(model => model.user.FirstName)
         </dd>
         <dt>
             Nazwisko serwisanta:
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Servicer.LastName)
+            @Html.DisplayFor(model => model.user.LastName)
         </dd>
         <dt>
             ID naprawy:
@@ -31,25 +31,25 @@
             ID klienta:
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Fault.Client.ClientId)
+            @Html.DisplayFor(model => model.Fault.Product.Client.ClientId)
         </dd>
         <dt>
             Imię klienta:
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Fault.Client.FirstName)
+            @Html.DisplayFor(model => model.Fault.Product.Client.FirstName)
         </dd>
         <dt>
             Nazwisko klienta:
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Fault.Client.SecondName)
+            @Html.DisplayFor(model => model.Fault.Product.Client.SecondName)
         </dd>
         <dt>
             Adres klienta:
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Fault.Client.Street)
+            @Html.DisplayFor(model => model.Fault.Product.Client.Street)
         </dd>
         <dt>
             ID usterki:

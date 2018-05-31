@@ -184,9 +184,30 @@ namespace CallCenterService.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _context.Products.SingleOrDefaultAsync(m => m.ProductID == id);
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                var product = await _context.Products.SingleOrDefaultAsync(m => m.ProductID == id);
+
+                var faults = _context.Faults.Include(m => m.Product)
+                    .Where(m => m.Product.ProductID == product.ProductID).ToList();
+
+                foreach (var fault in faults)
+                {
+                    var repairs = _context.Repairs.Include(m => m.Fault)
+                        .Where(m => m.Fault.FaultId == fault.FaultId).ToList();
+
+                    _context.Repairs.RemoveRange(repairs);
+
+                    _context.Faults.Remove(fault);
+                }
+
+                _context.Products.Remove(product);
+                
+                await _context.SaveChangesAsync();
+
+                transaction.Commit();
+            }
+
             return RedirectToAction("Index");
         }
 

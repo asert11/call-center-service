@@ -18,12 +18,11 @@ namespace CallCenterService.Configuration
 
         public async Task Seed()
         {
-            if ((await _dbContext.Faults.FirstOrDefaultAsync(x => x.ClientId == 1 && x.Product.ProductID == 3)) == null)
+            if ((await _dbContext.Faults.FirstOrDefaultAsync(x => x.Product.ProductID == 3)) == null)
             {
                 await _dbContext.Faults.AddAsync(
                     new Fault
                     {
-                        ClientId = 1,
                         ApplicationDate = new DateTime(2018, 1, 21, 12, 30, 20),
                         Status = "Open",
                         ClientDescription = "Nie działa system namaczania.",
@@ -32,12 +31,11 @@ namespace CallCenterService.Configuration
                     });
                 _dbContext.SaveChanges();
             }
-            if ((await _dbContext.Faults.FirstOrDefaultAsync(x => x.ClientId == 4 && x.Product.ProductID == 7)) == null)
+            if ((await _dbContext.Faults.FirstOrDefaultAsync(x => x.Product.ProductID == 7)) == null)
             {
                 await _dbContext.Faults.AddAsync(
                     new Fault
                     {
-                        ClientId = 4,
                         ApplicationDate = new DateTime(2018, 3, 12, 9, 12, 30),
                         Status = "Open",
                         ClientDescription = "Telefon się zawiesza",
@@ -45,12 +43,11 @@ namespace CallCenterService.Configuration
                     });
                 _dbContext.SaveChanges();
             }
-            if ((await _dbContext.Faults.FirstOrDefaultAsync(x => x.ClientId == 5 && x.Product.ProductID == 6)) == null)
+            if ((await _dbContext.Faults.FirstOrDefaultAsync(x => x.Product.ProductID == 6)) == null)
             {
                 await _dbContext.Faults.AddAsync(
                     new Fault
                     {
-                        ClientId = 5,
                         ApplicationDate = new DateTime(2018, 4, 9, 8, 42, 33),
                         Status = "Open",
                         ClientDescription = "W telewizorze nie działa Bluetooth",
@@ -59,12 +56,11 @@ namespace CallCenterService.Configuration
                     });
                 _dbContext.SaveChanges();
             }
-            if ((await _dbContext.Faults.FirstOrDefaultAsync(x => x.ClientId == 2 && x.Product.ProductID == 6)) == null)
+            //if ((await _dbContext.Faults.FirstOrDefaultAsync(x => x.Product.ProductID == 6)) == null)
             {
                 await _dbContext.Faults.AddAsync(
                     new Fault
                     {
-                        ClientId = 2,
                         ApplicationDate = new DateTime(2018, 2, 11, 11, 11, 11),
                         Status = "In progress",
                         ClientDescription = "Nie można włączyć telewizora pilotem",
@@ -72,12 +68,11 @@ namespace CallCenterService.Configuration
                     });
                 _dbContext.SaveChanges();
             }
-            if ((await _dbContext.Faults.FirstOrDefaultAsync(x => x.ClientId == 4 && x.Product.ProductID == 2)) == null)
+            if ((await _dbContext.Faults.FirstOrDefaultAsync(x => x.Product.ProductID == 2)) == null)
             {
                 await _dbContext.Faults.AddAsync(
                     new Fault
                     {
-                        ClientId = 4,
                         ApplicationDate = new DateTime(2018, 5, 12, 14, 27, 53),
                         Status = "In progress",
                         ClientDescription = "Pralka przecieka",
@@ -85,12 +80,11 @@ namespace CallCenterService.Configuration
                     });
                 _dbContext.SaveChanges();
             }
-            if ((await _dbContext.Faults.FirstOrDefaultAsync(x => x.ClientId == 2 && x.Product.ProductID == 4)) == null)
+            if ((await _dbContext.Faults.FirstOrDefaultAsync(x => x.Product.ProductID == 4)) == null)
             {
                 await _dbContext.Faults.AddAsync(
                     new Fault
                     {
-                        ClientId = 2,
                         ApplicationDate = new DateTime(2018, 5, 9, 22, 10, 10),
                         Status = "In progress",
                         ClientDescription = "Zmywarka pokazuje błąd E7",
@@ -98,12 +92,11 @@ namespace CallCenterService.Configuration
                     });
                 _dbContext.SaveChanges();
             }
-            if ((await _dbContext.Faults.FirstOrDefaultAsync(x => x.ClientId == 3 && x.Product.ProductID == 5)) == null)
+            if ((await _dbContext.Faults.FirstOrDefaultAsync(x => x.Product.ProductID == 5)) == null)
             {
                 await _dbContext.Faults.AddAsync(
                     new Fault
                     {
-                        ClientId = 3,
                         ApplicationDate = new DateTime(2018, 3, 10, 9, 45, 40),
                         Status = "In progress",
                         ClientDescription = "Zmywarka nie wypuszcza saszetki",
@@ -111,12 +104,11 @@ namespace CallCenterService.Configuration
                     });
                 _dbContext.SaveChanges();
             }
-            if ((await _dbContext.Faults.FirstOrDefaultAsync(x => x.ClientId == 7 && x.Product.ProductID == 1)) == null)
+            if ((await _dbContext.Faults.FirstOrDefaultAsync(x => x.Product.ProductID == 1)) == null)
             {
                 await _dbContext.Faults.AddAsync(
                     new Fault
                     {
-                        ClientId = 7,
                         ApplicationDate = new DateTime(2018, 4, 23, 15, 15, 20),
                         Status = "Done",
                         ClientDescription = "Telewizor świeci się na zielono",
@@ -124,12 +116,11 @@ namespace CallCenterService.Configuration
                     });
                 _dbContext.SaveChanges();
             }
-            if ((await _dbContext.Faults.FirstOrDefaultAsync(x => x.ClientId == 6 && x.Product.ProductID == 10)) == null)
+            if ((await _dbContext.Faults.FirstOrDefaultAsync(x => x.Product.ProductID == 10)) == null)
             {
                 await _dbContext.Faults.AddAsync(
                     new Fault
                     {
-                        ClientId = 6,
                         ApplicationDate = new DateTime(2018, 5, 3, 13, 20, 35),
                         Status = "Done",
                         ClientDescription = "Telefon nie wykrywa karty sim",
@@ -137,12 +128,11 @@ namespace CallCenterService.Configuration
                     });
                 _dbContext.SaveChanges();
             }
-            if ((await _dbContext.Faults.FirstOrDefaultAsync(x => x.ClientId == 1 && x.Product.ProductID == 5)) == null)
+            //if ((await _dbContext.Faults.FirstOrDefaultAsync(x => x.Product.ProductID == 5)) == null)
             {
                 await _dbContext.Faults.AddAsync(
                     new Fault
                     {
-                        ClientId = 1,
                         ApplicationDate = new DateTime(2018, 5, 6, 11, 10, 3),
                         Status = "Done",
                         ClientDescription = "Zmywarka pokazuje błąd E154 R4313503",

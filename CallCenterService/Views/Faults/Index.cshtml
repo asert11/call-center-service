@@ -74,16 +74,17 @@
                     @Html.DisplayFor(modelItem => item.ApplicationDate)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Client.FirstName)
+                    @Html.DisplayFor(modelItem => item.Product.Client.FirstName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Client.SecondName)
+                    @Html.DisplayFor(modelItem => item.Product.Client.SecondName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Client.Street)
+                    @Html.DisplayFor(modelItem => item.Product.Client.Street)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.FaultId">Edytuj</a>
+                    <a asp-action="Delete" asp-route-id="@item.FaultId">Usuń</a>
                 </td>
             </tr>
         }

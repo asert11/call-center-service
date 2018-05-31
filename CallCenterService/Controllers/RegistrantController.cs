@@ -33,36 +33,40 @@ namespace CallCenterService.Controllers
 
             if (!String.IsNullOrEmpty(searchClientName))
             {
-                name = name.Where(s => s.Client.FirstName.Equals(searchClientName));
+                name = name.Where(s => s.Product.Client.FirstName.Equals(searchClientName));
             }
 
             if (!String.IsNullOrEmpty(searchClientSurname))
             {
-                name = name.Where(s => s.Client.SecondName.Equals(searchClientSurname));
+                name = name.Where(s => s.Product.Client.SecondName.Equals(searchClientSurname));
             }
 
             if (!String.IsNullOrEmpty(searchClientAddress))
             {
-                name = name.Where(s => s.Client.Street.Equals(searchClientAddress));
+                name = name.Where(s => s.Product.Client.Street.Equals(searchClientAddress));
             }
 
-            return View(await name.Include(f => f.Client).Where(f => f.Status.Equals("Open")).ToListAsync());
+            return View(await name.Include(f => f.Product).Include(f => f.Product.Client)
+                .Where(f => f.Status.Equals("Open")).ToListAsync());
             //return View(await _context.Faults.Include(f => f.Client).Where(f => f.Status.Equals("Open")).ToListAsync());
         }
 
         public async Task<IActionResult> Opened_faults()
         {       
-            return View(await _context.Faults.Include(f => f.Client).Where(s => s.Status.Equals("Open")).ToListAsync());
+            return View(await _context.Faults.Include(f => f.Product).Include(f => f.Product.Client)
+                .Where(s => s.Status.Equals("Open")).ToListAsync());
         }
 
         public async Task<IActionResult> assigned_faults()
         {
-            return View(await _context.Faults.Include(f => f.Client).Where(s => s.Status.Equals("In progress")).ToListAsync());
+            return View(await _context.Faults.Include(f => f.Product).Include(f => f.Product.Client)
+                .Where(s => s.Status.Equals("In progress")).ToListAsync());
         }
 
         public async Task<IActionResult> Closed_assigned_faults()
         {
-            return View(await _context.Faults.Include(f => f.Client).Where(s => s.Status.Equals("Done")).ToListAsync());
+            return View(await _context.Faults.Include(f => f.Product).Include(f => f.Product.Client)
+                .Where(s => s.Status.Equals("Done")).ToListAsync());
         }
 
         public IActionResult FaultsList()
@@ -181,10 +185,8 @@ namespace CallCenterService.Controllers
                     Repair sf = new Repair
                     {
                         Fault = fault,
-                        Servicer = servicer
+                        ServicerId = servicer.Id
                     };
-
-                    //_context.ServicerFault.RemoveRange(_context.ServicerFault.Where(x => x.IdFault == vm.FaultId));
 
                     await _context.Repairs.AddAsync(sf);
                     await _context.SaveChangesAsync();

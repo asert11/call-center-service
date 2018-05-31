@@ -25,11 +25,12 @@ namespace CallCenterService.Configuration
         {
             if ((await _dbContext.Repairs.FirstOrDefaultAsync(x => x.Fault.FaultId == 4)) == null)
             {
+                var user = await _userManager.FindByNameAsync("AntoniNowak");
                 await _dbContext.Repairs.AddAsync(
                         new Repair()
                         {
                             Fault = await _dbContext.Faults.FirstOrDefaultAsync(x => x.FaultId == 4),
-                            Servicer = await _userManager.FindByNameAsync("AntoniNowak"),
+                            ServicerId = user.Id,
                             Date = new DateTime(2018, 5, 12),
                             Description = "Naprawa przebiegła bez problemu",
                             PartsPrice = 10.54m,
@@ -41,11 +42,12 @@ namespace CallCenterService.Configuration
             }
             if ((await _dbContext.Repairs.FirstOrDefaultAsync(x => x.Fault.FaultId == 5)) == null)
             {
+                var user = await _userManager.FindByNameAsync("JanPrus");
                 await _dbContext.Repairs.AddAsync(
                         new Repair()
                         {
                             Fault = await _dbContext.Faults.FirstOrDefaultAsync(x => x.FaultId == 5),
-                            Servicer = await _userManager.FindByNameAsync("JanPrus"),
+                            ServicerId = user.Id,
                             Date = new DateTime(2018, 11, 11),
                             Description = "Wymieniono uszczelke, problem zniknął",
                             PartsPrice = 12.74m,
@@ -57,11 +59,12 @@ namespace CallCenterService.Configuration
             }
             if ((await _dbContext.Repairs.FirstOrDefaultAsync(x => x.Fault.FaultId == 6)) == null)
             {
+                var user = await _userManager.FindByNameAsync("KonradKania");
                 await _dbContext.Repairs.AddAsync(
                         new Repair()
                         {
                             Fault = await _dbContext.Faults.FirstOrDefaultAsync(x => x.FaultId == 6),
-                            Servicer = await _userManager.FindByNameAsync("KonradKania"),
+                            ServicerId = user.Id,
                             Date = new DateTime(2018, 3, 28),
                             Description = "Wymiana pompy wodnej",
                             PartsPrice = 25.74m,
@@ -73,11 +76,12 @@ namespace CallCenterService.Configuration
             }
             if ((await _dbContext.Repairs.FirstOrDefaultAsync(x => x.Fault.FaultId == 7)) == null)
             {
+                var user = await _userManager.FindByNameAsync("KamilBem");
                 await _dbContext.Repairs.AddAsync(
                         new Repair()
                         {
                             Fault = await _dbContext.Faults.FirstOrDefaultAsync(x => x.FaultId == 7),
-                            Servicer = await _userManager.FindByNameAsync("KamilBem"),
+                            ServicerId = user.Id,
                             Date = new DateTime(2017, 1, 12),
                             Description = "Naprawa systemu podawania tabletki",
                             PartsPrice = 125.74m,
@@ -89,11 +93,12 @@ namespace CallCenterService.Configuration
             }
             if ((await _dbContext.Repairs.FirstOrDefaultAsync(x => x.Fault.FaultId == 8)) == null)
             {
+                var user = await _userManager.FindByNameAsync("ArturKopytko");
                 await _dbContext.Repairs.AddAsync(
                         new Repair()
                         {
                             Fault = await _dbContext.Faults.FirstOrDefaultAsync(x => x.FaultId == 8),
-                            Servicer = await _userManager.FindByNameAsync("ArturKopytko"),
+                            ServicerId = user.Id,
                             Date = new DateTime(2017, 8, 23),
                             Description = "Wymiana wyświetlacza",
                             PartsPrice = 525.74m,
@@ -105,11 +110,12 @@ namespace CallCenterService.Configuration
             }
             if ((await _dbContext.Repairs.FirstOrDefaultAsync(x => x.Fault.FaultId == 9)) == null)
             {
+                var user = await _userManager.FindByNameAsync("ArturKopytko");
                 await _dbContext.Repairs.AddAsync(
                         new Repair()
                         {
                             Fault = await _dbContext.Faults.FirstOrDefaultAsync(x => x.FaultId == 9),
-                            Servicer = await _userManager.FindByNameAsync("ArturKopytko"),
+                            ServicerId = user.Id,
                             Date = new DateTime(2018, 2, 17),
                             Description = "Wymiana gniazda karty sim",
                             PartsPrice = 25.74m,
@@ -121,11 +127,12 @@ namespace CallCenterService.Configuration
             }
             if ((await _dbContext.Repairs.FirstOrDefaultAsync(x => x.Fault.FaultId == 10)) == null)
             {
+                var user = await _userManager.FindByNameAsync("JanPrus");
                 await _dbContext.Repairs.AddAsync(
                         new Repair()
                         {
                             Fault = await _dbContext.Faults.FirstOrDefaultAsync(x => x.FaultId == 10),
-                            Servicer = await _userManager.FindByNameAsync("JanPrus"),
+                            ServicerId = user.Id,
                             Date = new DateTime(2018, 4, 22),
                             Description = "Wyczyszczenie zapchanego filtra",
                             PartsPrice = 22.74m,

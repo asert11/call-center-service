@@ -159,17 +159,44 @@ namespace CallCenterService.Controllers
             if (user == null)
                 return RedirectToAction("Index");
 
-            var logins = user.Logins;
-            var rolesForUser = await _userManager.GetRolesAsync(user);
-
-            foreach (var item in rolesForUser.ToList())
-            {
-                if (item == "Admin")
-                    return RedirectToAction("Index");
-            }
-
             using (var transaction = _dbContext.Database.BeginTransaction())
-            {
+            {           
+                var servicerSpecializations = _dbContext.ServicerSpecializations
+                    .Where(m => m.ServicerId == id);
+
+                _dbContext.ServicerSpecializations.RemoveRange(servicerSpecializations);
+
+                var repairs = _dbContext.Repairs.Include(m => m.Fault)
+                    .Where(m => m.Fault.Status == "Done").Where(m => m.ServicerId == id).ToList();
+
+                foreach(var repair in repairs)
+                {
+                    var fault = repair.Fault;
+                    _dbContext.Repairs.Remove(repair);
+                    _dbContext.Faults.Remove(fault);
+                }
+                
+                repairs = _dbContext.Repairs.Include(m => m.Fault)
+                    .Where(m => m.Fault.Status != "Done").Where(m => m.ServicerId == id).ToList();
+
+                foreach(var repair in repairs) {
+                    repair.Fault.Status = "Open";
+                    _dbContext.Faults.Update(repair.Fault);
+                }
+
+                _dbContext.Repairs.RemoveRange(repairs);
+
+                await _dbContext.SaveChangesAsync();
+
+                var logins = user.Logins;
+                var rolesForUser = await _userManager.GetRolesAsync(user);
+
+                foreach (var item in rolesForUser.ToList())
+                {
+                    if (item == "Admin")
+                        return RedirectToAction("Index");
+                }
+
                 foreach (var login in logins.ToList())
                 {
                     await _userManager.RemoveLoginAsync(user, login.LoginProvider, login.ProviderKey);

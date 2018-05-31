@@ -34,20 +34,20 @@ namespace CallCenterService.Controllers
             }
             if (!String.IsNullOrEmpty(searchClientName))
             {
-                name = name.Where(s => s.Client.FirstName.Equals(searchClientName));
+                name = name.Where(s => s.Product.Client.FirstName.Equals(searchClientName));
             }
 
             if (!String.IsNullOrEmpty(searchClientSurname))
             {
-                name = name.Where(s => s.Client.SecondName.Equals(searchClientSurname));
+                name = name.Where(s => s.Product.Client.SecondName.Equals(searchClientSurname));
             }
 
             if (!String.IsNullOrEmpty(searchClientAddress))
             {
-                name = name.Where(s => s.Client.Street.Equals(searchClientAddress));
+                name = name.Where(s => s.Product.Client.Street.Equals(searchClientAddress));
             }
 
-            return View(await name.Include(f => f.Client).ToListAsync());
+            return View(await name.Include(f => f.Product.Client).ToListAsync());
         }
 
         // GET: Faults/Details/5
@@ -95,8 +95,7 @@ namespace CallCenterService.Controllers
             {
                 fault.Status = "Open";
                 fault.ApplicationDate = DateTime.Now;
-                fault.Client = _context.Clients.FirstOrDefault(m => m.ClientId == fault.ClientId);
-                fault.Product = _context.Products.FirstOrDefault(m => m.ProductID == ProductId);
+                fault.Product = _context.Products.Include(m => m.Client).FirstOrDefault(m => m.ProductID == ProductId);
                 _context.Add(fault);
 
                 EventHistory ev = new EventHistory
@@ -187,9 +186,22 @@ namespace CallCenterService.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var fault = await _context.Faults.SingleOrDefaultAsync(m => m.FaultId == id);
-            _context.Faults.Remove(fault);
-            await _context.SaveChangesAsync();
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                var fault = await _context.Faults.SingleOrDefaultAsync(m => m.FaultId == id);
+
+                var repairs = _context.Repairs.Include(m => m.Fault)
+                    .Where(m => m.Fault.FaultId == fault.FaultId).ToList();
+
+                _context.Repairs.RemoveRange(repairs);
+
+                _context.Faults.Remove(fault);
+                    
+                await _context.SaveChangesAsync();
+
+                transaction.Commit();
+            }
+
             return RedirectToAction("Index");
         }
 

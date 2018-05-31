@@ -257,19 +257,12 @@ namespace CallCenterService.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ApplicationDate = table.Column<DateTime>(nullable: false),
                     ClientDescription = table.Column<string>(nullable: true),
-                    ClientId = table.Column<int>(nullable: false),
                     ProductID = table.Column<int>(nullable: true),
                     Status = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Faults", x => x.FaultId);
-                    table.ForeignKey(
-                        name: "FK_Faults_Clients_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Clients",
-                        principalColumn: "ClientId",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Faults_Products_ProductID",
                         column: x => x.ProductID,
@@ -300,12 +293,6 @@ namespace CallCenterService.Migrations
                         principalTable: "Faults",
                         principalColumn: "FaultId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Repairs_AspNetUsers_ServicerId",
-                        column: x => x.ServicerId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -318,11 +305,6 @@ namespace CallCenterService.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Faults_ClientId",
-                table: "Faults",
-                column: "ClientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Faults_ProductID",
@@ -343,11 +325,6 @@ namespace CallCenterService.Migrations
                 name: "IX_Repairs_FaultId",
                 table: "Repairs",
                 column: "FaultId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Repairs_ServicerId",
-                table: "Repairs",
-                column: "ServicerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ServicerSpecializations_SpecId",

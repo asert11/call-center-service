@@ -8,7 +8,7 @@ using CallCenterService.Models;
 namespace CallCenterService.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20180530235815_initial")]
+    [Migration("20180531040924_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -142,15 +142,11 @@ namespace CallCenterService.Migrations
 
                     b.Property<string>("ClientDescription");
 
-                    b.Property<int>("ClientId");
-
                     b.Property<int?>("ProductID");
 
                     b.Property<string>("Status");
 
                     b.HasKey("FaultId");
-
-                    b.HasIndex("ClientId");
 
                     b.HasIndex("ProductID");
 
@@ -198,8 +194,6 @@ namespace CallCenterService.Migrations
                     b.HasKey("RepairId");
 
                     b.HasIndex("FaultId");
-
-                    b.HasIndex("ServicerId");
 
                     b.ToTable("Repairs");
                 });
@@ -343,11 +337,6 @@ namespace CallCenterService.Migrations
 
             modelBuilder.Entity("CallCenterService.Models.Fault", b =>
                 {
-                    b.HasOne("CallCenterService.Models.Client", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("CallCenterService.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductID");
@@ -371,10 +360,6 @@ namespace CallCenterService.Migrations
                         .WithMany()
                         .HasForeignKey("FaultId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("CallCenterService.Models.ApplicationUser", "Servicer")
-                        .WithMany()
-                        .HasForeignKey("ServicerId");
                 });
 
             modelBuilder.Entity("CallCenterService.Models.ServicerSpecializations", b =>

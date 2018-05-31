@@ -138,9 +138,41 @@ namespace CallCenterService.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var specialization = await _context.Specialization.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Specialization.Remove(specialization);
-            await _context.SaveChangesAsync();
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                var specialization = await _context.Specialization.SingleOrDefaultAsync(m => m.Id == id);
+
+                var servicerSpecializations = _context.ServicerSpecializations.Include(m => m.Spec).
+                    Where(m => m.Spec.Id == specialization.Id);
+
+                _context.ServicerSpecializations.RemoveRange(servicerSpecializations);
+
+                var products = _context.Products.Include(m => m.Type)
+                    .Where(m => m.Type.Id == specialization.Id).ToList();
+
+                foreach(var product in products)
+                {
+                    var faults = _context.Faults.Include(m => m.Product)
+                        .Where(m => m.Product.ProductID == product.ProductID).ToList();
+
+                    foreach(var fault in faults)
+                    {
+                        var repairs = _context.Repairs.Include(m => m.Fault)
+                            .Where(m => m.Fault.FaultId == fault.FaultId).ToList();
+
+                        _context.Repairs.RemoveRange(repairs);
+
+                        _context.Faults.Remove(fault);
+                    }
+
+                    _context.Products.Remove(product);
+                }
+
+                _context.Specialization.Remove(specialization);
+                await _context.SaveChangesAsync();
+
+                transaction.Commit();
+            }
             return RedirectToAction("Index");
         }
 
