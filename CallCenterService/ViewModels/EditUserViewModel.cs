@@ -11,7 +11,6 @@ namespace CallCenterService.ViewModels
     {
         public string UserId { get; set; }
         public string Role { get; set; }
-        public string Specialization { get; set; }
 
         [Required, EmailAddress, MaxLength(256), Display(Name = "Email Address")]
         public string Email { get; set; }

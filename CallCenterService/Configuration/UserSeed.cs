@@ -10,9 +10,11 @@ namespace CallCenterService.Configuration
     public class UserSeed
     {
         private UserManager<ApplicationUser> _userManager;
+        private readonly DatabaseContext _dbContext;
 
-        public UserSeed(UserManager<ApplicationUser> userManager)
+        public UserSeed(DatabaseContext dbContext, UserManager<ApplicationUser> userManager)
         {
+            _dbContext = dbContext;
             _userManager = userManager;
         }
 
@@ -50,7 +52,7 @@ namespace CallCenterService.Configuration
             }
             if ((await _userManager.FindByNameAsync("AntoniNowak")) == null)
             {
-                var user = new ApplicationUser { UserName = "AntoniNowak", Email = "AntoniNowak@AntoniNowak",Specialization = "RTV", FirstName = "Antoni", LastName = "Nowak",
+                var user = new ApplicationUser { UserName = "AntoniNowak", Email = "AntoniNowak@AntoniNowak", FirstName = "Antoni", LastName = "Nowak",
                     Street = "Polechońska",
                     StreetNumber = "7",
                     ApartmentNumber = "11",
@@ -62,11 +64,18 @@ namespace CallCenterService.Configuration
                 {
                     user = await _userManager.FindByNameAsync("AntoniNowak");
                     await _userManager.AddToRoleAsync(user, "Serwisant");
+
+                    var spec = _dbContext.Specialization.SingleOrDefault(x => x.Type == "RTV");
+                    await _dbContext.ServicerSpecializations.AddAsync(new ServicerSpecializations {
+                        ServicerId = user.Id,
+                        Spec = spec
+                    });
+                    _dbContext.SaveChanges();
                 }
             }
             if ((await _userManager.FindByNameAsync("AdamNowak")) == null)
             {
-                var user = new ApplicationUser { UserName = "AdamNowak", Email = "AdamNowak@AdamNowak", Specialization = "RTV", FirstName = "Adam", LastName = "Nowak",
+                var user = new ApplicationUser { UserName = "AdamNowak", Email = "AdamNowak@AdamNowak", /*Specialization = "RTV",*/ FirstName = "Adam", LastName = "Nowak",
                     Street = "29 Listopada",
                     StreetNumber = "31",
                     PostCode = "38-700",
@@ -77,11 +86,19 @@ namespace CallCenterService.Configuration
                 {
                     user = await _userManager.FindByNameAsync("AdamNowak");
                     await _userManager.AddToRoleAsync(user, "Serwisant");
+
+                    var spec = _dbContext.Specialization.SingleOrDefault(x => x.Type == "RTV");
+                    await _dbContext.ServicerSpecializations.AddAsync(new ServicerSpecializations
+                    {
+                        ServicerId = user.Id,
+                        Spec = spec
+                    });
+                    _dbContext.SaveChanges();
                 }
             }
             if ((await _userManager.FindByNameAsync("ArturKopytko")) == null)
             {
-                var user = new ApplicationUser { UserName = "ArturKopytko", Email = "ArturKopytko@ArturKopytko", Specialization = "RTV", FirstName = "Artur", LastName = "Kopytko",
+                var user = new ApplicationUser { UserName = "ArturKopytko", Email = "ArturKopytko@ArturKopytko", /*Specialization = "RTV",*/ FirstName = "Artur", LastName = "Kopytko",
                     Street = "29 Listopada",
                     StreetNumber = "31",
                     PostCode = "38-700",
@@ -92,11 +109,19 @@ namespace CallCenterService.Configuration
                 {
                     user = await _userManager.FindByNameAsync("ArturKopytko");
                     await _userManager.AddToRoleAsync(user, "Serwisant");
+
+                    var spec = _dbContext.Specialization.SingleOrDefault(x => x.Type == "RTV");
+                    await _dbContext.ServicerSpecializations.AddAsync(new ServicerSpecializations
+                    {
+                        ServicerId = user.Id,
+                        Spec = spec
+                    });
+                    _dbContext.SaveChanges();
                 }
             }
             if ((await _userManager.FindByNameAsync("JanPrus")) == null)
             {
-                var user = new ApplicationUser { UserName = "JanPrus", Email = "JanPrus@JanPrus", Specialization = "AGD", FirstName = "Jan", LastName = "Prus",
+                var user = new ApplicationUser { UserName = "JanPrus", Email = "JanPrus@JanPrus", /*Specialization = "AGD",*/ FirstName = "Jan", LastName = "Prus",
                     Street = "Na Błonie",
                     StreetNumber = "11",
                     ApartmentNumber = "159",
@@ -108,11 +133,19 @@ namespace CallCenterService.Configuration
                 {
                     user = await _userManager.FindByNameAsync("JanPrus");
                     await _userManager.AddToRoleAsync(user, "Serwisant");
+
+                    var spec = _dbContext.Specialization.SingleOrDefault(x => x.Type == "AGD");
+                    await _dbContext.ServicerSpecializations.AddAsync(new ServicerSpecializations
+                    {
+                        ServicerId = user.Id,
+                        Spec = spec
+                    });
+                    _dbContext.SaveChanges();
                 }
             }
             if ((await _userManager.FindByNameAsync("KonradKania")) == null)
             {
-                var user = new ApplicationUser { UserName = "KonradKania", Email = "KonradKania@KonradKania", Specialization = "AGD", FirstName = "Konrad", LastName = "Kania",
+                var user = new ApplicationUser { UserName = "KonradKania", Email = "KonradKania@KonradKania", /*Specialization = "AGD",*/ FirstName = "Konrad", LastName = "Kania",
                     Street = "Korczaka",
                     StreetNumber = "1B",
                     PostCode = "32-221",
@@ -123,11 +156,19 @@ namespace CallCenterService.Configuration
                 {
                     user = await _userManager.FindByNameAsync("KonradKania");
                     await _userManager.AddToRoleAsync(user, "Serwisant");
+
+                    var spec = _dbContext.Specialization.SingleOrDefault(x => x.Type == "AGD");
+                    await _dbContext.ServicerSpecializations.AddAsync(new ServicerSpecializations
+                    {
+                        ServicerId = user.Id,
+                        Spec = spec
+                    });
+                    _dbContext.SaveChanges();
                 }
             }
             if ((await _userManager.FindByNameAsync("KamilBem")) == null)
             {
-                var user = new ApplicationUser { UserName = "KamilBem", Email = "KamilBem@KamilBem", Specialization = "AGD", FirstName = "Kamil", LastName = "Bem",
+                var user = new ApplicationUser { UserName = "KamilBem", Email = "KamilBem@KamilBem", /*Specialization = "AGD",*/ FirstName = "Kamil", LastName = "Bem",
                     Street = "Długa",
                     StreetNumber = "8",
                     ApartmentNumber = "12",
@@ -139,6 +180,14 @@ namespace CallCenterService.Configuration
                 {
                     user = await _userManager.FindByNameAsync("KamilBem");
                     await _userManager.AddToRoleAsync(user, "Serwisant");
+
+                    var spec = _dbContext.Specialization.SingleOrDefault(x => x.Type == "AGD");
+                    await _dbContext.ServicerSpecializations.AddAsync(new ServicerSpecializations
+                    {
+                        ServicerId = user.Id,
+                        Spec = spec
+                    });
+                    _dbContext.SaveChanges();
                 }
             }
             if ((await _userManager.FindByNameAsync("Kierownik")) == null)

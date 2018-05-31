@@ -21,11 +21,14 @@ namespace CallCenterService.Configuration
         public async Task Seed()
         {
             if ((await _dbContext.Products.SingleOrDefaultAsync(x => x.Name == "Pralka A+++ BEKO WRE 6511 BWW")) == null){
+
+                var spec = _dbContext.Specialization.SingleOrDefault(x => x.Type == "AGD");
+                
                 await _dbContext.Products.AddAsync(
                         new Product()
                         {
                             Name = "Pralka A+++ BEKO WRE 6511 BWW",
-                            Type = "AGD",
+                            Type = spec,
                             ClientId = 1
                         });
                         
@@ -33,11 +36,13 @@ namespace CallCenterService.Configuration
             }
             if ((await _dbContext.Products.SingleOrDefaultAsync(x => x.Name == "Pralka GORENJE W 6503/S")) == null)
             {
+                var spec = _dbContext.Specialization.SingleOrDefault(x => x.Type == "AGD");
+
                 await _dbContext.Products.AddAsync(
                         new Product()
                         {
                             Name = "Pralka GORENJE W 6503/S",
-                            Type = "AGD",
+                            Type = spec,
                             ClientId = 1
                         });
 
@@ -45,11 +50,13 @@ namespace CallCenterService.Configuration
             }
             if ((await _dbContext.Products.SingleOrDefaultAsync(x => x.Name == "Pralka BEKO WTV6533BS")) == null)
             {
+                var spec = _dbContext.Specialization.SingleOrDefault(x => x.Type == "AGD");
+
                 await _dbContext.Products.AddAsync(
                         new Product()
                         {
                             Name = "Pralka BEKO WTV6533BS",
-                            Type = "AGD",
+                            Type = spec,
                             ClientId = 2
                         });
 
@@ -57,11 +64,13 @@ namespace CallCenterService.Configuration
             }
             if ((await _dbContext.Products.SingleOrDefaultAsync(x => x.Name == "Zmywarka SIEMENS SN215I01AE")) == null)
             {
+                var spec = _dbContext.Specialization.SingleOrDefault(x => x.Type == "AGD");
+
                 await _dbContext.Products.AddAsync(
                         new Product()
                         {
                             Name = "Zmywarka SIEMENS SN215I01AE",
-                            Type = "AGD",
+                            Type = spec,
                             ClientId = 3
                         });
 
@@ -69,11 +78,13 @@ namespace CallCenterService.Configuration
             }
             if ((await _dbContext.Products.SingleOrDefaultAsync(x => x.Name == "Zmywarka BOSCH SMS46GI04E")) == null)
             {
+                var spec = _dbContext.Specialization.SingleOrDefault(x => x.Type == "AGD");
+
                 await _dbContext.Products.AddAsync(
                         new Product()
                         {
                             Name = "Zmywarka BOSCH SMS46GI04E",
-                            Type = "AGD",
+                            Type = spec,
                             ClientId = 4
                         });
 
@@ -81,11 +92,13 @@ namespace CallCenterService.Configuration
             }
             if ((await _dbContext.Products.SingleOrDefaultAsync(x => x.Name == "Telewizor Lin 32LHD")) == null)
             {
+                var spec = _dbContext.Specialization.SingleOrDefault(x => x.Type == "RTV");
+
                 await _dbContext.Products.AddAsync(
                         new Product()
                         {
                             Name = "Telewizor Lin 32LHD",
-                            Type = "RTV",
+                            Type = spec,
                             ClientId = 2
                         });
 
@@ -93,11 +106,13 @@ namespace CallCenterService.Configuration
             }
             if ((await _dbContext.Products.SingleOrDefaultAsync(x => x.Name == "Telewizor MANTA LED320E10")) == null)
             {
+                var spec = _dbContext.Specialization.SingleOrDefault(x => x.Type == "RTV");
+
                 await _dbContext.Products.AddAsync(
                         new Product()
                         {
                             Name = "Telewizor MANTA LED320E10",
-                            Type = "RTV",
+                            Type = spec,
                             ClientId = 5
                         });
 
@@ -105,11 +120,13 @@ namespace CallCenterService.Configuration
             }
             if ((await _dbContext.Products.SingleOrDefaultAsync(x => x.Name == "myPhone Prime Plus")) == null)
             {
+                var spec = _dbContext.Specialization.SingleOrDefault(x => x.Type == "RTV");
+
                 await _dbContext.Products.AddAsync(
                         new Product()
                         {
                             Name = "myPhone Prime Plus",
-                            Type = "RTV",
+                            Type = spec,
                             ClientId = 6
                         });
 
@@ -117,11 +134,13 @@ namespace CallCenterService.Configuration
             }
             if ((await _dbContext.Products.SingleOrDefaultAsync(x => x.Name == "MaxCom MM916")) == null)
             {
+                var spec = _dbContext.Specialization.SingleOrDefault(x => x.Type == "RTV");
+
                 await _dbContext.Products.AddAsync(
                         new Product()
                         {
                             Name = "MaxCom MM916",
-                            Type = "RTV",
+                            Type = spec,
                             ClientId = 7
                         });
 
@@ -129,11 +148,13 @@ namespace CallCenterService.Configuration
             }
             if ((await _dbContext.Products.SingleOrDefaultAsync(x => x.Name == "Samsung Galaxy j5 2016 16 GB SM-J510F (Dual Sim) Złoty")) == null)
             {
+                var spec = _dbContext.Specialization.SingleOrDefault(x => x.Type == "RTV");
+
                 await _dbContext.Products.AddAsync(
                         new Product()
                         {
                             Name = "Samsung Galaxy j5 2016 16 GB SM-J510F (Dual Sim) Złoty",
-                            Type = "RTV",
+                            Type = spec,
                             ClientId = 6
                         });
 

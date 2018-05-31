@@ -44,8 +44,6 @@ namespace CallCenterService.ViewModels
         [Required]
         public string Role { get; set; }
 
-        public string Specialization { get; set; }
-
         public SelectList Roles { get; set; }
     }
 }

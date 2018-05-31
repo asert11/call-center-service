@@ -83,8 +83,7 @@ namespace CallCenterService.Controllers
                     var user = new ApplicationUser { UserName = vm.UserName, Email = vm.Email,
                         FirstName = vm.FirstName, LastName = vm.LastName, Street = vm.Street,
                         StreetNumber = vm.StreetNumber, ApartmentNumber = vm.ApartmentNumber,
-                        PostCode = vm.PostCode, City = vm.City,
-                        Specialization = vm.Specialization};
+                        PostCode = vm.PostCode, City = vm.City};
 
                     var result = await _userManager.CreateAsync(user, vm.Password);
                     _dbContext.SaveChanges();
@@ -219,8 +218,7 @@ namespace CallCenterService.Controllers
                 ApartmentNumber = user.ApartmentNumber,
                 PostCode = user.PostCode,
                 City = user.City,
-                UserName = user.UserName,
-                Specialization = user.Specialization
+                UserName = user.UserName
             };
             return View(vm);
         }
@@ -253,7 +251,6 @@ namespace CallCenterService.Controllers
                     vm.ApartmentNumber = user.ApartmentNumber;
                     vm.PostCode = user.PostCode;
                     vm.City = user.City;
-                    vm.Specialization = user.Specialization;
                     vm.Roles = GetUserRoles();
                     return View(vm);
                 }
@@ -278,7 +275,6 @@ namespace CallCenterService.Controllers
                     user.ApartmentNumber = vm.ApartmentNumber;
                     user.PostCode = vm.PostCode;
                     user.City = vm.City;
-                    user.Specialization = vm.Specialization;
 
                     await _userManager.UpdateAsync(user);
 
@@ -295,7 +291,6 @@ namespace CallCenterService.Controllers
             vm.ApartmentNumber = user.ApartmentNumber;
             vm.PostCode = user.PostCode;
             vm.City = user.City;
-            vm.Specialization = user.Specialization;
             vm.Roles = GetUserRoles();
             return View(vm);
         }

@@ -23,8 +23,9 @@ namespace CallCenterService.Configuration
 
         public async void SeedDatabase()
         {
+            await new SpecializationsSeed(_dbContext).Seed();
             await new UserRoleSeed(_roleManager).Seed();
-            await new UserSeed(_userManager).Seed();
+            await new UserSeed(_dbContext, _userManager).Seed();
             await new ClientsSeed(_dbContext).Seed();
             await new ProductsSeed(_dbContext).Seed();
             await new FaultsSeed(_dbContext).Seed();

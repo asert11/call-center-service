@@ -37,10 +37,10 @@ namespace CallCenterService.Controllers
 
             if (!String.IsNullOrEmpty(searchTypeProduct))
             {
-                name = name.Where(s => s.Type.Equals(searchTypeProduct));
+                name = name.Include(s => s.Type).Where(s => s.Type.Type.Equals(searchTypeProduct));
             }
 
-            return View(await name.Include(m => m.Client).ToListAsync());
+            return View(await name.Include(m => m.Client).Include(m => m.Type).ToListAsync());
         }
 
         // GET: Products/Details/5
@@ -51,7 +51,7 @@ namespace CallCenterService.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products
+            var product = await _context.Products.Include(m => m.Type)
                 .SingleOrDefaultAsync(m => m.ProductID == id);
             if (product == null)
             {
@@ -71,7 +71,7 @@ namespace CallCenterService.Controllers
 
             Product p = new Product();
             p.ClientId = (int)id;
-
+            p.Specializations = _context.Specialization.ToList();
             return View(p);
         }
 
@@ -80,17 +80,25 @@ namespace CallCenterService.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int ? id, [Bind("ProductID,Name,Type")] Product product)
+        public async Task<IActionResult> Create(int ? id, [Bind("ProductID,Name,Type,SelectedId")] Product product)
         {
             if (ModelState.IsValid)
             {
                 product.Client = _context.Clients.FirstOrDefault(m => m.ClientId == id);
+                product.Type = _context.Specialization.FirstOrDefault(m => m.Id == Int32.Parse(product.SelectedId));
+
+                if (product.Type == null)
+                {
+                    product.Specializations = _context.Specialization.ToList();
+                    return View(product);
+                }
 
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return RedirectToAction("Index", "Clients");
+            product.Specializations = _context.Specialization.ToList();
+            return View(product);
         }
 
         // GET: Products/Edit/5
@@ -101,11 +109,13 @@ namespace CallCenterService.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products.SingleOrDefaultAsync(m => m.ProductID == id);
+            var product = await _context.Products.Include(m => m.Type).SingleOrDefaultAsync(m => m.ProductID == id);
             if (product == null)
             {
                 return NotFound();
             }
+            product.Specializations = _context.Specialization.ToList();
+            product.SelectedId = product.Type.Id.ToString();
             return View(product);
         }
 
@@ -114,7 +124,7 @@ namespace CallCenterService.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductID,Name,Type")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductID,Name,Type,SelectedId")] Product product)
         {
             if (id != product.ProductID)
             {
@@ -125,7 +135,13 @@ namespace CallCenterService.Controllers
             {
                 try
                 {
-                    _context.Update(product);
+                    var data = _context.Products.Include(m => m.Client).Where(m => m.ProductID == id).First();
+                    data.Type = _context.Specialization.FirstOrDefault(m => m.Id == Int32.Parse(product.SelectedId));
+                    data.Name = product.Name;
+                    if(data.Type == null)
+                        return RedirectToAction("Index");
+
+                    _context.Update(data);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -141,6 +157,7 @@ namespace CallCenterService.Controllers
                 }
                 return RedirectToAction("Index");
             }
+            product.Specializations = _context.Specialization.ToList();
             return View(product);
         }
 

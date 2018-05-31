@@ -52,25 +52,5 @@
         <select asp-for="Role" asp-items="Model.Roles"></select>
     </div>
     <br />
-    <div>
-        @*<label asp-for="Specialization">Specjalizacja:</label>
-            <input asp-for="Specialization" />
-            <span asp-validation-for="Specialization"></span>*@
-        @{
-            List<SelectListItem> listItems = new List<SelectListItem>();
-            listItems.Add(new SelectListItem
-            {
-                Text = "RTV",
-                Value = "RTV"
-            });
-            listItems.Add(new SelectListItem
-            {
-                Text = "AGD",
-                Value = "AGD"
-            });
-        }
-        <label>Specjalizacja: @Html.DropDownListFor(model => model.Specialization, listItems, "")</label>
-    </div>
-    <br />
-    <input type="submit" value="Edytuj  " />
+    <input type="submit" value="Edytuj" />
 </form>

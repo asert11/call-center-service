@@ -92,16 +92,24 @@ namespace CallCenterService.Controllers
                 return NotFound();
             }
 
-            var FaultTmp = _context.Faults.Include(m => m.Product).FirstOrDefault(f => f.FaultId == id);
+            var FaultTmp = _context.Faults.Include(m => m.Product).Include(m => m.Product.Type)
+                .FirstOrDefault(f => f.FaultId == id);
 
             var vm = new SetServicerRegistrantViewModel
             {
                 FaultId = (int)id,
-                // Servicers = await _userManager.GetUsersInRoleAsync("Serwisant"),
-
-                FaultData = await _context.Faults.FirstOrDefaultAsync(f => f.FaultId == id),
-                Servicers = _context.Users.Where(m => m.Specialization == FaultTmp.Product.Type).ToList()
+                FaultData = _context.Faults.FirstOrDefault(f => f.FaultId == id),
+                Servicers = new List<ApplicationUser>()
             };
+
+            var Specializations = _context.ServicerSpecializations.Include(m => m.Spec)
+                .Where(m => m.Spec.Id == FaultTmp.Product.Type.Id).ToList();
+
+            foreach(var item in Specializations)
+            {
+                var user = await _userManager.FindByIdAsync(item.ServicerId);
+                vm.Servicers.Add(user);
+            }
 
             if (vm.FaultData == null)
             {
@@ -114,16 +122,26 @@ namespace CallCenterService.Controllers
         [HttpPost]
         public async Task<IActionResult> SetServicer(SetServicerRegistrantViewModel vm)
         {
-            var fault = await _context.Faults.FirstOrDefaultAsync(f => f.FaultId == vm.FaultId);
+            var fault = await _context.Faults.Include(m => m.Product).Include(m => m.Product.Type)
+                .FirstOrDefaultAsync(f => f.FaultId == vm.FaultId);
 
             if(vm.ServicerId == null)
             {
-                vm.Servicers = await _userManager.GetUsersInRoleAsync("Serwisant");
+                vm.Servicers = new List<ApplicationUser>();
                 vm.FaultData = fault;
 
                 if (vm.FaultData == null)
                 {
                     return NotFound();
+                }
+
+                var Specializations = _context.ServicerSpecializations.Include(m => m.Spec)
+                .Where(m => m.Spec.Id == fault.Product.Type.Id).ToList();
+
+                foreach (var item in Specializations)
+                {
+                    var user = await _userManager.FindByIdAsync(item.ServicerId);
+                    vm.Servicers.Add(user);
                 }
 
                 return View(vm);
@@ -133,12 +151,21 @@ namespace CallCenterService.Controllers
 
             if (ModelState.IsValid == false || servicer == null)
             {
-                vm.Servicers = await _userManager.GetUsersInRoleAsync("Serwisant");
+                vm.Servicers = new List<ApplicationUser>();
                 vm.FaultData = fault;
 
                 if (vm.FaultData == null)
                 {
                     return NotFound();
+                }
+
+                var Specializations = _context.ServicerSpecializations.Include(m => m.Spec)
+                .Where(m => m.Spec.Id == fault.Product.Type.Id).ToList();
+
+                foreach (var item in Specializations)
+                {
+                    var user = await _userManager.FindByIdAsync(item.ServicerId);
+                    vm.Servicers.Add(user);
                 }
 
                 return View(vm);

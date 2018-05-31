@@ -1,0 +1,70 @@
+﻿@using Microsoft.AspNetCore.Identity;
+
+﻿@*<link rel="stylesheet" href="~/css/tableStyle.css">*@
+@using Microsoft.AspNetCore.Identity;
+@using CallCenterService.Models;
+@model CallCenterService.ViewModels.UsersViewModel
+
+@inject UserManager<ApplicationUser> userManager
+
+
+<h2>Użytkownicy</h2>
+<br />
+<form asp-controller="Servicers" asp-action="Index" method="get">
+    <p>
+        <b> Login </b> <input type="text" name="searchUserLogin">
+        <b> E-mail:</b> <input type="text" name="searchUserEmail">
+        <input type="submit" value="Szukaj" />
+    </p>
+</form>
+<a asp-controller="Account" asp-action="AddUser">Dodaj użytkownika</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Login</th>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+            <th>Ulica</th>
+            <th>Numer domu</th>
+            <th>Numer mieszkania</th>
+            <th>Kod pocztowy</th>
+            <th>Miasto</th>
+            <th>Email</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.FirstName</td>
+                <td>@user.LastName</td>
+                <td>@user.Street</td>
+                <td>@user.StreetNumber</td>
+                <td>@user.ApartmentNumber</td>
+                <td>@user.PostCode</td>
+                <td>@user.City</td>
+                <td>@user.Email</td>
+
+                @if (user.UserName != "admin@admin.com")
+                {
+                    <td>
+                        <a asp-controller="Account" asp-action="EditUser" asp-route-id="@user.Id">Edytuj</a>
+                    </td>
+                    <td>
+                        <a asp-controller="Account" asp-action="DeleteUser" asp-route-id="@user.Id">Usuń</a>
+                    </td>
+                }
+                else
+                {
+                    <td></td>
+                    <td></td>
+                }
+                <td><a asp-controller="Servicers" asp-action="Specializations" asp-route-id="@user.Id">Specjalizacje</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

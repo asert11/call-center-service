@@ -166,12 +166,13 @@ namespace CallCenterService.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<string>("Type")
-                        .IsRequired();
+                    b.Property<int?>("TypeId");
 
                     b.HasKey("ProductID");
 
                     b.HasIndex("ClientId");
+
+                    b.HasIndex("TypeId");
 
                     b.ToTable("Products");
                 });
@@ -200,6 +201,36 @@ namespace CallCenterService.Migrations
                     b.HasIndex("ServicerId");
 
                     b.ToTable("Repairs");
+                });
+
+            modelBuilder.Entity("CallCenterService.Models.ServicerSpecializations", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ServicerId")
+                        .IsRequired();
+
+                    b.Property<int>("SpecId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SpecId");
+
+                    b.ToTable("ServicerSpecializations");
+                });
+
+            modelBuilder.Entity("CallCenterService.Models.Specialization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Type")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Specialization");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
@@ -327,6 +358,10 @@ namespace CallCenterService.Migrations
                         .WithMany()
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("CallCenterService.Models.Specialization", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeId");
                 });
 
             modelBuilder.Entity("CallCenterService.Models.Repair", b =>
@@ -339,6 +374,14 @@ namespace CallCenterService.Migrations
                     b.HasOne("CallCenterService.Models.ApplicationUser", "Servicer")
                         .WithMany()
                         .HasForeignKey("ServicerId");
+                });
+
+            modelBuilder.Entity("CallCenterService.Models.ServicerSpecializations", b =>
+                {
+                    b.HasOne("CallCenterService.Models.Specialization", "Spec")
+                        .WithMany()
+                        .HasForeignKey("SpecId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>

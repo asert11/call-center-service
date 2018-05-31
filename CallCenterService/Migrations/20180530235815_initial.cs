@@ -76,6 +76,19 @@ namespace CallCenterService.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Specialization",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Type = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Specialization", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -152,7 +165,7 @@ namespace CallCenterService.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ClientId = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: false),
-                    Type = table.Column<string>(nullable: false)
+                    TypeId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -162,6 +175,32 @@ namespace CallCenterService.Migrations
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "ClientId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Products_Specialization_TypeId",
+                        column: x => x.TypeId,
+                        principalTable: "Specialization",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ServicerSpecializations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ServicerId = table.Column<string>(nullable: false),
+                    SpecId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServicerSpecializations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ServicerSpecializations_Specialization_SpecId",
+                        column: x => x.SpecId,
+                        principalTable: "Specialization",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -296,6 +335,11 @@ namespace CallCenterService.Migrations
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Products_TypeId",
+                table: "Products",
+                column: "TypeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Repairs_FaultId",
                 table: "Repairs",
                 column: "FaultId");
@@ -304,6 +348,11 @@ namespace CallCenterService.Migrations
                 name: "IX_Repairs_ServicerId",
                 table: "Repairs",
                 column: "ServicerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServicerSpecializations_SpecId",
+                table: "ServicerSpecializations",
+                column: "SpecId");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
@@ -341,6 +390,9 @@ namespace CallCenterService.Migrations
                 name: "Repairs");
 
             migrationBuilder.DropTable(
+                name: "ServicerSpecializations");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
             migrationBuilder.DropTable(
@@ -369,6 +421,9 @@ namespace CallCenterService.Migrations
 
             migrationBuilder.DropTable(
                 name: "Clients");
+
+            migrationBuilder.DropTable(
+                name: "Specialization");
         }
     }
 }
