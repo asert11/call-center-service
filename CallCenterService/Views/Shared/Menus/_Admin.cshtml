@@ -1,0 +1,28 @@
+﻿<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">CallCenterService</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                @*<li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>*@
+                <li><a asp-area="" asp-controller="Registrant" asp-action="Index">Rejestrujący</a></li>
+                <li><a asp-area="" asp-controller="Account" asp-action="Index">Użytkownicy</a></li>
+                <li><a asp-area="" asp-controller="Clients" asp-action="Index">Klienci</a></li>
+                <li><a asp-area="" asp-controller="Faults" asp-action="Index">Usterki</a></li>
+                @*<li><a asp-area="" asp-controller="FaultsHistory" asp-action="Index">Historia zmian</a></li>*@
+                <li><a asp-area="" asp-controller="Products" asp-action="Index">Produkty</a></li>
+                @*<li><a asp-area="" asp-controller="Repairs" asp-action="Index">Naprawy</a></li>*@
+                <li><a asp-area="" asp-controller="Servicers" asp-action="Index">Serwisanci</a></li>
+                <li><a asp-area="" asp-controller="Specializations" asp-action="Index">Specjalizacje</a></li>
+            </ul>
+            @await Html.PartialAsync("_LoginPartial")
+        </div>
+    </div>
+</nav>

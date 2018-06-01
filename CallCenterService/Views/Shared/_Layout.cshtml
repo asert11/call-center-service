@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - CallCenterService</title>
-	
+
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
@@ -16,45 +16,6 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
-    @Html.Raw(JavaScriptSnippet.FullScript)
-</head>
-<body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">CallCenterService</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    @*<li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>*@
-                    <li><a asp-area="" asp-controller="Registrant" asp-action="Index">Rejestrujący</a></li>
-                    <li><a asp-area="" asp-controller="Account" asp-action="Index">Użytkownicy</a></li>
-                    <li><a asp-area="" asp-controller="Clients" asp-action="Index">Klienci</a></li>
-                    <li><a asp-area="" asp-controller="Faults" asp-action="Index">Usterki</a></li>
-                    @*<li><a asp-area="" asp-controller="FaultsHistory" asp-action="Index">Historia zmian</a></li>*@
-                    <li><a asp-area="" asp-controller="Products" asp-action="Index">Produkty</a></li>
-                    @*<li><a asp-area="" asp-controller="Repairs" asp-action="Index">Naprawy</a></li>*@
-                    <li><a asp-area="" asp-controller="Servicers" asp-action="Index">Serwisanci</a></li>
-                    <li><a asp-area="" asp-controller="Specializations" asp-action="Index">Specjalizacje</a></li>
-                </ul>
-                @await Html.PartialAsync("_LoginPartial")
-            </div>
-        </div>
-    </nav>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2018 - CallCenterService</p>
-        </footer>
-    </div>
-
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
@@ -75,6 +36,46 @@
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.3.0/bootbox.min.js"></script>
+
+    @if (IsSectionDefined("head"))
+    {
+        @RenderSection("head")
+    }
+
+    @Html.Raw(JavaScriptSnippet.FullScript)
+</head>
+<body>
+    @{
+        if (this.User.IsInRole("Admin"))
+        {
+            @await Html.PartialAsync("~/Views/Shared/Menus/_Admin.cshtml")
+        }
+        else if (this.User.IsInRole("Serwisant"))
+        {
+            @await Html.PartialAsync("~/Views/Shared/Menus/_Serwisant.cshtml")
+        }
+        else if (this.User.IsInRole("Kierownik"))
+        {
+            @await Html.PartialAsync("~/Views/Shared/Menus/_Kierownik.cshtml")
+        }
+        else if (this.User.IsInRole("Księgowa"))
+        {
+            @await Html.PartialAsync("~/Views/Shared/Menus/_Ksiegowa.cshtml")
+        }
+        else if (this.User.IsInRole("Rejestrujący"))
+        {
+            @await Html.PartialAsync("~/Views/Shared/Menus/_Rejestrujacy.cshtml")
+        }
+    }         
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; 2018 - CallCenterService</p>
+        </footer>
+    </div>
 
     @RenderSection("Scripts", required: false)
 </body>

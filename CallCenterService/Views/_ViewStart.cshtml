@@ -1,25 +1,3 @@
 ﻿@{
-    if (this.User.IsInRole("Admin"))
-    {
-        Layout = "~/Views/Shared/_Layout.cshtml";
-    }
-    else if (this.User.IsInRole("Serwisant"))
-    {
-        Layout = "~/Views/Shared/_LayoutSerwisant.cshtml";
-    }
-    else if (this.User.IsInRole("Kierownik"))
-    {
-        Layout = "~/Views/Shared/_LayoutKierownik.cshtml";
-
-    }
-    else if (this.User.IsInRole("Księgowa"))
-    {
-        Layout = "~/Views/Shared/_LayoutKsiegowa.cshtml";
-
-    }
-    else if(this.User.IsInRole("Rejestrujący"))
-    {
-        Layout = "~/Views/Shared/_LayoutRejestrujacy.cshtml";
-
-    }
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }

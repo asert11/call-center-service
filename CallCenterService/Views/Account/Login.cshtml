@@ -1,14 +1,12 @@
 ﻿@model CallCenterService.ViewModels.LoginViewModel
 
+@section head  {
+    <link rel="stylesheet" href="~/css/loginView.css">
+}
 
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-
-<link rel="stylesheet" href="~/css/loginView.css">
 @*
     <div class="container">
-        <img alt="error" src="https://upload.wikimedia.org/wikipedia/commons/c/ca/Crystal_Clear_app_Login_Manager.png">
+        <img alt="error" src="~/images/Login_Manager.png">
         <form method="post" asp-controller="Account" class="form-horizontal" asp-action="Login">
             <div class="form-group">
                 <label class="control-label col-sm-2" for="username"><span class="glyphicon glyphicon-user"></span></label>
@@ -32,41 +30,37 @@
 
             </form>
     </div>*@
-
-
-<div class="container">
-    <img alt="error" src="https://upload.wikimedia.org/wikipedia/commons/c/ca/Crystal_Clear_app_Login_Manager.png">
-    <form method="post" asp-controller="Account" asp-action="Login">
-        <div asp-validation-summary="All" style="font-size: 30px; color: darkred"></div>
-
-        <br>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="username"><span class="glyphicon glyphicon-user"></span></label>
-
-            <label asp-for="UserName">Login:</label>
-            <input asp-for="UserName" />
+    <div class="container" id="LoginPanel">
+        <img alt="error" src="~/images/logo.png">
+        <form method="post" asp-controller="Account" asp-action="Login">
             <br>
-            <span asp-validation-for="UserName"></span>
-            <br>
-        </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="username"><span class="glyphicon glyphicon-user"></span></label>
 
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="password"><span class="glyphicon glyphicon-briefcase"></span></label>
+                <label asp-for="UserName">Login:</label>
+                <input asp-for="UserName" />
+                <br>
+                <span asp-validation-for="UserName"></span>
+                <br>
+            </div>
 
-            <label asp-for="Password">Hasło:</label>
-            <input asp-for="Password" />
-            <br>
-            <span asp-validation-for="Password"></span>
-            <br>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="password"><span class="glyphicon glyphicon-briefcase"></span></label>
 
-        </div>
-        <div>
-            <label asp-for="RememberMe">Zapamiętaj mnie:</label>
-            <input asp-for="RememberMe" />
+                <label asp-for="Password">Hasło:</label>
+                <input asp-for="Password" />
+                <br>
+                <span asp-validation-for="Password"></span>
+                <br>
 
-            <span asp-validation-for="RememberMe"></span>
+            </div>
+            <div>
+                <label asp-for="RememberMe">Zapamiętaj mnie:</label>
+                <input asp-for="RememberMe" />
 
-        </div>
-        <div><p><input type="submit" value="Zaloguj" /></p></div>
-    </form>
-</div>
+                <span asp-validation-for="RememberMe"></span>
+            </div>
+            <br/>
+            <div><p><input class="btn btn-light" type="submit" value="Zaloguj" /></p></div>
+        </form>
+    </div>
