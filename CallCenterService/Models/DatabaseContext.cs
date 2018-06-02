@@ -15,5 +15,6 @@ namespace CallCenterService.Models
         public DbSet<EventHistory> EventHistory { get; set; }
         public DbSet<Specialization> Specialization { get; set; }
         public DbSet<ServicerSpecializations> ServicerSpecializations { get; set; }
+        public DbSet<RepairEvent> RepairEvents { get; set; }
     }
 }
