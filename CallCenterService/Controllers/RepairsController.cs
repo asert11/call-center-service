@@ -48,10 +48,6 @@ namespace CallCenterService.Controllers
                 name = name.Where(s => s.Fault.Product.Name.Contains(searchNameProduct));
             }
 
-
-
-
-
             ApplicationUser usr = await _userManager.GetUserAsync(HttpContext.User);
             string id = usr?.Id;
             if (id == null)

@@ -21,20 +21,20 @@ namespace CallCenterService.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult GetRepairEvents()
+        {
+            var events = _context.RepairEvents.ToList();
+            return new JsonResult(events);
+        }
+
         public IActionResult Error()
         {
             return View();
         }
 
-        [HttpGet]
-        public JsonResult GetRepairEvents()
-        {
-            var events = _context.RepairEvents.ToList();
-            return new JsonResult(events);      //dodac tutaj AllowGet Behaviour
-        }
-
         [HttpPost]
-        public JsonResult SaveRepairEvent(RepairEvent e)
+        public IActionResult SaveRepairEvent(RepairEvent e)
         {
             var status = false;
 
@@ -60,11 +60,12 @@ namespace CallCenterService.Controllers
             _context.SaveChanges();
             status = true;
 
+           // ViewData["SaveStatus"] = status;
             return new JsonResult(status);
         }
 
         [HttpPost]
-        public JsonResult DeleteRepairEvent(int id)
+        public IActionResult DeleteRepairEvent(int id)
         {
             var status = false;
 
@@ -75,6 +76,8 @@ namespace CallCenterService.Controllers
                 _context.SaveChanges();
                 status = true;
             }
+
+            //ViewData["DeleteStatus"] = status;
             return new JsonResult(status);
         }
     }
