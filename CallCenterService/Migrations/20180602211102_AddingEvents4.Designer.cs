@@ -198,7 +198,7 @@ namespace CallCenterService.Migrations
                     b.ToTable("Repairs");
                 });
 
-            modelBuilder.Entity("CallCenterService.Models.RepairEvent", b =>
+            modelBuilder.Entity("CallCenterService.Models.CalendarEvent", b =>
                 {
                     b.Property<int>("EventId")
                         .ValueGeneratedOnAdd();
@@ -389,7 +389,7 @@ namespace CallCenterService.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("CallCenterService.Models.RepairEvent", b =>
+            modelBuilder.Entity("CallCenterService.Models.CalendarEvent", b =>
                 {
                     b.HasOne("CallCenterService.Models.Repair", "Repair")
                         .WithMany()

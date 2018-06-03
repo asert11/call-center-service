@@ -30,7 +30,7 @@ namespace CallCenterService.Configuration
             await new ProductsSeed(_dbContext).Seed();
             await new FaultsSeed(_dbContext).Seed();
             await new RepairsSeed(_dbContext,_userManager).Seed();
-            await new RepairEventsSeed(_dbContext).Seed();
+            await new CalendarEventsSeed(_dbContext).Seed();
         }
     }
 }

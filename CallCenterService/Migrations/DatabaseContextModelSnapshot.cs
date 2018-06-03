@@ -88,6 +88,29 @@ namespace CallCenterService.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("CallCenterService.Models.CalendarEvent", b =>
+                {
+                    b.Property<int>("EventId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<DateTime>("End");
+
+                    b.Property<bool>("IsFullDay");
+
+                    b.Property<DateTime>("Start");
+
+                    b.Property<string>("Subject")
+                        .IsRequired();
+
+                    b.Property<string>("ThemeColor");
+
+                    b.HasKey("EventId");
+
+                    b.ToTable("CalendarEvents");
+                });
+
             modelBuilder.Entity("CallCenterService.Models.Client", b =>
                 {
                     b.Property<int>("ClientId")
@@ -195,33 +218,6 @@ namespace CallCenterService.Migrations
                     b.HasIndex("FaultId");
 
                     b.ToTable("Repairs");
-                });
-
-            modelBuilder.Entity("CallCenterService.Models.RepairEvent", b =>
-                {
-                    b.Property<int>("EventId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description");
-
-                    b.Property<DateTime>("End");
-
-                    b.Property<bool>("IsFullDay");
-
-                    b.Property<int?>("RepairId");
-
-                    b.Property<DateTime>("Start");
-
-                    b.Property<string>("Subject")
-                        .IsRequired();
-
-                    b.Property<string>("ThemeColor");
-
-                    b.HasKey("EventId");
-
-                    b.HasIndex("RepairId");
-
-                    b.ToTable("RepairEvents");
                 });
 
             modelBuilder.Entity("CallCenterService.Models.ServicerSpecializations", b =>
@@ -386,13 +382,6 @@ namespace CallCenterService.Migrations
                         .WithMany()
                         .HasForeignKey("FaultId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("CallCenterService.Models.RepairEvent", b =>
-                {
-                    b.HasOne("CallCenterService.Models.Repair", "Repair")
-                        .WithMany()
-                        .HasForeignKey("RepairId");
                 });
 
             modelBuilder.Entity("CallCenterService.Models.ServicerSpecializations", b =>

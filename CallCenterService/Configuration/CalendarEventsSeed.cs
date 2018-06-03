@@ -7,21 +7,21 @@ using System.Threading.Tasks;
 
 namespace CallCenterService.Configuration
 {
-    public class RepairEventsSeed
+    public class CalendarEventsSeed
     {
         private readonly DatabaseContext _dbContext;
 
-        public RepairEventsSeed(DatabaseContext dbContext)
+        public CalendarEventsSeed(DatabaseContext dbContext)
         {
             _dbContext = dbContext;
         }
 
         public async Task Seed()
         {
-            if ((await _dbContext.RepairEvents.FirstOrDefaultAsync(x => x.Subject == "Testowy event 1") == null))
+            if ((await _dbContext.CalendarEvents.FirstOrDefaultAsync(x => x.Subject == "Testowy event 1") == null))
             {
-                await _dbContext.RepairEvents.AddAsync(
-                    new RepairEvent
+                await _dbContext.CalendarEvents.AddAsync(
+                    new CalendarEvent
                     {
                         Subject = "Testowy event 1",
                         Description = "Testowy opis 1",
@@ -32,10 +32,10 @@ namespace CallCenterService.Configuration
                     });
                 _dbContext.SaveChanges();
             }
-            if ((await _dbContext.RepairEvents.FirstOrDefaultAsync(x => x.Subject == "Testowy event 2") == null))
+            if ((await _dbContext.CalendarEvents.FirstOrDefaultAsync(x => x.Subject == "Testowy event 2") == null))
             {
-                await _dbContext.RepairEvents.AddAsync(
-                    new RepairEvent
+                await _dbContext.CalendarEvents.AddAsync(
+                    new CalendarEvent
                     {
                         Subject = "Testowy event 2",
                         Description = "Testowy opis 2",

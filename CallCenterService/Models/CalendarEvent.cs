@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CallCenterService.Models
 {
-    public class RepairEvent
+    public class CalendarEvent
     {
         [Key]
         public int EventId { get; set; }
@@ -25,7 +25,5 @@ namespace CallCenterService.Models
 
         [Required]
         public Boolean IsFullDay { get; set; }
-
-        public virtual Repair Repair { get; set; }
     }
 }

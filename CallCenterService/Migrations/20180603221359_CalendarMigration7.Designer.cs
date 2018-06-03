@@ -8,8 +8,8 @@ using CallCenterService.Models;
 namespace CallCenterService.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20180602211438_AddingEvents5")]
-    partial class AddingEvents5
+    [Migration("20180603221359_CalendarMigration7")]
+    partial class CalendarMigration7
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -87,6 +87,29 @@ namespace CallCenterService.Migrations
                         .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("CallCenterService.Models.CalendarEvent", b =>
+                {
+                    b.Property<int>("EventId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<DateTime>("End");
+
+                    b.Property<bool>("IsFullDay");
+
+                    b.Property<DateTime>("Start");
+
+                    b.Property<string>("Subject")
+                        .IsRequired();
+
+                    b.Property<string>("ThemeColor");
+
+                    b.HasKey("EventId");
+
+                    b.ToTable("CalendarEvents");
                 });
 
             modelBuilder.Entity("CallCenterService.Models.Client", b =>
@@ -196,33 +219,6 @@ namespace CallCenterService.Migrations
                     b.HasIndex("FaultId");
 
                     b.ToTable("Repairs");
-                });
-
-            modelBuilder.Entity("CallCenterService.Models.CalendarEvent", b =>
-                {
-                    b.Property<int>("EventId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description");
-
-                    b.Property<DateTime>("End");
-
-                    b.Property<bool>("IsFullDay");
-
-                    b.Property<int?>("RepairId");
-
-                    b.Property<DateTime>("Start");
-
-                    b.Property<string>("Subject")
-                        .IsRequired();
-
-                    b.Property<string>("ThemeColor");
-
-                    b.HasKey("EventId");
-
-                    b.HasIndex("RepairId");
-
-                    b.ToTable("CalendarEvents");
                 });
 
             modelBuilder.Entity("CallCenterService.Models.ServicerSpecializations", b =>
@@ -387,13 +383,6 @@ namespace CallCenterService.Migrations
                         .WithMany()
                         .HasForeignKey("FaultId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("CallCenterService.Models.CalendarEvent", b =>
-                {
-                    b.HasOne("CallCenterService.Models.Repair", "Repair")
-                        .WithMany()
-                        .HasForeignKey("RepairId");
                 });
 
             modelBuilder.Entity("CallCenterService.Models.ServicerSpecializations", b =>

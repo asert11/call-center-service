@@ -24,7 +24,7 @@ namespace CallCenterService.Controllers
         [HttpGet]
         public IActionResult GetRepairEvents()
         {
-            var events = _context.RepairEvents.ToList();
+            var events = _context.CalendarEvents.ToList();
             return new JsonResult(events);
         }
 
@@ -34,14 +34,14 @@ namespace CallCenterService.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveRepairEvent(RepairEvent e)
+        public IActionResult SaveRepairEvent(CalendarEvent e)
         {
             var status = false;
 
             if (e.EventId > 0)
             {
                 //update
-                var v = _context.RepairEvents.Include(x => x.Repair).Where(x => x.EventId == e.EventId).FirstOrDefault();
+                var v = _context.CalendarEvents.Where(x => x.EventId == e.EventId).FirstOrDefault();
                 if (v != null)
                 {
                     v.Subject = e.Subject;
@@ -50,12 +50,11 @@ namespace CallCenterService.Controllers
                     v.Description = e.Description;
                     v.IsFullDay = e.IsFullDay;
                     v.ThemeColor = e.ThemeColor;
-                    v.Repair = e.Repair;
                 }
             }
             else
             {
-                _context.RepairEvents.Add(e);
+                _context.CalendarEvents.Add(e);
             }
             _context.SaveChanges();
             status = true;
@@ -69,10 +68,10 @@ namespace CallCenterService.Controllers
         {
             var status = false;
 
-            var v = _context.RepairEvents.Include(x => x.Repair).Where(x => x.EventId == id).FirstOrDefault();
+            var v = _context.CalendarEvents.Where(x => x.EventId == id).FirstOrDefault();
             if (v != null)
             {
-                _context.RepairEvents.Remove(v);
+                _context.CalendarEvents.Remove(v);
                 _context.SaveChanges();
                 status = true;
             }

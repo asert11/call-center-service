@@ -8,8 +8,8 @@ using CallCenterService.Models;
 namespace CallCenterService.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20180602211438_AddingEvents5")]
-    partial class AddingEvents5
+    [Migration("20180603220754_CalendarMigration5")]
+    partial class CalendarMigration5
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -198,7 +198,7 @@ namespace CallCenterService.Migrations
                     b.ToTable("Repairs");
                 });
 
-            modelBuilder.Entity("CallCenterService.Models.CalendarEvent", b =>
+            modelBuilder.Entity("CallCenterService.Models.RepairEvent", b =>
                 {
                     b.Property<int>("EventId")
                         .ValueGeneratedOnAdd();
@@ -209,8 +209,6 @@ namespace CallCenterService.Migrations
 
                     b.Property<bool>("IsFullDay");
 
-                    b.Property<int?>("RepairId");
-
                     b.Property<DateTime>("Start");
 
                     b.Property<string>("Subject")
@@ -219,8 +217,6 @@ namespace CallCenterService.Migrations
                     b.Property<string>("ThemeColor");
 
                     b.HasKey("EventId");
-
-                    b.HasIndex("RepairId");
 
                     b.ToTable("CalendarEvents");
                 });
@@ -387,13 +383,6 @@ namespace CallCenterService.Migrations
                         .WithMany()
                         .HasForeignKey("FaultId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("CallCenterService.Models.CalendarEvent", b =>
-                {
-                    b.HasOne("CallCenterService.Models.Repair", "Repair")
-                        .WithMany()
-                        .HasForeignKey("RepairId");
                 });
 
             modelBuilder.Entity("CallCenterService.Models.ServicerSpecializations", b =>

@@ -18,21 +18,21 @@ namespace CallCenterService.Migrations
 
             migrationBuilder.RenameTable(
                 name: "Events",
-                newName: "RepairEvents");
+                newName: "CalendarEvents");
 
             migrationBuilder.RenameIndex(
                 name: "IX_Events_RepairId",
-                table: "RepairEvents",
+                table: "CalendarEvents",
                 newName: "IX_RepairEvents_RepairId");
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_RepairEvents",
-                table: "RepairEvents",
+                table: "CalendarEvents",
                 column: "EventId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_RepairEvents_Repairs_RepairId",
-                table: "RepairEvents",
+                table: "CalendarEvents",
                 column: "RepairId",
                 principalTable: "Repairs",
                 principalColumn: "RepairId",
@@ -43,14 +43,14 @@ namespace CallCenterService.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_RepairEvents_Repairs_RepairId",
-                table: "RepairEvents");
+                table: "CalendarEvents");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_RepairEvents",
-                table: "RepairEvents");
+                table: "CalendarEvents");
 
             migrationBuilder.RenameTable(
-                name: "RepairEvents",
+                name: "CalendarEvents",
                 newName: "Events");
 
             migrationBuilder.RenameIndex(
