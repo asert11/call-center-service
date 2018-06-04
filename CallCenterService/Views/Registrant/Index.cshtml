@@ -3,6 +3,34 @@
 @{
     ViewData["Title"] = "Registrant Panel";
 }
+@section head {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.debug.js" integrity="sha384-CchuzHs077vGtfhGYl9Qtc7Vx64rXBXdIAZIPbItbNyWIRTdG0oYAqki3Ry13Yzu" crossorigin="anonymous"></script>
+
+    <style>
+        @@media print {
+            #search-registrant {
+                display: none;
+            }
+        }
+
+        /* SEARCH */
+        .searchInput {
+            background-image: url('https://www.w3schools.com/css/searchicon.png '); /* https://www.w3schools.com/css/searchicon.png */
+            background-position: 10px 12px;
+            background-repeat: no-repeat;
+            width: 200px;
+            font-size: 16px;
+            padding: 12px 20px 12px 40px;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+            margin-top: 6px;
+        }
+
+        .formUnit {
+            white-space: nowrap;
+        }
+    </style>
+}
 
 <h2>Panel rejestrującego</h2>
 <p>
@@ -22,22 +50,21 @@
 <p>
     <br />
     @*<br />
-    <a asp-action="AddFault">Add fault</a>*@
+        <a asp-action="AddFault">Add fault</a>*@
     <br />
     <a asp-action="AddClients">Lista klientów</a>
     @*<br />
-    <a asp-action="FaultsList">All Faults</a>*@
+        <a asp-action="FaultsList">All Faults</a>*@
 </p>
 
 <br />
-<form asp-controller="Registrant" asp-action="Index" method="get">
+<form id="search-registrant">
     <p>
-        <b> ID usterki</b> <input type="text" name="searchIDFault">
-        <b> Imię klienta:</b> <input type="text" name="searchClientName">
-        <b> Nazwisko klienta: </b> <input type="text" name="searchClientSurname">
-        <b> Adres klienta: </b><input type="text" name="searchClientAddress">
-        <input type="submit" value="Szukaj" />
-</p>
+        <span class="formUnit">Imię klienta: <input type="text" id="searchClientName" class="searchInput" onkeyup="searchingEngine()" /></span>
+        <span class="formUnit">Nazwisko klienta: <input type="text" id="searchClientSurname" class="searchInput" onkeyup="searchingEngine()" /></span>
+        <span class="formUnit">Adres klienta : <input type="text" id="searchClientAddres" class="searchInput" onkeyup="searchingEngine()" /></span>
+
+    </p>
 </form>
 <table class="table">
     <thead>
@@ -66,35 +93,103 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="searchBody">
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FaultId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClientDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ApplicationDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Product.Client.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Product.Client.SecondName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Product.Client.Street)
-            </td>
-            <td>
-                <a asp-action="SetServicer" asp-route-id="@item.FaultId">Dodaj serwisanta</a>
-            </td>
-        </tr>
+            var clientName = item.Product.Client.FirstName;
+            var clientSurname = item.Product.Client.SecondName;
+            var clientAdress = item.Product.Client.Street;
+
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FaultId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClientDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApplicationDate)
+                </td>
+                <td class="resultsclientName">
+                    @Html.DisplayFor(modelItem => item.Product.Client.FirstName)
+                </td>
+                <td class="resultsclientSurname">
+                    @Html.DisplayFor(modelItem => item.Product.Client.SecondName)
+                </td>
+                <td class="resultsclientAddres">
+                    @Html.DisplayFor(modelItem => item.Product.Client.Street)
+                </td>
+                <td>
+                    <a asp-action="SetServicer" asp-route-id="@item.FaultId">Dodaj serwisanta</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
+<script>
+
+    function searchingEngine() {
+        var tbody, trs, tr, searchByName, searchBySurname, searchByAddress, display, i;
+        tbody = document.getElementById("searchBody");
+        trs = tbody.getElementsByTagName("tr");
+
+        searchByName = document.forms['search-registrant'].querySelector("#searchClientName");
+        searchBySurname = document.forms['search-registrant'].querySelector("#searchClientSurname");
+        searchByAddress = document.forms['search-registrant'].querySelector("#searchClientAddres");
+
+        for (i = 0; i < trs.length; i++) {
+            tr = trs[i];
+            if (
+                checkFilter(tr, searchByName, "resultsclientName") &&
+                checkFilter(tr, searchBySurname, "resultsclientSurname") &&
+                checkFilter(tr, searchByAddress, "resultsclientAddres")
+            ) {
+                display = "";
+            }
+            else {
+                display = "none";
+            }
+
+            tr.style.display = display;
+        }
+
+    }
+
+    function checkFilter(tr, input, resultClass) {
+        var inputValue = (input.value || "").toUpperCase();
+        var resultValue = tr.getElementsByClassName(resultClass)[0].textContent.toUpperCase();
+        return resultValue.indexOf(inputValue) > -1;
+    }
+
+    var tbody = document.getElementById("searchBody");
+    var trs = tbody.getElementsByTagName("tr");
+
+    function addHighlight(e) {
+        this.classList.toggle("selected");
+        if (this.className === "selected") {
+            this.style.color = "green";
+        } else {
+            this.style.color = "";
+        }
+
+    }
+
+    for (var i = 0; i < trs.length; i++) {
+        trs[i].addEventListener("click", addHighlight);
+    }
+    var btn = document.getElementById("btn1").addEventListener("click", function (e) {
+        e.preventDefault();
+
+    })
+    class User {
+        constructor(clientName, clientSurname, clientAdress) {
+            this.clientName = clientName;
+            this.clientSurname = clientSurname;
+            this.clientAdress = clientAdress;
+        }
+    }
+
+</script>

@@ -6,18 +6,46 @@
 
 @inject UserManager<ApplicationUser> userManager
 
+@section head {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.debug.js" integrity="sha384-CchuzHs077vGtfhGYl9Qtc7Vx64rXBXdIAZIPbItbNyWIRTdG0oYAqki3Ry13Yzu" crossorigin="anonymous"></script>
 
+    <style>
+        @@media print {
+            #search-account {
+                display: none;
+            }
+        }
+
+        /* SEARCH */
+        .searchInput {
+            background-image: url('https://www.w3schools.com/css/searchicon.png '); /* https://www.w3schools.com/css/searchicon.png */
+            background-position: 10px 12px;
+            background-repeat: no-repeat;
+            width: 200px;
+            font-size: 16px;
+            padding: 12px 20px 12px 40px;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+            margin-top: 6px;
+        }
+
+        .formUnit {
+            white-space: nowrap;
+        }
+    </style>
+}
 <h2>Użytkownicy</h2>
 <br />
-<form asp-controller="Account" asp-action="Index" method="get">
+<form id="search-account">
     <p>
-        <b> Login </b> <input type="text" name="searchUserLogin">
-        <b> E-mail:</b> <input type="text" name="searchUserEmail">
-        <b> Rola: </b> <input type="text" name="searchUserRole">
-        <input type="submit" value="Szukaj" />
+        <span class="formUnit">Login: <input type="text" id="searchUserLogin" class="searchInput" onkeyup="searchingEngine()" /></span>
+        <span class="formUnit">E-mail: <input type="text" id="searchUserEmail" class="searchInput" onkeyup="searchingEngine()" /></span>
+        <span class="formUnit">Rola: <input type="text" id="searchUserRole" class="searchInput" onkeyup="searchingEngine()" /></span>
+
     </p>
 </form>
 <a asp-action="AddUser">Dodaj użytkownika</a>
+
 <table class="table">
     <thead>
         <tr>
@@ -34,34 +62,108 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="searchBody">
         @foreach (var user in Model.Users)
         {
-        <tr>
-            <td>@user.UserName</td>
-            <td>@user.FirstName</td>
-            <td>@user.LastName</td>
-            <td>@user.Street</td>
-            <td>@user.StreetNumber</td>
-            <td>@user.ApartmentNumber</td>
-            <td>@user.PostCode</td>
-            <td>@user.City</td>
-            <td>@user.Email</td>
-            <td>@(string.Join(",", await userManager.GetRolesAsync(user)))</td>
+            var userLogin = user.UserName;
+            var userEmail = user.Email;
+            var userRole = (string.Join(",", await userManager.GetRolesAsync(user)));
+            <tr>
+                <td class="resultUserName">
+                    @user.UserName
+                </td>
+                <td>@user.FirstName</td>
+                <td>@user.LastName</td>
+                <td>@user.Street</td>
+                <td>@user.StreetNumber</td>
+                <td>@user.ApartmentNumber</td>
+                <td>@user.PostCode</td>
+                <td>@user.City</td>
+                <td class="resultUserEmail">
+                    @user.Email
+                </td>
+                <td class="resultUserRole">
+                    @(string.Join(",", await userManager.GetRolesAsync(user)))
+                </td>
 
-            @if (user.UserName != "admin@admin.com")
-    {
-        <td>
-            <a asp-controller="Account" asp-action="EditUser" asp-route-id="@user.Id">Edytuj</a>
-            <a asp-controller="Account" asp-action="DeleteUser" asp-route-id="@user.Id">Usuń</a>
-        </td>
-}
-else
-{
-        <td></td>
-        <td></td>
-}
-        </tr>
+                @if (user.UserName != "admin@admin.com")
+                {
+                    <td>
+                        <a asp-controller="Account" asp-action="EditUser" asp-route-id="@user.Id">Edytuj</a>
+                        <a asp-controller="Account" asp-action="DeleteUser" asp-route-id="@user.Id">Usuń</a>
+                    </td>
+                }
+                else
+                {
+                    <td></td>
+                    <td></td>
+                }
+            </tr>
         }
     </tbody>
 </table>
+<script>
+
+    function searchingEngine() {
+        var tbody, trs, tr, searchByLogin, searchByEmail, searchByRole, display, i;
+        tbody = document.getElementById("searchBody");
+        trs = tbody.getElementsByTagName("tr");
+
+        searchByLogin = document.forms['search-account'].querySelector("#searchUserLogin");
+        searchByEmail = document.forms['search-account'].querySelector("#searchUserEmail");
+        searchByRole = document.forms['search-account'].querySelector("#searchUserRole");
+
+        for (i = 0; i < trs.length; i++) {
+            tr = trs[i];
+            if (
+                checkFilter(tr, searchByLogin, "resultUserName") &&
+                checkFilter(tr, searchByEmail, "resultUserEmail") &&
+                checkFilter(tr, searchByRole, "resultUserRole")
+            ) {
+                display = "";
+            }
+            else {
+                display = "none";
+            }
+
+            tr.style.display = display;
+        }
+
+    }
+
+    function checkFilter(tr, input, resultClass) {
+        var inputValue = (input.value || "").toUpperCase();
+        var resultValue = tr.getElementsByClassName(resultClass)[0].textContent.toUpperCase();
+        return resultValue.indexOf(inputValue) > -1;
+    }
+
+    var tbody = document.getElementById("searchBody");
+    var trs = tbody.getElementsByTagName("tr");
+
+    function addHighlight(e) {
+        this.classList.toggle("selected");
+        if (this.className === "selected") {
+            this.style.color = "green";
+        } else {
+            this.style.color = "";
+        }
+
+    }
+
+    for (var i = 0; i < trs.length; i++) {
+        trs[i].addEventListener("click", addHighlight);
+    }
+    var btn = document.getElementById("btn1").addEventListener("click", function (e) {
+        e.preventDefault();
+
+    })
+    class User {
+        constructor(userLogin, userEmail, userRole) {
+            this.userLogin = userLogin;
+            this.userEmail = userEmail;
+            this.userRole = userRole;
+        }
+    }
+
+</script>
+

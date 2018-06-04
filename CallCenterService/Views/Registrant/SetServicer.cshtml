@@ -1,9 +1,44 @@
 ﻿@model CallCenterService.ViewModels.SetServicerRegistrantViewModel
+@section head {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.debug.js" integrity="sha384-CchuzHs077vGtfhGYl9Qtc7Vx64rXBXdIAZIPbItbNyWIRTdG0oYAqki3Ry13Yzu" crossorigin="anonymous"></script>
+
+    <style>
+        @@media print {
+            #search-servicers {
+                display: none;
+            }
+        }
+
+        /* SEARCH */
+        .searchInput {
+            background-image: url('https://www.w3schools.com/css/searchicon.png '); /* https://www.w3schools.com/css/searchicon.png */
+            background-position: 10px 12px;
+            background-repeat: no-repeat;
+            width: 200px;
+            font-size: 16px;
+            padding: 12px 20px 12px 40px;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+            margin-top: 6px;
+        }
+
+        .formUnit {
+            white-space: nowrap;
+        }
+    </style>
+}
 
 <h2>Set Servicer</h2>
 
 <h3>ID usterki: @Model.FaultData.FaultId</h3>
+<form id="search-servicers">
+    <p>
+        <span class="formUnit">Imię serwisanta: <input type="text" id="searchServicerName" class="searchInput" onkeyup="searchingEngine()" /></span>
+        <span class="formUnit">Nazwisko serwisanta: <input type="text" id="searchServicerSurname" class="searchInput" onkeyup="searchingEngine()" /></span>
+        <span class="formUnit">Specjalizacja: <input type="text" id="searchServicerSpec" class="searchInput" onkeyup="searchingEngine()" /></span>
 
+    </p>
+</form>
 <div asp-validation-summary="All"></div>
 <form asp-controller="Registrant" asp-action="SetServicer">
     <input asp-for="FaultId" type="hidden" />
@@ -24,21 +59,98 @@
                     Specjalizacja
                 </th>
                 <th>
-                    
+
                 </th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="searchBody">
             @foreach (var servicer in Model.Servicers)
-            {
-                <tr>
-                    <td>@servicer.Id</td>
-                    <td>@servicer.FirstName</td>
-                    <td>@servicer.LastName</td>
-                    <td>@servicer.Specialization</td>
-                    <td><input asp-for="ServicerId" value="@servicer.Id" type="radio" /></td>
-                </tr>
-            }
+        {
+            var servicerName = servicer.FirstName;
+            var servicerSurname = servicer.LastName;
+            var servicerSpec = servicer.Specialization;
+            <tr>
+                <td>@servicer.Id</td>
+                <td class="resultsServicerName">
+                    @servicer.FirstName
+                </td>
+                <td class="resultsServicerSurname">
+                    @servicer.LastName
+                </td>
+                <td class="resultsServicerSpec">
+                    @servicer.Specialization
+                </td>
+                <td><input asp-for="ServicerId" value="@servicer.Id" type="radio" /></td>
+            </tr>
+    }
         </tbody>
     </table>
 </form>
+
+
+<script>
+
+    function searchingEngine() {
+        var tbody, trs, tr, searchByName, searchBySurname, searchBySpec, display, i;
+        tbody = document.getElementById("searchBody");
+        trs = tbody.getElementsByTagName("tr");
+
+        searchByName = document.forms['search-servicers'].querySelector("#searchServicerName");
+        searchBySurname = document.forms['search-servicers'].querySelector("#searchServicerSurname");
+        searchBySpec = document.forms['search-servicers'].querySelector("#searchServicerSpec");
+
+        for (i = 0; i < trs.length; i++) {
+            tr = trs[i];
+            if (
+                checkFilter(tr, searchByName, "resultsServicerName") &&
+                checkFilter(tr, searchBySurname, "resultsServicerSurname") &&
+                checkFilter(tr, searchBySpec, "resultsServicerSpec")
+
+            ) {
+                display = "";
+            }
+            else {
+                display = "none";
+            }
+
+            tr.style.display = display;
+        }
+
+    }
+
+    function checkFilter(tr, input, resultClass) {
+        var inputValue = (input.value || "").toUpperCase();
+        var resultValue = tr.getElementsByClassName(resultClass)[0].textContent.toUpperCase();
+        return resultValue.indexOf(inputValue) > -1;
+    }
+
+    var tbody = document.getElementById("searchBody");
+    var trs = tbody.getElementsByTagName("tr");
+
+    function addHighlight(e) {
+        this.classList.toggle("selected");
+        if (this.className === "selected") {
+            this.style.color = "green";
+        } else {
+            this.style.color = "";
+        }
+
+    }
+
+    for (var i = 0; i < trs.length; i++) {
+        trs[i].addEventListener("click", addHighlight);
+    }
+    var btn = document.getElementById("btn1").addEventListener("click", function (e) {
+        e.preventDefault();
+
+    })
+    class User {
+        constructor(servicerName, servicerSurname, servicerSpec) {
+            this.servicerName = servicerName;
+            this.servicerSurname = servicerSurname;
+            this.servicerSpec = servicerSpec;
+
+        }
+    }
+
+</script>
