@@ -52,12 +52,10 @@ namespace CallCenterService.Controllers
             {
                 var repairEvents = _context.Repairs.Include(m => m.CalendarEvent).Where(m => m.ServicerId == id).Select(m => m.CalendarEvent).ToList();
                 repairEvents.RemoveAll(m => m == null);
-                ViewData["isServicer"] = true;
                 return new JsonResult(repairEvents);
             }
           var events = _context.CalendarEvents.ToList();
 
-            ViewData["isServicer"] = false;
             return new JsonResult(events);
         }
 
