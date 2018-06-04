@@ -13,7 +13,7 @@ hr, footer {
 
 #LoginPanel {
     width: 430px;
-    height: 490px;
+    min-height: 490px;
     text-align: center;
     background-color: rgba(240,248,255, 0.4);
     border-radius: 4px;

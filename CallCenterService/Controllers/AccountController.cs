@@ -50,7 +50,7 @@ namespace CallCenterService.Controllers
                 {
                     return RedirectToAction("Index", "Home");
                 }
-                ModelState.AddModelError("", "Invalid Login Attempt.");
+                ModelState.AddModelError("Password", "Niepoprawny login lub has³o");
                 return View(vm);
             }
             return View(vm);
