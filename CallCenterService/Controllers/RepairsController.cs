@@ -260,7 +260,7 @@ namespace CallCenterService.Controllers
                 return 0;
             }
 
-            var repair = _context.Repairs.SingleOrDefault(m => m.RepairId == id);
+            var repair = _context.Repairs.Include(m => m.CalendarEvent).SingleOrDefault(m => m.RepairId == id);
 
             if (repair.Price == 0)
                 return 0;
@@ -271,6 +271,7 @@ namespace CallCenterService.Controllers
             if (fault != null)
             {
                 fault.Status = "Done";
+                _context.Remove(repair.CalendarEvent);
                 _context.SaveChanges();
             }
 
