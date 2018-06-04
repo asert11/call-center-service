@@ -78,20 +78,25 @@ namespace CallCenterService.Controllers
                     return View(vm);
                 }
 
-                using (var transaction =_dbContext.Database.BeginTransaction())
+                ApplicationUser loggedUser = await _userManager.GetUserAsync(HttpContext.User);
+                string id = loggedUser?.Id;
+                if (id == null)
+                    return NotFound();
+
+                using (var transaction = _dbContext.Database.BeginTransaction())
                 {
                     var user = new ApplicationUser { UserName = vm.UserName, Email = vm.Email,
                         FirstName = vm.FirstName, LastName = vm.LastName, Street = vm.Street,
                         StreetNumber = vm.StreetNumber, ApartmentNumber = vm.ApartmentNumber,
-                        PostCode = vm.PostCode, City = vm.City};
+                        PostCode = vm.PostCode, City = vm.City };
 
                     var result = await _userManager.CreateAsync(user, vm.Password);
                     _dbContext.SaveChanges();
 
-                    if(!result.Succeeded)
+                    if (!result.Succeeded)
                     {
                         transaction.Rollback();
-                        foreach(var error in result.Errors)
+                        foreach (var error in result.Errors)
                         {
                             ModelState.AddModelError("", error.Description);
                         }
@@ -101,6 +106,39 @@ namespace CallCenterService.Controllers
 
                     user = await _userManager.FindByNameAsync(vm.UserName);
                     await _userManager.AddToRoleAsync(user, vm.Role);
+
+                    var history = new EventHistory {
+                        Date = DateTime.Now,
+                        UserId = loggedUser.Id,
+                        Operation = "add user",
+                        Table = "AspNetUsers",
+                        Description = "UserId{" + user.Id + "} " +
+                            "UserName{" + vm.UserName + "} " +
+                            "Email{" + vm.Email + "} " +
+                            "FirstName{" + vm.FirstName + "} " +
+                            "LastName{" + vm.LastName + "} " +
+                            "Street{" + vm.Street + "} " +
+                            "StreetNumber{" + vm.StreetNumber + "} " +
+                            "ApartmentNumber{" + vm.ApartmentNumber + "} " +
+                            "PostCode{" + vm.PostCode + "} " +
+                            "City{" + vm.City + "}"
+                    };
+                   
+
+                    _dbContext.EventHistory.Add(history);
+
+                    history = new EventHistory
+                    {
+                        Date = DateTime.Now,
+                        UserId = loggedUser.Id,
+                        Operation = "add user role",
+                        Table = "AspNetUserRoles",
+                        Description = "UserId{" + user.Id + "} " +
+                                      "Role{" + vm.Role + "}"
+                    };
+
+                    _dbContext.EventHistory.Add(history);
+
                     _dbContext.SaveChanges();
 
                     transaction.Commit();
@@ -159,38 +197,128 @@ namespace CallCenterService.Controllers
             if (user == null)
                 return RedirectToAction("Index");
 
+            var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
+            string loggedId = loggedUser?.Id;
+            if (loggedId == null)
+                return NotFound();
+
             using (var transaction = _dbContext.Database.BeginTransaction())
-            {           
-                var servicerSpecializations = _dbContext.ServicerSpecializations
+            {
+                EventHistory history;
+
+                var servicerSpecializations = _dbContext.ServicerSpecializations.Include(m => m.Spec)
                     .Where(m => m.ServicerId == id);
 
-                _dbContext.ServicerSpecializations.RemoveRange(servicerSpecializations);
+                foreach(var specialization in servicerSpecializations)
+                {
+                    history = new EventHistory
+                    {
+                        Date = DateTime.Now,
+                        UserId = loggedUser.Id,
+                        Operation = "delete servicer specialization",
+                        Table = "ServicerSpecializations",
+                        Description = "Id{" + specialization.Id + "} " +
+                                      "ServicerId{" + specialization.ServicerId + "} " +
+                                      "SpecId{" + specialization.Spec.Id + "}"
+                    };
+                    _dbContext.EventHistory.Add(history);
+                    _dbContext.ServicerSpecializations.Remove(specialization);
+                }
+                _dbContext.SaveChanges();
 
-                var repairs = _dbContext.Repairs.Include(m => m.Fault)
+                //_dbContext.ServicerSpecializations.RemoveRange(servicerSpecializations);
+
+                var repairs = _dbContext.Repairs.Include(m => m.Fault).Include(m => m.Fault.Product)
                     .Where(m => m.Fault.Status == "Done").Where(m => m.ServicerId == id).ToList();
 
                 foreach(var repair in repairs)
                 {
                     var fault = repair.Fault;
+
+                    history = new EventHistory
+                    {
+                        Date = DateTime.Now,
+                        UserId = loggedUser.Id,
+                        Operation = "delete repair",
+                        Table = "Repairs",
+                        Description = "Date{" + repair.Date + "} " +
+                                      "Description{" + repair.Description + "} " +
+                                      "FaultId{" + repair.Fault.FaultId + "} " +
+                                      "PartsPrice{" + repair.PartsPrice + "} " +
+                                      "Price{" + repair.Price + "} " +
+                                      "RepairId{" + repair.RepairId + "} " +
+                                      "ServicerId{" + repair.ServicerId + "}"
+                    };
+                    _dbContext.EventHistory.Add(history);
+
+                    history = new EventHistory
+                    {
+                        Date = DateTime.Now,
+                        UserId = loggedUser.Id,
+                        Operation = "delete fault",
+                        Table = "Faults",
+                        Description = "ApplicationDate{" + fault.ApplicationDate + "} " +
+                                      "ClientDescription{" + fault.ClientDescription + "} " +
+                                      "FaultId{" + fault.FaultId + "} " +
+                                      "Status{" + fault.Status + "} " +
+                                      "ProductID{" + fault.Product.ProductID + "}"
+                    };
+                    _dbContext.EventHistory.Add(history);
+
                     _dbContext.Repairs.Remove(repair);
                     _dbContext.Faults.Remove(fault);
                 }
-                
-                repairs = _dbContext.Repairs.Include(m => m.Fault)
+                _dbContext.SaveChanges();
+
+                repairs = _dbContext.Repairs.Include(m => m.Fault).Include(m => m.Fault.Product)
                     .Where(m => m.Fault.Status != "Done").Where(m => m.ServicerId == id).ToList();
 
                 foreach(var repair in repairs) {
                     repair.Fault.Status = "Open";
-                    _dbContext.Faults.Update(repair.Fault);
-                }
 
-                _dbContext.Repairs.RemoveRange(repairs);
+                    history = new EventHistory
+                    {
+                        Date = DateTime.Now,
+                        UserId = loggedUser.Id,
+                        Operation = "edit fault",
+                        Table = "Faults",
+                        Description = "ApplicationDate{" + repair.Fault.ApplicationDate + "} " +
+                                      "ClientDescription{" + repair.Fault.ClientDescription + "} " +
+                                      "FaultId{" + repair.Fault.FaultId + "} " +
+                                      "Status{" + repair.Fault.Status + "} " +
+                                      "ProductID{" + repair.Fault.Product.ProductID + "}"
+                    };
+                    _dbContext.EventHistory.Add(history);
+
+                    _dbContext.Faults.Update(repair.Fault);
+
+                    history = new EventHistory
+                    {
+                        Date = DateTime.Now,
+                        UserId = loggedUser.Id,
+                        Operation = "delete repair",
+                        Table = "Repairs",
+                        Description = "Date{" + repair.Date + "} " +
+                                      "Description{" + repair.Description + "} " +
+                                      "FaultId{" + repair.Fault.FaultId + "} " +
+                                      "PartsPrice{" + repair.PartsPrice + "} " +
+                                      "Price{" + repair.Price + "} " +
+                                      "RepairId{" + repair.RepairId + "} " +
+                                      "ServicerId{" + repair.ServicerId + "}"
+                    };
+                    _dbContext.EventHistory.Add(history);
+
+                    _dbContext.Repairs.Remove(repair);
+                }
+                _dbContext.SaveChanges();
+
+                //_dbContext.Repairs.RemoveRange(repairs);
 
                 await _dbContext.SaveChangesAsync();
 
                 var logins = user.Logins;
                 var rolesForUser = await _userManager.GetRolesAsync(user);
-
+                
                 foreach (var item in rolesForUser.ToList())
                 {
                     if (item == "Admin")
@@ -206,10 +334,43 @@ namespace CallCenterService.Controllers
                 {
                     foreach (var item in rolesForUser.ToList())
                     {
+                        history = new EventHistory
+                        {
+                            Date = DateTime.Now,
+                            UserId = loggedUser.Id,
+                            Operation = "delete user role",
+                            Table = "AspNetUserRoles",
+                            Description = "UserId{" + user.Id + "} " +
+                                      "Role{" + item + "}"
+                        };
+
+                        _dbContext.EventHistory.Add(history);
+
                         // item should be the name of the role
                         var result = await _userManager.RemoveFromRoleAsync(user, item);
                     }
                 }
+                _dbContext.SaveChanges();
+
+                history = new EventHistory
+                {
+                    Date = DateTime.Now,
+                    UserId = loggedUser.Id,
+                    Operation = "delete user",
+                    Table = "AspNetUsers",
+                    Description = "UserId{" + user.Id + "} " +
+                                      "UserName{" + user.UserName + "} " +
+                                      "Email{" + user.Email + "} " +
+                                      "FirstName{" + user.FirstName + "} " +
+                                      "LastName{" + user.LastName + "} " +
+                                      "Street{" + user.Street + "} " +
+                                      "StreetNumber{" + user.StreetNumber + "} " +
+                                      "ApartmentNumber{" + user.ApartmentNumber + "} " +
+                                      "PostCode{" + user.PostCode + "} " +
+                                      "City{" + user.City + "}"
+                };
+                _dbContext.EventHistory.Add(history);
+                _dbContext.SaveChanges();
 
                 await _userManager.DeleteAsync(user);
                 transaction.Commit();
@@ -282,6 +443,11 @@ namespace CallCenterService.Controllers
                     return View(vm);
                 }
 
+                var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
+                string id = loggedUser?.Id;
+                if (id == null)
+                    return NotFound();
+
                 using (var transaction = _dbContext.Database.BeginTransaction())
                 {
                     if (rolesForUser.Count() > 0)
@@ -289,11 +455,24 @@ namespace CallCenterService.Controllers
                         foreach (var item in rolesForUser.ToList())
                         {
                             await _userManager.RemoveFromRoleAsync(user, item);
+
                         }
                     }
 
                     await _userManager.AddToRoleAsync(user, vm.Role);
                     await _userManager.SetEmailAsync(user, vm.Email);
+
+                    var history = new EventHistory
+                    {
+                        Date = DateTime.Now,
+                        UserId = loggedUser.Id,
+                        Operation = "edit user role",
+                        Table = "AspNetUserRoles",
+                        Description = "UserId{" + user.Id + "} " +
+                                      "Role{" + vm.Role + "}"
+                    };
+
+                    _dbContext.EventHistory.Add(history);
 
                     user.FirstName = vm.FirstName;
                     user.LastName = vm.LastName;
@@ -304,6 +483,27 @@ namespace CallCenterService.Controllers
                     user.City = vm.City;
 
                     await _userManager.UpdateAsync(user);
+
+                    history = new EventHistory
+                    {
+                        Date = DateTime.Now,
+                        UserId = loggedUser.Id,
+                        Operation = "edit user",
+                        Table = "AspNetUsers",
+                        Description = "UserId{" + user.Id + "} " +
+                                      "UserName{" + user.UserName + "} " +
+                                      "Email{" + vm.Email + "} " +
+                                      "FirstName{" + user.FirstName + "} " +
+                                      "LastName{" + user.LastName + "} " +
+                                      "Street{" + user.Street + "} " +
+                                      "StreetNumber{" + user.StreetNumber + "} " +
+                                      "ApartmentNumber{" + user.ApartmentNumber + "} " +
+                                      "PostCode{" + user.PostCode + "} " +
+                                      "City{" + user.City + "}"
+                    };
+
+                    _dbContext.EventHistory.Add(history);
+                    _dbContext.SaveChanges();
 
                     transaction.Commit();
                     return RedirectToAction("Index");

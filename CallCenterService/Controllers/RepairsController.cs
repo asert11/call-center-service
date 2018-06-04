@@ -100,10 +100,41 @@ namespace CallCenterService.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("RepairId,Description,Date,Price,PartsPrice")] Repair repair)
         {
+            var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
+            string loggedId = loggedUser?.Id;
+            if (loggedId == null)
+                return NotFound();
+
             if (ModelState.IsValid)
             {
-                _context.Add(repair);
-                await _context.SaveChangesAsync();
+                using (var transaction = _context.Database.BeginTransaction())
+                {
+                    _context.Add(repair);
+                    _context.SaveChanges();
+
+                    repair = _context.Repairs.Include(m => m.Fault)
+                        .SingleOrDefault(m => m.RepairId == repair.RepairId);
+
+                    var history = new EventHistory
+                    {
+                        Date = DateTime.Now,
+                        UserId = loggedUser.Id,
+                        Operation = "add repair",
+                        Table = "Repairs",
+                        Description = "Date{" + repair.Date + "} " +
+                                      "Description{" + repair.Description + "} " +
+                                      "FaultId{" + repair.Fault.FaultId + "} " +
+                                      "PartsPrice{" + repair.PartsPrice + "} " +
+                                      "Price{" + repair.Price + "} " +
+                                      "RepairId{" + repair.RepairId + "} " +
+                                      "ServicerId{" + repair.ServicerId + "}"
+                    };
+                    _context.EventHistory.Add(history);
+                    _context.SaveChanges();
+
+                    await _context.SaveChangesAsync();
+                    transaction.Commit();
+                }
                 return RedirectToAction("Index");
             }
             return View(repair);
@@ -133,7 +164,8 @@ namespace CallCenterService.Controllers
         public async Task<IActionResult> Edit(int id, Repair repair)
         {
 
-            var repairTmp = _context.Repairs.SingleOrDefault(m => m.RepairId == id);
+            var repairTmp = _context.Repairs.Include(m => m.Fault)
+                .SingleOrDefault(m => m.RepairId == id);
 
             repairTmp.Date = repair.Date;
             repairTmp.Description = repair.Description;
@@ -148,9 +180,37 @@ namespace CallCenterService.Controllers
             if (ModelState.IsValid)
             {
                 try
-                { 
-                    _context.Update(repairTmp);
-                    await _context.SaveChangesAsync();
+                {
+                    var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
+                    string loggedId = loggedUser?.Id;
+                    if (loggedId == null)
+                        return NotFound();
+
+                    using (var transaction = _context.Database.BeginTransaction())
+                    {
+                        _context.Update(repairTmp);
+                        _context.SaveChanges();
+
+                        var history = new EventHistory
+                        {
+                            Date = DateTime.Now,
+                            UserId = loggedUser.Id,
+                            Operation = "edit repair",
+                            Table = "Repairs",
+                            Description = "Date{" + repairTmp.Date + "} " +
+                                      "Description{" + repairTmp.Description + "} " +
+                                      "FaultId{" + repairTmp.Fault.FaultId + "} " +
+                                      "PartsPrice{" + repairTmp.PartsPrice + "} " +
+                                      "Price{" + repairTmp.Price + "} " +
+                                      "RepairId{" + repairTmp.RepairId + "} " +
+                                      "ServicerId{" + repairTmp.ServicerId + "}"
+                        };
+                        _context.EventHistory.Add(history);
+                        _context.SaveChanges();
+
+                        await _context.SaveChangesAsync();
+                        transaction.Commit();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -198,7 +258,7 @@ namespace CallCenterService.Controllers
         }
 
         [HttpGet]
-        public int CheckIfDone(int? id)
+        public async Task<int> CheckIfDone(int? id)
         {
             if (id == null)
             {
@@ -212,11 +272,37 @@ namespace CallCenterService.Controllers
             else if (repair.Date == new DateTime(0001, 01, 01, 00, 00, 00))
                 return 0;
 
-            var fault = _context.Faults.SingleOrDefault(m => m.FaultId == repair.FaultId);
+            var fault = _context.Faults.Include(m => m.Product)
+                .SingleOrDefault(m => m.FaultId == repair.FaultId);
             if (fault != null)
             {
-                fault.Status = "Done";
-                _context.SaveChanges();
+                var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
+                string loggedId = loggedUser?.Id;
+                if (loggedId == null)
+                    return 0;
+
+                using (var transaction = _context.Database.BeginTransaction())
+                {
+                    fault.Status = "Done";
+                    _context.SaveChanges();
+
+                    var history = new EventHistory
+                    {
+                        Date = DateTime.Now,
+                        UserId = loggedUser.Id,
+                        Operation = "edit fault",
+                        Table = "Faults",
+                        Description = "ApplicationDate{" + fault.ApplicationDate + "} " +
+                                     "ClientDescription{" + fault.ClientDescription + "} " +
+                                     "FaultId{" + fault.FaultId + "} " +
+                                     "Status{" + fault.Status + "} " +
+                                     "ProductID{" + fault.Product.ProductID + "}"
+                    };
+                    _context.EventHistory.Add(history);
+                    _context.SaveChanges();
+
+                    transaction.Commit();
+                }
             }
 
             return 1;

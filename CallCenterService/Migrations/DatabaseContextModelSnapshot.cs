@@ -125,7 +125,17 @@ namespace CallCenterService.Migrations
 
                     b.Property<DateTime>("Date");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .IsRequired();
+
+                    b.Property<string>("Operation")
+                        .IsRequired();
+
+                    b.Property<string>("Table")
+                        .IsRequired();
+
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("Id");
 

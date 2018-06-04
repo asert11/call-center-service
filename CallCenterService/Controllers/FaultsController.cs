@@ -6,18 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CallCenterService.Models;
-
-
+using Microsoft.AspNetCore.Identity;
 
 namespace CallCenterService.Controllers
 {
     public class FaultsController : Controller
     {
         private readonly DatabaseContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public FaultsController(DatabaseContext context)
+        public FaultsController(DatabaseContext context, UserManager<ApplicationUser> userManager)
         {
-            _context = context;    
+            _context = context;
+            _userManager = userManager;
         }
 
         // GET: Faults
@@ -104,17 +105,34 @@ namespace CallCenterService.Controllers
                         .Where(m => m.Client.ClientId == fault.ClientId).ToList();
                     return View(fault);
                 }
-                _context.Faults.Add(fault);
 
-                EventHistory ev = new EventHistory
+                var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
+                string loggedId = loggedUser?.Id;
+                if (loggedId == null)
+                    return NotFound();
+
+                using (var transaction = _context.Database.BeginTransaction())
                 {
-                    //Id = fault.FaultId,      // this should be autoincremnted, and it set to be, but it becomes NULL and i dont know why
-                    Description = "Faults for client of Id: " + fault.FaultId + " has been added",
-                    Date = System.DateTime.Now
-                };
+                    _context.Faults.Add(fault);
+                    _context.SaveChanges();
 
-                _context.Add(ev);
-                await _context.SaveChangesAsync();
+                    var history = new EventHistory
+                    {
+                        Date = DateTime.Now,
+                        UserId = loggedUser.Id,
+                        Operation = "add fault",
+                        Table = "Faults",
+                        Description = "ApplicationDate{" + fault.ApplicationDate + "} " +
+                                     "ClientDescription{" + fault.ClientDescription + "} " +
+                                     "FaultId{" + fault.FaultId + "} " +
+                                     "Status{" + fault.Status + "} " +
+                                     "ProductID{" + fault.Product.ProductID + "}"
+                    };
+
+                    _context.EventHistory.Add(history);
+                    await _context.SaveChangesAsync();
+                    transaction.Commit();
+                }
                 return RedirectToAction("Index", "Registrant");
             }
             fault.Products = _context.Products.Include(m => m.Client)
@@ -154,8 +172,36 @@ namespace CallCenterService.Controllers
             {
                 try
                 {
-                    _context.Update(fault);
-                    await _context.SaveChangesAsync();
+                    var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
+                    string loggedId = loggedUser?.Id;
+                    if (loggedId == null)
+                        return NotFound();
+
+                    using (var transaction = _context.Database.BeginTransaction())
+                    {
+                        _context.Update(fault);
+                        _context.SaveChanges();
+
+                        fault = await _context.Faults.Include(m => m.Product).SingleOrDefaultAsync(m => m.FaultId == id);
+
+                        var history = new EventHistory
+                        {
+                            Date = DateTime.Now,
+                            UserId = loggedUser.Id,
+                            Operation = "edit fault",
+                            Table = "Faults",
+                            Description = "ApplicationDate{" + fault.ApplicationDate + "} " +
+                                     "ClientDescription{" + fault.ClientDescription + "} " +
+                                     "FaultId{" + fault.FaultId + "} " +
+                                     "Status{" + fault.Status + "} " +
+                                     "ProductID{" + fault.Product.ProductID + "}"
+                        };
+
+                        _context.EventHistory.Add(history);
+
+                        await _context.SaveChangesAsync();
+                        transaction.Commit();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -196,14 +242,59 @@ namespace CallCenterService.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
+            string loggedId = loggedUser?.Id;
+            if (loggedId == null)
+                return NotFound();
+
+            EventHistory history;
+
             using (var transaction = _context.Database.BeginTransaction())
             {
-                var fault = await _context.Faults.SingleOrDefaultAsync(m => m.FaultId == id);
+                var fault = await _context.Faults.Include(m => m.Product)
+                    .SingleOrDefaultAsync(m => m.FaultId == id);
 
                 var repairs = _context.Repairs.Include(m => m.Fault)
                     .Where(m => m.Fault.FaultId == fault.FaultId).ToList();
 
-                _context.Repairs.RemoveRange(repairs);
+                foreach(var repair in repairs)
+                {
+                    history = new EventHistory
+                    {
+                        Date = DateTime.Now,
+                        UserId = loggedUser.Id,
+                        Operation = "delete repair",
+                        Table = "Repairs",
+                        Description = "Date{" + repair.Date + "} " +
+                                      "Description{" + repair.Description + "} " +
+                                      "FaultId{" + repair.Fault.FaultId + "} " +
+                                      "PartsPrice{" + repair.PartsPrice + "} " +
+                                      "Price{" + repair.Price + "} " +
+                                      "RepairId{" + repair.RepairId + "} " +
+                                      "ServicerId{" + repair.ServicerId + "}"
+                    };
+                    _context.EventHistory.Add(history);
+                    _context.SaveChanges();
+
+                    _context.Repairs.Remove(repair);
+                }
+
+                //_context.Repairs.RemoveRange(repairs);
+
+                history = new EventHistory
+                {
+                    Date = DateTime.Now,
+                    UserId = loggedUser.Id,
+                    Operation = "delete fault",
+                    Table = "Faults",
+                    Description = "ApplicationDate{" + fault.ApplicationDate + "} " +
+                                     "ClientDescription{" + fault.ClientDescription + "} " +
+                                     "FaultId{" + fault.FaultId + "} " +
+                                     "Status{" + fault.Status + "} " +
+                                     "ProductID{" + fault.Product.ProductID + "}"
+                };
+                _context.EventHistory.Add(history);
+                _context.SaveChanges();
 
                 _context.Faults.Remove(fault);
                     

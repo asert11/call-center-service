@@ -116,25 +116,114 @@ namespace CallCenterService.Controllers
             if (!isServicer)
                 return RedirectToAction("Index");
 
-            _dbContext.ServicerSpecializations.RemoveRange(
-                _dbContext.ServicerSpecializations.Where(x => x.ServicerId == user.Id));
-            _dbContext.SaveChanges();
+            var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
+            string loggedId = loggedUser?.Id;
+            if (loggedId == null)
+                return NotFound();
 
-            foreach(var item in vm.Specializations)
+            EventHistory history;
+
+
+            var servicerSpecializations = _dbContext.ServicerSpecializations
+                .Include(m => m.Spec).Where(x => x.ServicerId == user.Id).ToList();
+
+            using (var transaction = _dbContext.Database.BeginTransaction())
             {
-                if(item.Checked)
+                foreach (var spec in servicerSpecializations)
                 {
-                    var spec = _dbContext.Specialization.Where(x => x.Id == item.Id).FirstOrDefault();
-                    if (spec == null)
-                        continue;
-
-                    await _dbContext.ServicerSpecializations.AddAsync(new ServicerSpecializations
+                    foreach (var item in vm.Specializations)
                     {
-                        ServicerId = user.Id,
-                        Spec = spec
-                    });
-                    _dbContext.SaveChanges();
+                        if (spec.Spec.Id == item.Id && item.Checked == false)
+                        {
+                            history = new EventHistory
+                            {
+                                Date = DateTime.Now,
+                                UserId = loggedUser.Id,
+                                Operation = "delete servicer specialization",
+                                Table = "ServicerSpecializations",
+                                Description = "Id{" + spec.Id + "} " +
+                                      "ServicerId{" + spec.ServicerId + "} " +
+                                      "SpecId{" + spec.Spec.Id + "}"
+                            };
+
+                            _dbContext.EventHistory.Add(history);
+                            _dbContext.ServicerSpecializations.Remove(spec);
+                            _dbContext.SaveChanges();
+
+                            break;
+                        }
+                    }
                 }
+
+                //_dbContext.ServicerSpecializations.RemoveRange(
+                 //   _dbContext.ServicerSpecializations.Where(x => x.ServicerId == user.Id));
+                _dbContext.SaveChanges();
+
+                //foreach (var item in vm.Specializations)
+                //{
+                //    if (item.Checked)
+                //    {
+                //        var spec = _dbContext.Specialization.Where(x => x.Id == item.Id).FirstOrDefault();
+                //        if (spec == null)
+                //            continue;
+
+                //        await _dbContext.ServicerSpecializations.AddAsync(new ServicerSpecializations
+                //        {
+                //            ServicerId = user.Id,
+                //            Spec = spec
+                //        });
+                //        _dbContext.SaveChanges();
+                //    }
+                //}
+
+                servicerSpecializations = _dbContext.ServicerSpecializations
+                .Include(m => m.Spec).Where(x => x.ServicerId == user.Id).ToList();
+
+                foreach (var item in vm.Specializations)
+                {
+                    bool add = true;
+
+                    foreach (var spec in servicerSpecializations)
+                    {
+                        if (spec.Spec.Id == item.Id && item.Checked == true)
+                        {
+                            add = false;
+                            break;
+                        }
+                    }
+
+                    if (add && item.Checked)
+                    {
+                        var spec = _dbContext.Specialization.Where(x => x.Id == item.Id).FirstOrDefault();
+                        if (spec == null)
+                            continue;
+
+                        var data = new ServicerSpecializations
+                        {
+                            ServicerId = user.Id,
+                            Spec = spec
+                        };
+
+                        await _dbContext.ServicerSpecializations.AddAsync(data);
+                        _dbContext.SaveChanges();
+
+                        history = new EventHistory
+                        {
+                            Date = DateTime.Now,
+                            UserId = loggedUser.Id,
+                            Operation = "add servicer specialization",
+                            Table = "ServicerSpecializations",
+                            Description = "Id{" + data.Id + "} " +
+                                      "ServicerId{" + data.ServicerId + "} " +
+                                      "SpecId{" + data.Spec.Id + "}"
+                        };
+
+                        _dbContext.EventHistory.Add(history);
+                        _dbContext.SaveChanges();
+                    }
+                }
+
+                transaction.Commit();
             }
 
             return RedirectToAction("Index");
