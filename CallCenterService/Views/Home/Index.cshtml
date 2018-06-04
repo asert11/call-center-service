@@ -104,6 +104,8 @@
          var selectedEvent = null;
          //var evs = [];
          @*var arr = @Html.Raw(Json.Serialize(ViewData["Evs"]));*@
+         var isAdmin = false;
+         CheckIfAdmin();
          FetchEventAndRenderCalendar();
 
          function FetchEventAndRenderCalendar() {
@@ -120,6 +122,7 @@
              //        allDay: data.isFullDay
              //    });
              //});
+             CheckIfAdmin();
              var events = [];
              $.ajax({
                  type: "GET",
@@ -169,7 +172,7 @@
 
                      $('#myModal').modal();
                  },
-                 selectable: true,
+                 selectable: isAdmin,
                  select: function (start, end) {
                      selectedEvent = {
                          eventId: 0,
@@ -282,6 +285,19 @@
              }
              SaveEvent(data);
          });
+
+         function CheckIfAdmin() {
+             $.ajax({
+                 type: "GET",
+                 url: '/home/IsAdmin',
+                 success: function (result) {
+                     isAdmin = result;
+                 },
+                 error: function () {
+                     alert('Failed');
+                 }
+             });
+         }
 
          function SaveEvent(data) {
              $.ajax({

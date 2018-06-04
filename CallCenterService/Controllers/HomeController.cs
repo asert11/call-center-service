@@ -26,6 +26,19 @@ namespace CallCenterService.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> IsAdmin()
+        {
+            ApplicationUser usr = await _userManager.GetUserAsync(HttpContext.User);
+            var role = await _userManager.GetRolesAsync(usr);
+            var status = false;
+
+            if (role.Contains("Admin"))
+                status = true;
+
+            return new JsonResult(status);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> GetRepairEvents()
         {
             ApplicationUser usr = await _userManager.GetUserAsync(HttpContext.User);
@@ -33,13 +46,19 @@ namespace CallCenterService.Controllers
             if (id == null)
                 return NotFound();
 
-            var repairEvents = _context.Repairs.Include(m => m.CalendarEvent).Where(m => m.ServicerId == id).Select(m => m.CalendarEvent).ToList();
-            repairEvents.RemoveAll(m => m == null);
- //           var events = _context.CalendarEvents.ToList();
+            var role = await _userManager.GetRolesAsync(usr);
 
- //           var evs = repairEvents.Concat(events);
+            if (role.Contains("Serwisant"))
+            {
+                var repairEvents = _context.Repairs.Include(m => m.CalendarEvent).Where(m => m.ServicerId == id).Select(m => m.CalendarEvent).ToList();
+                repairEvents.RemoveAll(m => m == null);
+                ViewData["isServicer"] = true;
+                return new JsonResult(repairEvents);
+            }
+          var events = _context.CalendarEvents.ToList();
 
-            return new JsonResult(repairEvents);
+            ViewData["isServicer"] = false;
+            return new JsonResult(events);
         }
 
         public IActionResult Error()
@@ -66,9 +85,12 @@ namespace CallCenterService.Controllers
                     v.ThemeColor = e.ThemeColor;
                 }
                 var repair = _context.Repairs.Include(x => x.CalendarEvent).SingleOrDefault(x => x.CalendarEvent.EventId == e.EventId);
-                repair.CalendarEvent = v;
-                repair.Date = v.Start;
-                repair.Description = v.Description;
+                if (repair != null)
+                {
+                    repair.CalendarEvent = v;
+                    repair.Date = v.Start;
+                    repair.Description = v.Description;
+                }
             }
             else
             {
