@@ -177,10 +177,30 @@ namespace CallCenterService.Controllers
 
             else
             {
+                var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
+                string loggedId = loggedUser?.Id;
+                if (loggedId == null)
+                    return NotFound();
+
                 using (var transaction = _context.Database.BeginTransaction())
                 {
                     fault.Status = "In progress";
                     await _context.SaveChangesAsync();
+
+                    var history = new EventHistory
+                    {
+                        Date = DateTime.Now,
+                        UserId = loggedUser.Id,
+                        Operation = "edit fault",
+                        Table = "Faults",
+                        Description = "ApplicationDate{" + fault.ApplicationDate + "} " +
+                                     "ClientDescription{" + fault.ClientDescription + "} " +
+                                     "FaultId{" + fault.FaultId + "} " +
+                                     "Status{" + fault.Status + "} " +
+                                     "ProductID{" + fault.Product.ProductID + "}"
+                    };
+                    _context.EventHistory.Add(history);
+                    _context.SaveChanges();
 
                     Repair sf = new Repair
                     {
@@ -190,6 +210,23 @@ namespace CallCenterService.Controllers
 
                     await _context.Repairs.AddAsync(sf);
                     await _context.SaveChangesAsync();
+
+                    history = new EventHistory
+                    {
+                        Date = DateTime.Now,
+                        UserId = loggedUser.Id,
+                        Operation = "add repair",
+                        Table = "Repairs",
+                        Description = "Date{" + sf.Date + "} " +
+                                      "Description{" + sf.Description + "} " +
+                                      "FaultId{" + sf.Fault.FaultId + "} " +
+                                      "PartsPrice{" + sf.PartsPrice + "} " +
+                                      "Price{" + sf.Price + "} " +
+                                      "RepairId{" + sf.RepairId + "} " +
+                                      "ServicerId{" + sf.ServicerId + "}"
+                    };
+                    _context.EventHistory.Add(history);
+                    _context.SaveChanges();
 
                     transaction.Commit();
                 }

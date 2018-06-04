@@ -6,16 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CallCenterService.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace CallCenterService.Controllers
 {
     public class ProductsController : Controller
     {
         private readonly DatabaseContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ProductsController(DatabaseContext context)
+        public ProductsController(DatabaseContext context, UserManager<ApplicationUser> userManager)
         {
-            _context = context;    
+            _context = context;
+            _userManager = userManager;
         }
 
         // GET: Products
@@ -92,8 +95,33 @@ namespace CallCenterService.Controllers
                     return View(product);
                 }
 
-                _context.Add(product);
-                await _context.SaveChangesAsync();
+                var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
+                string loggedId = loggedUser?.Id;
+                if (loggedId == null)
+                    return NotFound();
+
+                using (var transaction = _context.Database.BeginTransaction())
+                {
+                    _context.Add(product);
+                    _context.SaveChanges();
+
+                    var history = new EventHistory
+                    {
+                        Date = DateTime.Now,
+                        UserId = loggedUser.Id,
+                        Operation = "add product",
+                        Table = "Products",
+                        Description = "ProductID{" + product.ProductID + "} " +
+                                      "ClientId{" + product.Client.ClientId + "} " +
+                                      "Name{" + product.Name + "} " +
+                                      "TypeId{" + product.Type.Id + "}"
+                    };
+                    _context.EventHistory.Add(history);
+
+                    await _context.SaveChangesAsync();
+                    transaction.Commit();
+                }
+
                 return RedirectToAction("Index");
             }
             product.Specializations = _context.Specialization.ToList();
@@ -140,8 +168,31 @@ namespace CallCenterService.Controllers
                     if(data.Type == null)
                         return RedirectToAction("Index");
 
-                    _context.Update(data);
-                    await _context.SaveChangesAsync();
+                    var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
+                    string loggedId = loggedUser?.Id;
+                    if (loggedId == null)
+                        return NotFound();
+
+                    using (var transaction = _context.Database.BeginTransaction())
+                    {
+                        _context.Update(data);
+                        _context.SaveChanges();
+
+                        var history = new EventHistory
+                        {
+                            Date = DateTime.Now,
+                            UserId = loggedUser.Id,
+                            Operation = "edit product",
+                            Table = "Products",
+                            Description = "ProductID{" + data.ProductID + "} " +
+                                      "ClientId{" + data.Client.ClientId + "} " +
+                                      "Name{" + data.Name + "} " +
+                                      "TypeId{" + data.Type.Id + "}"
+                        };
+                        _context.EventHistory.Add(history);
+                        await _context.SaveChangesAsync();
+                        transaction.Commit();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -183,9 +234,17 @@ namespace CallCenterService.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
+            string loggedId = loggedUser?.Id;
+            if (loggedId == null)
+                return NotFound();
+
+            EventHistory history;
+
             using (var transaction = _context.Database.BeginTransaction())
             {
-                var product = await _context.Products.SingleOrDefaultAsync(m => m.ProductID == id);
+                var product = await _context.Products.Include(m => m.Client)
+                    .Include(m => m.Type).SingleOrDefaultAsync(m => m.ProductID == id);
 
                 var faults = _context.Faults.Include(m => m.Product)
                     .Where(m => m.Product.ProductID == product.ProductID).ToList();
@@ -195,10 +254,61 @@ namespace CallCenterService.Controllers
                     var repairs = _context.Repairs.Include(m => m.Fault)
                         .Where(m => m.Fault.FaultId == fault.FaultId).ToList();
 
-                    _context.Repairs.RemoveRange(repairs);
+                    foreach (var repair in repairs)
+                    {
+                        history = new EventHistory
+                        {
+                            Date = DateTime.Now,
+                            UserId = loggedUser.Id,
+                            Operation = "delete repair",
+                            Table = "Repairs",
+                            Description = "Date{" + repair.Date + "} " +
+                                  "Description{" + repair.Description + "} " +
+                                  "FaultId{" + repair.Fault.FaultId + "} " +
+                                  "PartsPrice{" + repair.PartsPrice + "} " +
+                                  "Price{" + repair.Price + "} " +
+                                  "RepairId{" + repair.RepairId + "} " +
+                                  "ServicerId{" + repair.ServicerId + "}"
+                        };
+                        _context.EventHistory.Add(history);
+                        _context.SaveChanges();
+
+                        _context.Repairs.Remove(repair);
+                    }
+
+                    //_context.Repairs.RemoveRange(repairs);
+
+                    history = new EventHistory
+                    {
+                        Date = DateTime.Now,
+                        UserId = loggedUser.Id,
+                        Operation = "delete fault",
+                        Table = "Faults",
+                        Description = "ApplicationDate{" + fault.ApplicationDate + "} " +
+                                     "ClientDescription{" + fault.ClientDescription + "} " +
+                                     "FaultId{" + fault.FaultId + "} " +
+                                     "Status{" + fault.Status + "} " +
+                                     "ProductID{" + fault.Product.ProductID + "}"
+                    };
+                    _context.EventHistory.Add(history);
+                    _context.SaveChanges();
 
                     _context.Faults.Remove(fault);
                 }
+
+                history = new EventHistory
+                {
+                    Date = DateTime.Now,
+                    UserId = loggedUser.Id,
+                    Operation = "delete product",
+                    Table = "Products",
+                    Description = "ProductID{" + product.ProductID + "} " +
+                                      "ClientId{" + product.Client.ClientId + "} " +
+                                      "Name{" + product.Name + "} " +
+                                      "TypeId{" + product.Type.Id + "}"
+                };
+                _context.EventHistory.Add(history);
+                _context.SaveChanges();
 
                 _context.Products.Remove(product);
                 

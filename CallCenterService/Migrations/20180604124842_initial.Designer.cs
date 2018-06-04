@@ -8,7 +8,7 @@ using CallCenterService.Models;
 namespace CallCenterService.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20180602145331_initial")]
+    [Migration("20180604124842_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -126,7 +126,17 @@ namespace CallCenterService.Migrations
 
                     b.Property<DateTime>("Date");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .IsRequired();
+
+                    b.Property<string>("Operation")
+                        .IsRequired();
+
+                    b.Property<string>("Table")
+                        .IsRequired();
+
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("Id");
 

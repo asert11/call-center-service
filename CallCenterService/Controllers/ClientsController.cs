@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CallCenterService.Models;
 using CallCenterService.ViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace CallCenterService.Controllers
 {
     public class ClientsController : Controller
     {
         private readonly DatabaseContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ClientsController(DatabaseContext context)
+        public ClientsController(DatabaseContext context, UserManager<ApplicationUser> userManager)
         {
-            _context = context;    
+            _context = context;
+            _userManager = userManager;
         }
 
         // GET: Clients
@@ -91,10 +94,39 @@ namespace CallCenterService.Controllers
         public async Task<IActionResult> Create(
             [Bind("ClientId,FirstName,SecondName,Street,StreetNumber,ApartmentNumber,City,PostCode")] Client client)
         {
+            var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
+            string loggedId = loggedUser?.Id;
+            if (loggedId == null)
+                return NotFound();
+
             if (ModelState.IsValid)
             {
-                _context.Add(client);
-                await _context.SaveChangesAsync();
+                using (var transaction = _context.Database.BeginTransaction())
+                {
+                    _context.Add(client);
+                    await _context.SaveChangesAsync();
+
+                    var history = new EventHistory
+                    {
+                        Date = DateTime.Now,
+                        UserId = loggedUser.Id,
+                        Operation = "add client",
+                        Table = "Clients",
+                        Description = "ClientId{" + client.ClientId + "} " +
+                                      "FirstName{" + client.FirstName + "} " +
+                                      "SecondName{" + client.SecondName + "} " +
+                                      "Street{" + client.Street + "} " +
+                                      "StreetNumber{" + client.StreetNumber + "} " +
+                                      "ApartmentNumber{" + client.ApartmentNumber + "} " +
+                                      "PostCode{" + client.PostCode + "} " +
+                                      "City{" + client.City + "}"
+                    };
+
+                    _context.EventHistory.Add(history);
+                    _context.SaveChanges();
+
+                    transaction.Commit();
+                }
                 return RedirectToAction("Index");
             }
             return View(client);
@@ -129,12 +161,41 @@ namespace CallCenterService.Controllers
                 return NotFound();
             }
 
+            var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
+            string loggedId = loggedUser?.Id;
+            if (loggedId == null)
+                return NotFound();
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(client);
-                    await _context.SaveChangesAsync();
+                    using (var transaction = _context.Database.BeginTransaction())
+                    {
+                        _context.Update(client);
+                        await _context.SaveChangesAsync();
+
+                        var history = new EventHistory
+                        {
+                            Date = DateTime.Now,
+                            UserId = loggedUser.Id,
+                            Operation = "edit client",
+                            Table = "Clients",
+                            Description = "ClientId{" + client.ClientId + "} " +
+                                      "FirstName{" + client.FirstName + "} " +
+                                      "SecondName{" + client.SecondName + "} " +
+                                      "Street{" + client.Street + "} " +
+                                      "StreetNumber{" + client.StreetNumber + "} " +
+                                      "ApartmentNumber{" + client.ApartmentNumber + "} " +
+                                      "PostCode{" + client.PostCode + "} " +
+                                      "City{" + client.City + "}"
+                        };
+
+                        _context.EventHistory.Add(history);
+                        _context.SaveChanges();
+
+                        transaction.Commit();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -175,11 +236,18 @@ namespace CallCenterService.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
+            string loggedId = loggedUser?.Id;
+            if (loggedId == null)
+                return NotFound();
+
+            EventHistory history;
+
             using (var transaction = _context.Database.BeginTransaction())
             {
                 var client = await _context.Clients.SingleOrDefaultAsync(m => m.ClientId == id);
 
-                var products = _context.Products.Include(m => m.Client)
+                var products = _context.Products.Include(m => m.Client).Include(m => m.Type)
                     .Where(m => m.Client.ClientId == id).ToList();
 
                 foreach (var product in products)
@@ -192,13 +260,82 @@ namespace CallCenterService.Controllers
                         var repairs = _context.Repairs.Include(m => m.Fault)
                             .Where(m => m.Fault.FaultId == fault.FaultId).ToList();
 
-                        _context.Repairs.RemoveRange(repairs);
+                        foreach(var repair in repairs)
+                        {
+                            history = new EventHistory
+                            {
+                                Date = DateTime.Now,
+                                UserId = loggedUser.Id,
+                                Operation = "delete repair",
+                                Table = "Repairs",
+                                Description = "Date{" + repair.Date + "} " +
+                                      "Description{" + repair.Description + "} " +
+                                      "FaultId{" + repair.Fault.FaultId + "} " +
+                                      "PartsPrice{" + repair.PartsPrice + "} " +
+                                      "Price{" + repair.Price + "} " +
+                                      "RepairId{" + repair.RepairId + "} " +
+                                      "ServicerId{" + repair.ServicerId + "}"
+                            };
+                            _context.EventHistory.Add(history);
+                            _context.SaveChanges();
+
+                            _context.Repairs.Remove(repair);
+                        }
+                        //_context.Repairs.RemoveRange(repairs);
+
+                        history = new EventHistory
+                        {
+                            Date = DateTime.Now,
+                            UserId = loggedUser.Id,
+                            Operation = "delete fault",
+                            Table = "Faults",
+                            Description = "ApplicationDate{" + fault.ApplicationDate + "} " +
+                                     "ClientDescription{" + fault.ClientDescription + "} " +
+                                     "FaultId{" + fault.FaultId + "} " +
+                                     "Status{" + fault.Status + "} " +
+                                     "ProductID{" + fault.Product.ProductID + "}"
+                        };
+                        _context.EventHistory.Add(history);
+                        _context.SaveChanges();
 
                         _context.Faults.Remove(fault);
                     }
 
+                    history = new EventHistory
+                    {
+                        Date = DateTime.Now,
+                        UserId = loggedUser.Id,
+                        Operation = "delete product",
+                        Table = "Products",
+                        Description = "ProductID{" + product.ProductID + "} " +
+                                      "ClientId{" + product.Client.ClientId + "} " +
+                                      "Name{" + product.Name + "} " +
+                                      "TypeId{" + product.Type.Id + "}"
+                    };
+                    _context.EventHistory.Add(history);
+                    _context.SaveChanges();
+
                     _context.Products.Remove(product);
                 }
+
+                history = new EventHistory
+                {
+                    Date = DateTime.Now,
+                    UserId = loggedUser.Id,
+                    Operation = "delete client",
+                    Table = "Clients",
+                    Description = "ClientId{" + client.ClientId + "} " +
+                                      "FirstName{" + client.FirstName + "} " +
+                                      "SecondName{" + client.SecondName + "} " +
+                                      "Street{" + client.Street + "} " +
+                                      "StreetNumber{" + client.StreetNumber + "} " +
+                                      "ApartmentNumber{" + client.ApartmentNumber + "} " +
+                                      "PostCode{" + client.PostCode + "} " +
+                                      "City{" + client.City + "}"
+                };
+
+                _context.EventHistory.Add(history);
+                _context.SaveChanges();
 
                 _context.Clients.Remove(client);
 
