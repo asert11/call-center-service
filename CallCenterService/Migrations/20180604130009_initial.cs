@@ -43,6 +43,24 @@ namespace CallCenterService.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CalendarEvents",
+                columns: table => new
+                {
+                    EventId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Description = table.Column<string>(nullable: true),
+                    End = table.Column<DateTime>(nullable: false),
+                    IsFullDay = table.Column<bool>(nullable: false),
+                    Start = table.Column<DateTime>(nullable: false),
+                    Subject = table.Column<string>(nullable: false),
+                    ThemeColor = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CalendarEvents", x => x.EventId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Clients",
                 columns: table => new
                 {
@@ -280,6 +298,7 @@ namespace CallCenterService.Migrations
                 {
                     RepairId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CalendarEventEventId = table.Column<int>(nullable: true),
                     Date = table.Column<DateTime>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     FaultId = table.Column<int>(nullable: false),
@@ -290,6 +309,12 @@ namespace CallCenterService.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Repairs", x => x.RepairId);
+                    table.ForeignKey(
+                        name: "FK_Repairs_CalendarEvents_CalendarEventEventId",
+                        column: x => x.CalendarEventEventId,
+                        principalTable: "CalendarEvents",
+                        principalColumn: "EventId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Repairs_Faults_FaultId",
                         column: x => x.FaultId,
@@ -323,6 +348,11 @@ namespace CallCenterService.Migrations
                 name: "IX_Products_TypeId",
                 table: "Products",
                 column: "TypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Repairs_CalendarEventEventId",
+                table: "Repairs",
+                column: "CalendarEventEventId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Repairs_FaultId",
@@ -386,6 +416,9 @@ namespace CallCenterService.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "CalendarEvents");
 
             migrationBuilder.DropTable(
                 name: "Faults");

@@ -18,6 +18,7 @@ namespace CallCenterService.Models
         public DateTime?  Date { get; set; }
         public decimal Price { get; set; }
         public decimal PartsPrice { get; set; }
+        public virtual CalendarEvent CalendarEvent { get; set; }
 
         [NotMapped]
         public ApplicationUser user { get; set; }

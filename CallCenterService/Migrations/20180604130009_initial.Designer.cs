@@ -8,7 +8,7 @@ using CallCenterService.Models;
 namespace CallCenterService.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20180604124842_initial")]
+    [Migration("20180604130009_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,6 +87,29 @@ namespace CallCenterService.Migrations
                         .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("CallCenterService.Models.CalendarEvent", b =>
+                {
+                    b.Property<int>("EventId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<DateTime>("End");
+
+                    b.Property<bool>("IsFullDay");
+
+                    b.Property<DateTime>("Start");
+
+                    b.Property<string>("Subject")
+                        .IsRequired();
+
+                    b.Property<string>("ThemeColor");
+
+                    b.HasKey("EventId");
+
+                    b.ToTable("CalendarEvents");
                 });
 
             modelBuilder.Entity("CallCenterService.Models.Client", b =>
@@ -189,6 +212,8 @@ namespace CallCenterService.Migrations
                     b.Property<int>("RepairId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("CalendarEventEventId");
+
                     b.Property<DateTime?>("Date");
 
                     b.Property<string>("Description");
@@ -202,6 +227,8 @@ namespace CallCenterService.Migrations
                     b.Property<string>("ServicerId");
 
                     b.HasKey("RepairId");
+
+                    b.HasIndex("CalendarEventEventId");
 
                     b.HasIndex("FaultId");
 
@@ -366,6 +393,10 @@ namespace CallCenterService.Migrations
 
             modelBuilder.Entity("CallCenterService.Models.Repair", b =>
                 {
+                    b.HasOne("CallCenterService.Models.CalendarEvent", "CalendarEvent")
+                        .WithMany()
+                        .HasForeignKey("CalendarEventEventId");
+
                     b.HasOne("CallCenterService.Models.Fault", "Fault")
                         .WithMany()
                         .HasForeignKey("FaultId")
