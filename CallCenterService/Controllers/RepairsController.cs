@@ -21,15 +21,15 @@ namespace CallCenterService.Controllers
             _context = context;
             _userManager = userManager;
         }
-      
+
         // GET: Repairs
-        public async Task<IActionResult> Index(int ? searchIdRepair,string searchClientName, string searchClientSurname, string searchNameProduct)
+        public async Task<IActionResult> Index(int? searchIdRepair, string searchClientName, string searchClientSurname, string searchNameProduct)
         {
             var name = from m in _context.Repairs
                        select m;
 
 
-            if (searchIdRepair!=null)
+            if (searchIdRepair != null)
             {
                 name = name.Where(s => s.RepairId.Equals(searchIdRepair));
             }
@@ -56,7 +56,7 @@ namespace CallCenterService.Controllers
             var repairs = name.Include(r => r.Fault)
                 .Include(r => r.Fault.Product).Include(r => r.Fault.Product.Client).Where(s => s.ServicerId == id)
                 .Where(s => s.Fault.Status == "In progress");
-            
+
             return View(await repairs.ToListAsync());
         }
 
@@ -98,6 +98,16 @@ namespace CallCenterService.Controllers
         {
             if (ModelState.IsValid)
             {
+                CalendarEvent calendarEvent = new CalendarEvent
+                {
+                    Subject = repair.Fault.ClientDescription,
+                    Description = repair.Description,
+                    Start = (DateTime)repair.Date,
+                    ThemeColor = "black",
+                    IsFullDay = false
+                };
+                _context.Add(calendarEvent);
+                repair.CalendarEvent = calendarEvent;
                 _context.Add(repair);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -107,18 +117,47 @@ namespace CallCenterService.Controllers
 
         // GET: Repairs/Edit/5
         public async Task<IActionResult> Edit(int? id)
-            {
+        {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var repair = await _context.Repairs.SingleOrDefaultAsync(m => m.RepairId == id);
+            var repair = await _context.Repairs.Include(m => m.CalendarEvent).SingleOrDefaultAsync(m => m.RepairId == id);
             if (repair == null)
             {
                 return NotFound();
             }
             return View(repair);
+        }
+
+        [HttpPost]
+        public IActionResult SaveRepairEvent(CalendarEvent e)
+        {
+            var status = false;
+
+            if (e.EventId > 0)
+            {
+                //update
+                var v = _context.CalendarEvents.Where(x => x.EventId == e.EventId).FirstOrDefault();
+                if (v != null)
+                {
+                    v.Subject = e.Subject;
+                    v.Start = e.Start;
+                    v.End = e.End;
+                    v.Description = e.Description;
+                    v.IsFullDay = e.IsFullDay;
+                    v.ThemeColor = e.ThemeColor;
+                }
+            }
+            else
+            {
+                _context.CalendarEvents.Add(e);
+            }
+            _context.SaveChanges();
+            status = true;
+
+            return new JsonResult(status);
         }
 
         // POST: Repairs/Edit/5
@@ -129,12 +168,31 @@ namespace CallCenterService.Controllers
         public async Task<IActionResult> Edit(int id, Repair repair)
         {
 
-            var repairTmp = _context.Repairs.SingleOrDefault(m => m.RepairId == id);
+            var repairTmp = _context.Repairs.Include(m => m.CalendarEvent).Include(m => m.Fault).SingleOrDefault(m => m.RepairId == id);
 
             repairTmp.Date = repair.Date;
             repairTmp.Description = repair.Description;
             repairTmp.Price = repair.Price;
             repairTmp.PartsPrice = repair.PartsPrice;
+
+            if (repairTmp.CalendarEvent == null)
+            {
+                CalendarEvent calendarEvent = new CalendarEvent
+                {
+                    Subject = repairTmp.Fault.ClientDescription,
+                    Description = repairTmp.Description,
+                    Start = (DateTime)repairTmp.Date,
+                    ThemeColor = "purple",
+                    IsFullDay = false
+                };
+
+                SaveRepairEvent(calendarEvent);
+                repairTmp.CalendarEvent = calendarEvent;
+            }
+
+            repairTmp.CalendarEvent.Description = repairTmp.Description;
+            repairTmp.CalendarEvent.Start = (DateTime)repairTmp.Date;
+            SaveRepairEvent(repairTmp.CalendarEvent);
 
             if (id != repair.RepairId)
             {
@@ -144,8 +202,9 @@ namespace CallCenterService.Controllers
             if (ModelState.IsValid)
             {
                 try
-                { 
+                {
                     _context.Update(repairTmp);
+                    _context.Update(repairTmp.CalendarEvent);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

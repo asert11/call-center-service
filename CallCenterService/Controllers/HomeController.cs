@@ -51,6 +51,10 @@ namespace CallCenterService.Controllers
                     v.IsFullDay = e.IsFullDay;
                     v.ThemeColor = e.ThemeColor;
                 }
+                var repair = _context.Repairs.Include(x => x.CalendarEvent).SingleOrDefault(x => x.CalendarEvent.EventId == e.EventId);
+                repair.CalendarEvent = v;
+                repair.Date = v.Start;
+                repair.Description = v.Description;
             }
             else
             {

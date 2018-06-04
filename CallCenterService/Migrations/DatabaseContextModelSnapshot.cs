@@ -201,6 +201,8 @@ namespace CallCenterService.Migrations
                     b.Property<int>("RepairId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("CalendarEventEventId");
+
                     b.Property<DateTime?>("Date");
 
                     b.Property<string>("Description");
@@ -214,6 +216,8 @@ namespace CallCenterService.Migrations
                     b.Property<string>("ServicerId");
 
                     b.HasKey("RepairId");
+
+                    b.HasIndex("CalendarEventEventId");
 
                     b.HasIndex("FaultId");
 
@@ -378,6 +382,10 @@ namespace CallCenterService.Migrations
 
             modelBuilder.Entity("CallCenterService.Models.Repair", b =>
                 {
+                    b.HasOne("CallCenterService.Models.CalendarEvent", "CalendarEvent")
+                        .WithMany()
+                        .HasForeignKey("CalendarEventEventId");
+
                     b.HasOne("CallCenterService.Models.Fault", "Fault")
                         .WithMany()
                         .HasForeignKey("FaultId")
