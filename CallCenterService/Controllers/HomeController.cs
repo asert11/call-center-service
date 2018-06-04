@@ -1,6 +1,8 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using CallCenterService.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,10 +12,12 @@ namespace CallCenterService.Controllers
     public class HomeController : Controller
     {
         private readonly DatabaseContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public HomeController(DatabaseContext context)
+        public HomeController(DatabaseContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -22,10 +26,20 @@ namespace CallCenterService.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetRepairEvents()
+        public async Task<IActionResult> GetRepairEvents()
         {
-            var events = _context.CalendarEvents.ToList();
-            return new JsonResult(events);
+            ApplicationUser usr = await _userManager.GetUserAsync(HttpContext.User);
+            string id = usr?.Id;
+            if (id == null)
+                return NotFound();
+
+            var repairEvents = _context.Repairs.Include(m => m.CalendarEvent).Where(m => m.ServicerId == id).Select(m => m.CalendarEvent).ToList();
+            repairEvents.RemoveAll(m => m == null);
+ //           var events = _context.CalendarEvents.ToList();
+
+ //           var evs = repairEvents.Concat(events);
+
+            return new JsonResult(repairEvents);
         }
 
         public IActionResult Error()
