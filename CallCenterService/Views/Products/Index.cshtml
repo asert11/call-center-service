@@ -4,14 +4,42 @@
     ViewData["Title"] = "Index";
 }
 
+@section head {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.debug.js" integrity="sha384-CchuzHs077vGtfhGYl9Qtc7Vx64rXBXdIAZIPbItbNyWIRTdG0oYAqki3Ry13Yzu" crossorigin="anonymous"></script>
+
+    <style>
+        @@media print {
+            #search-products {
+                display: none;
+            }
+        }
+
+        /* SEARCH */
+        .searchInput {
+            background-image: url('https://www.w3schools.com/css/searchicon.png '); /* https://www.w3schools.com/css/searchicon.png */
+            background-position: 10px 12px;
+            background-repeat: no-repeat;
+            width: 200px;
+            font-size: 16px;
+            padding: 12px 20px 12px 40px;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+            margin-top: 6px;
+        }
+
+        .formUnit {
+            white-space: nowrap;
+        }
+    </style>
+}
+
 <h2>Produkty</h2>
 
-<form asp-controller="Products" asp-action="Index" method="get">
+<form id="search-products">
     <p>
-        <b>ID Produktu: </b> <input type="text" name="searchIdProduct">
-        <b>Nazwa:</b>  <input type="text" name="searchNameProduct">
-        <b>Typ:</b>  <input type="text" name="searchTypeProduct">
-        <input type="submit" value="Szukaj" />
+        <span class="formUnit">Nazwa: <input type="text" id="searchProductName" class="searchInput" onkeyup="searchingEngine()" /></span>
+        <span class="formUnit">Typ: <input type="text" id="searchProductType" class="searchInput" onkeyup="searchingEngine()" /></span>
+
     </p>
 </form>
 
@@ -39,16 +67,20 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
-@foreach (var item in Model) {
+    <tbody id="searchBody">
+        @foreach (var item in Model)
+        {
+            var productName = item.Name;
+            var productType = item.Type.Type;
+
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.ProductID)
             </td>
-            <td>
+            <td class="resultsProductName">
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
+            <td class="resultsProductType">
                 @Html.DisplayFor(modelItem => item.Type.Type)
             </td>
             <td>
@@ -66,6 +98,68 @@
                 <a asp-action="Delete" asp-route-id="@item.ProductID">Delete</a>
             </td>
         </tr>
-}
+        }
     </tbody>
 </table>
+<script>
+
+    function searchingEngine() {
+        var tbody, trs, tr, searchByName, searchByType, display, i;
+        tbody = document.getElementById("searchBody");
+        trs = tbody.getElementsByTagName("tr");
+
+        searchByName = document.forms['search-products'].querySelector("#searchProductName");
+        searchByType = document.forms['search-products'].querySelector("#searchProductType");
+
+        for (i = 0; i < trs.length; i++) {
+            tr = trs[i];
+            if (
+                checkFilter(tr, searchByName, "resultsProductName") &&
+                checkFilter(tr, searchByType, "resultsProductType")
+        
+            ) {
+                display = "";
+            }
+            else {
+                display = "none";
+            }
+
+            tr.style.display = display;
+        }
+
+    }
+
+    function checkFilter(tr, input, resultClass) {
+        var inputValue = (input.value || "").toUpperCase();
+        var resultValue = tr.getElementsByClassName(resultClass)[0].textContent.toUpperCase();
+        return resultValue.indexOf(inputValue) > -1;
+    }
+
+    var tbody = document.getElementById("searchBody");
+    var trs = tbody.getElementsByTagName("tr");
+
+    function addHighlight(e) {
+        this.classList.toggle("selected");
+        if (this.className === "selected") {
+            this.style.color = "green";
+        } else {
+            this.style.color = "";
+        }
+
+    }
+
+    for (var i = 0; i < trs.length; i++) {
+        trs[i].addEventListener("click", addHighlight);
+    }
+    var btn = document.getElementById("btn1").addEventListener("click", function (e) {
+        e.preventDefault();
+
+    })
+    class User {
+        constructor(productName, productType) {
+            this.productName = productName;
+            this.productType = productType;
+        }
+    }
+
+</script>

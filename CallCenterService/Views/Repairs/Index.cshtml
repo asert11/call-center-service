@@ -3,27 +3,53 @@
 @{
     ViewData["Title"] = "Index";
 }
+@section head {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.debug.js" integrity="sha384-CchuzHs077vGtfhGYl9Qtc7Vx64rXBXdIAZIPbItbNyWIRTdG0oYAqki3Ry13Yzu" crossorigin="anonymous"></script>
 
+    <style>
+        @@media print {
+            #search-repairs {
+                display: none;
+            }
+        }
+
+        /* SEARCH */
+        .searchInput {
+            background-image: url('https://www.w3schools.com/css/searchicon.png '); /* https://www.w3schools.com/css/searchicon.png */
+            background-position: 10px 12px;
+            background-repeat: no-repeat;
+            width: 200px;
+            font-size: 16px;
+            padding: 12px 20px 12px 40px;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+            margin-top: 6px;
+        }
+
+        .formUnit {
+            white-space: nowrap;
+        }
+    </style>
+}
 <script>
     function checkIfDone(getId) {
-            jQuery.ajax({
-                type: "GET",
-                url: "/Repairs/CheckIfDone/" + getId,
-                success: function (data)
-                {
-                    if (data == 1) {
-                        bootbox.alert("Naprawa oznaczona jako wykonana.");
-                        location.reload();                  // dla prezesa do poprawy
-                    }
-                    else if (data == 0) {
-                        bootbox.alert("Żeby zatwierdzić naprawę musisz podać jej cenę i datę.");
-                    }
-                },
-
-                failure: function (errMsg) {
-                    alert(errMsg);
+        jQuery.ajax({
+            type: "GET",
+            url: "/Repairs/CheckIfDone/" + getId,
+            success: function (data) {
+                if (data == 1) {
+                    bootbox.alert("Naprawa oznaczona jako wykonana.");
+                    location.reload();                  // dla prezesa do poprawy
                 }
-            });
+                else if (data == 0) {
+                    bootbox.alert("Żeby zatwierdzić naprawę musisz podać jej cenę i datę.");
+                }
+            },
+
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        });
     }
 </script>
 
@@ -32,14 +58,12 @@
 <p>
     @*<a asp-action="Create">Create New</a>*@ &nbsp;
 </p>
-
-<form asp-controller="Repairs" asp-action="Index" method="get">
+<form id="search-repairs">
     <p>
-        <b>ID naprawy:</b> <input type="text" name="searchIdRepair">
-        <b>Imie klienta: </b> <input type="text" name="searchClientName">
-        <b>Nazwisko klienta:</b>  <input type="text" name="searchClientSurname">
-        <b>Nazwa produktu: </b> <input type="text" name="searchNameProduct">
-        <input type="submit" value="Szukaj" />
+        <span class="formUnit">Imię klienta: <input type="text" id="searchClientName" class="searchInput" onkeyup="searchingEngine()" /></span>
+        <span class="formUnit">Nazwisko klienta: <input type="text" id="searchClientSurname" class="searchInput" onkeyup="searchingEngine()" /></span>
+        <span class="formUnit">Nazwa produktu: <input type="text" id="searchProductName" class="searchInput" onkeyup="searchingEngine()" /></span>
+
     </p>
 </form>
 
@@ -60,48 +84,51 @@
                 Nazwa produktu
             </th>
             <th>
-               Opis naprawy
+                Opis naprawy
             </th>
             @*<th>
-                Data
-            </th>*@
+                    Data
+                </th>*@
             @*<th>
-                Cena
-            </th>
-            <th>
-                Cena części
-            </th>*@
+                    Cena
+                </th>
+                <th>
+                    Cena części
+                </th>*@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="searchBody">
         @foreach (var item in Model)
         {
+            var clientName = item.Fault.Product.Client.FirstName;
+            var clientSurname = item.Fault.Product.Client.SecondName;
+            var productName = item.Fault.Product.Name;
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.RepairId)
             </td>
-            <td>
+            <td class="resultsclientName">
                 @Html.DisplayFor(modelItem => item.Fault.Product.Client.FirstName)
             </td>
-            <th>
+            <td class="resultsclientSurname">
                 @Html.DisplayFor(modelItem => item.Fault.Product.Client.SecondName)
-            </th>
-            <th>
+            </td>
+            <td class="resultsProductName">
                 @Html.DisplayFor(modelItem => item.Fault.Product.Name)
-            </th>
+                </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             @*<td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>*@
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>*@
             @*<td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PartsPrice)
-            </td>*@
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PartsPrice)
+        </td>*@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.RepairId">Edytuj</a> |
                 <a asp-action="Details" asp-route-id="@item.RepairId">Szczegóły</a> |
@@ -112,4 +139,67 @@
         }
     </tbody>
 </table>
+<script>
 
+    function searchingEngine() {
+        var tbody, trs, tr, searchByName, searchBySurname, searchByAddress, display, i;
+        tbody = document.getElementById("searchBody");
+        trs = tbody.getElementsByTagName("tr");
+
+        searchByName = document.forms['search-repairs'].querySelector("#searchClientName");
+        searchBySurname = document.forms['search-repairs'].querySelector("#searchClientSurname");
+        searchByAddress = document.forms['search-repairs'].querySelector("#searchProductName");
+
+        for (i = 0; i < trs.length; i++) {
+            tr = trs[i];
+            if (
+                checkFilter(tr, searchByName, "resultsclientName") &&
+                checkFilter(tr, searchBySurname, "resultsclientSurname") &&
+                checkFilter(tr, searchByAddress, "resultsProductName")
+            ) {
+                display = "";
+            }
+            else {
+                display = "none";
+            }
+
+            tr.style.display = display;
+        }
+
+    }
+
+    function checkFilter(tr, input, resultClass) {
+        var inputValue = (input.value || "").toUpperCase();
+        var resultValue = tr.getElementsByClassName(resultClass)[0].textContent.toUpperCase();
+        return resultValue.indexOf(inputValue) > -1;
+    }
+
+    var tbody = document.getElementById("searchBody");
+    var trs = tbody.getElementsByTagName("tr");
+
+    function addHighlight(e) {
+        this.classList.toggle("selected");
+        if (this.className === "selected") {
+            this.style.color = "green";
+        } else {
+            this.style.color = "";
+        }
+
+    }
+
+    for (var i = 0; i < trs.length; i++) {
+        trs[i].addEventListener("click", addHighlight);
+    }
+    var btn = document.getElementById("btn1").addEventListener("click", function (e) {
+        e.preventDefault();
+
+    })
+    class User {
+        constructor(clientName, clientSurname, productName) {
+            this.clientName = clientName;
+            this.clientSurname = clientSurname;
+            this.productName = productName;
+        }
+    }
+
+</script>

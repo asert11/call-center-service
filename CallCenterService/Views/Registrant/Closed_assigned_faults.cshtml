@@ -2,67 +2,170 @@
 @{
     ViewData["Title"] = "Zamknięte usterki";
 }
+@section head {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.debug.js" integrity="sha384-CchuzHs077vGtfhGYl9Qtc7Vx64rXBXdIAZIPbItbNyWIRTdG0oYAqki3Ry13Yzu" crossorigin="anonymous"></script>
 
-    <h2>Zamknięte usterki</h2>
+    <style>
+        @@media print {
+            #search-faults {
+                display: none;
+            }
+        }
 
+        /* SEARCH */
+        .searchInput {
+            background-image: url('https://www.w3schools.com/css/searchicon.png '); /* https://www.w3schools.com/css/searchicon.png */
+            background-position: 10px 12px;
+            background-repeat: no-repeat;
+            width: 200px;
+            font-size: 16px;
+            padding: 12px 20px 12px 40px;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+            margin-top: 6px;
+        }
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    ID usterki
-                </th>
-                <th>
-                    Opis klienta
-                </th>
-                <th>
-                    Status
-                </th>
-                <th>
-                    Data zgłoszenia
-                </th>
-                <th>
-                    Imię klienta
-                </th>
-                <th>
-                    Nazwisko klienta
-                </th>
-                <th>
-                    Adres klienta
-                </th>
-                <th>
-                    
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
+        .formUnit {
+            white-space: nowrap;
+        }
+    </style>
+}
+
+<h2>Zamknięte usterki</h2>
+<form id="search-faults">
+    <p>
+        <span class="formUnit">Imię klienta: <input type="text" id="searchClientName" class="searchInput" onkeyup="searchingEngine()" /></span>
+        <span class="formUnit">Nazwisko klienta: <input type="text" id="searchClientSurname" class="searchInput" onkeyup="searchingEngine()" /></span>
+        <span class="formUnit">Status: <input type="text" id="searchStatus" class="searchInput" onkeyup="searchingEngine()" /></span>
+
+    </p>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                ID usterki
+            </th>
+            <th>
+                Opis klienta
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Data zgłoszenia
+            </th>
+            <th>
+                Imię klienta
+            </th>
+            <th>
+                Nazwisko klienta
+            </th>
+            <th>
+                Adres klienta
+            </th>
+            <th>
+
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="searchBody">
+        @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FaultId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ClientDescription)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ApplicationDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Product.Client.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Product.Client.SecondName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Product.Client.Street)
-                </td>
-                <td><a asp-action="GoToRepair" asp-route-id="@item.FaultId">Przejdź do naprawy</a></td>
-            </tr>
+            var clientName = item.Product.Client.FirstName;
+            var clientSurname = item.Product.Client.SecondName;
+            var status = item.Status;
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FaultId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientDescription)
+            </td>
+            <td class="resultsStatus">
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicationDate)
+            </td>
+            <td class="resultsclientName">
+                @Html.DisplayFor(modelItem => item.Product.Client.FirstName)
+            </td>
+            <td class="resultsclientSurname">
+                @Html.DisplayFor(modelItem => item.Product.Client.SecondName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Client.Street)
+            </td>
+            <td><a asp-action="GoToRepair" asp-route-id="@item.FaultId">Przejdź do naprawy</a></td>
+        </tr>
+        }
+    </tbody>
+</table>
+</table>
+<script>
+
+    function searchingEngine() {
+        var tbody, trs, tr, searchByName, searchBySurname, searchByStatus, display, i;
+        tbody = document.getElementById("searchBody");
+        trs = tbody.getElementsByTagName("tr");
+
+        searchByName = document.forms['search-faults'].querySelector("#searchClientName");
+        searchBySurname = document.forms['search-faults'].querySelector("#searchClientSurname");
+        searchByStatus = document.forms['search-faults'].querySelector("#searchStatus");
+
+        for (i = 0; i < trs.length; i++) {
+            tr = trs[i];
+            if (
+                checkFilter(tr, searchByName, "resultsclientName") &&
+                checkFilter(tr, searchBySurname, "resultsclientSurname") &&
+                checkFilter(tr, searchByStatus, "resultsStatus")
+            ) {
+                display = "";
+            }
+            else {
+                display = "none";
+            }
+
+            tr.style.display = display;
+        }
+
     }
-        </tbody>
-    </table>
+
+    function checkFilter(tr, input, resultClass) {
+        var inputValue = (input.value || "").toUpperCase();
+        var resultValue = tr.getElementsByClassName(resultClass)[0].textContent.toUpperCase();
+        return resultValue.indexOf(inputValue) > -1;
+    }
+
+    var tbody = document.getElementById("searchBody");
+    var trs = tbody.getElementsByTagName("tr");
+
+    function addHighlight(e) {
+        this.classList.toggle("selected");
+        if (this.className === "selected") {
+            this.style.color = "green";
+        } else {
+            this.style.color = "";
+        }
+
+    }
+
+    for (var i = 0; i < trs.length; i++) {
+        trs[i].addEventListener("click", addHighlight);
+    }
+    var btn = document.getElementById("btn1").addEventListener("click", function (e) {
+        e.preventDefault();
+
+    })
+    class User {
+        constructor(clientName, clientSurname, status) {
+            this.clientName = clientName;
+            this.clientSurname = clientSurname;
+            this.status = status;
+        }
+    }
+
+</script>
