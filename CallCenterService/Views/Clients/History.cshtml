@@ -31,7 +31,18 @@
             <tr>
                 <td>@fault.FaultId</td>
                 <td>@fault.ClientDescription</td>
-                <td>@fault.Status</td>
+                <td>@if(fault.Status == "Open")
+                    {
+                        <span>Otwarty</span>
+                    }
+                    else if(fault.Status == "Done")
+                    {
+                        <span>Zamkniety</span>
+                    }
+                    else if(fault.Status == "In progress")
+                    {
+                        <span>W trakcie</span>
+                    }</td>
                 <td>@fault.Product.ProductID</td>
                 <td>@fault.Product.Name</td>
                 <td><a asp-controller="Repairs" asp-action="Details" asp-route-id="@fault.FaultId">Przejdü do naprawy</a></td>

@@ -1,19 +1,19 @@
 @model CallCenterService.Models.Specialization
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edytuj";
 }
 
-<h2>Edit</h2>
+<h2>Edytuj</h2>
 
 <form asp-action="Edit">
     <div class="form-horizontal">
-        <h4>Specialization</h4>
+        <h4>Specjalizacje</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Id" />
         <div class="form-group">
-            <label asp-for="Type" class="col-md-2 control-label"></label>
+            <label asp-for="Type" class="col-md-2 control-label">Typ</label>
             <div class="col-md-10">
                 <input asp-for="Type" class="form-control" />
                 <span asp-validation-for="Type" class="text-danger"></span>
@@ -21,13 +21,13 @@
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Zapisz" class="btn btn-default" />
             </div>
         </div>
     </div>
 </form>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Powrót</a>
 </div>
 
