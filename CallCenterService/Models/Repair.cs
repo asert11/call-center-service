@@ -20,6 +20,11 @@ namespace CallCenterService.Models
         public decimal PartsPrice { get; set; }
         public virtual CalendarEvent CalendarEvent { get; set; }
 
+        [NotMapped, RegularExpression("^[0-9]+[.|]?[0-9]{0,2}$")]
+        public string PriceDot { get; set; }
+
+        [NotMapped, RegularExpression("^[0-9]+[.|,]?[0-9]{0,2}$")]
+        public string PartsPriceDot { get; set; }
         [NotMapped]
         public ApplicationUser user { get; set; }
     }
