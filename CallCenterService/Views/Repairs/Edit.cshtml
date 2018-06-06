@@ -10,7 +10,7 @@
     <div class="form-horizontal">
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="RepairId" />
+        <input type="hidden" asp-for="RepairId" />
         <div class="form-group">
             <label asp-for="Description" class="col-md-2 control-label">Opis:</label>
             <div class="col-md-10">
@@ -25,20 +25,27 @@
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
         </div>
+
+
+
         <div class="form-group">
-            <label asp-for="Price" class="col-md-2 control-label">Cena:</label>
+            <label asp-for="PriceDot" class="col-md-2 control-label">Price:</label>
             <div class="col-md-10">
                 <input asp-for="PriceDot" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
+                <span asp-validation-for="PriceDot" class="text-danger"></span>
+            </div>"
         </div>
+
+
         <div class="form-group">
-            <label asp-for="PartsPrice" class="col-md-2 control-label">Cena części zew.:</label>
+            <label asp-for="PartsPriceDot" class="col-md-2 control-label">PartsPrice:</label>
             <div class="col-md-10">
                 <input asp-for="PartsPriceDot" class="form-control" />
-                <span asp-validation-for="PartsPrice" class="text-danger"></span>
-            </div>
+                <span asp-validation-for="PartsPriceDot" class="text-danger"></span>
+            </div>"
         </div>
+
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Zapisz" class="btn btn-default" />

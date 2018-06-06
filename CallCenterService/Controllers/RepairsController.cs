@@ -203,23 +203,29 @@ namespace CallCenterService.Controllers
             repairTmp.Date = repair.Date;
             repairTmp.Description = repair.Description;
             //repairTmp.Price = repair.Price;
-            string priceDot = repair.PriceDot;
-            if (priceDot.Contains('.'))
+            if (ModelState.IsValid)
             {
-                priceDot = priceDot.Replace('.', ',');
-            }
-            decimal decimalVal = System.Convert.ToDecimal(priceDot);
-            repairTmp.Price = decimalVal;
-            //repairTmp.PartsPrice = repair.PartsPrice;
+                
+                string priceDot = repair.PriceDot;
+                if (priceDot.Contains('.'))
+                {
+                    priceDot = priceDot.Replace('.', ',');
+                }
+                decimal decimalVal = System.Convert.ToDecimal(priceDot);
+                repairTmp.Price = decimalVal;
+                
+                //repairTmp.PartsPrice = repair.PartsPrice;
 
-            priceDot = repair.PartsPriceDot;
-            if (priceDot.Contains('.'))
-            {
-                priceDot = priceDot.Replace('.', ',');
-            }
-            decimalVal = System.Convert.ToDecimal(priceDot);
-            repairTmp.PartsPrice = decimalVal;
+                priceDot = repair.PartsPriceDot;
+                if (priceDot.Contains('.'))
+                {
+                    priceDot = priceDot.Replace('.', ',');
+                }
+                decimalVal = System.Convert.ToDecimal(priceDot);
+                repairTmp.PartsPrice = decimalVal;
 
+                return RedirectToAction("Index");
+            }
 
             if (repairTmp.CalendarEvent == null)
             {
