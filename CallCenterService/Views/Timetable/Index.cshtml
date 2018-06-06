@@ -159,9 +159,9 @@
                      selectedEvent = calEvent;
                      $('#myModel #eventTitle').text(calEvent.title);
                      var $description = $('<div/>');
-                     $description.append($('<p/>').html('<b>Start: </b>' + calEvent.start.format("DD-MM-YYYY HH:mm")));
+                     $description.append($('<p/>').html('<b>Start: </b>' + calEvent.start.format("DD-MM-YYYY H:mm")));
                      if (calEvent.end != null) {
-                         $description.append($('<p/>').html('<b>End: </b>' + calEvent.end.format("DD-MM-YYYY HH:mm")));
+                         $description.append($('<p/>').html('<b>End: </b>' + calEvent.end.format("DD-MM-YYYY H:mm")));
                      }
                      $description.append($('<p/>').html('<b>Description: </b>' + calEvent.description));
                      $('#myModal #pDetails').empty().html($description);
@@ -187,8 +187,8 @@
                      var data = {
                          EventId: event.eventID,
                          Subject: event.title,
-                         Start: event.start.format('DD/MM/YYYY HH:mm'),
-                         End: event.end != null ? event.end.format('DD/MM/YYYY HH:mm') : null,
+                         Start: event.start.format('DD/MM/YYYY H:mm'),
+                         End: event.end != null ? event.end.format('DD/MM/YYYY H:mm') : null,
                          Description: event.description,
                          ThemeColor: event.color
                      };
@@ -222,7 +222,7 @@
          });
 
          $('#dtp1,#dtp2').datetimepicker({
-             format: 'DD/MM/YYYY HH:mm'
+             format: 'DD/MM/YYYY H:mm'
          });
 
          $('#chkIsFullDay').change(function () {
@@ -238,10 +238,10 @@
              if (selectedEvent != null) {
                  $('#hdEventID').val(selectedEvent.eventID);
                  $('#txtSubject').val(selectedEvent.title);
-                 $('#txtStart').val(selectedEvent.start.format('DD/MM/YYYY HH:mm'));
+                 $('#txtStart').val(selectedEvent.start.format('DD/MM/YYYY H:mm'));
                  $('#chkIsFullDay').prop("checked", selectedEvent.allDay || false);
                  $('#chkIsFullDay').change();
-                 $('#txtEnd').val(selectedEvent.end != null ? selectedEvent.end.format('DD/MM/YYYY HH:mm') : '');
+                 $('#txtEnd').val(selectedEvent.end != null ? selectedEvent.end.format('DD/MM/YYYY H:mm') : '');
                  $('#txtDescription').val(selectedEvent.description);
                  $('#ddThemeColor').val(selectedEvent.color);
              }
@@ -263,8 +263,8 @@
                  return;
              }
              else {
-                 var startDate = moment($('#txtStart').val(), "DD/MM/YYYY HH:mm").toDate();
-                 var endDate = moment($('#txtEnd').val(), "DD/MM/YYYY HH:mm").toDate();
+                 var startDate = moment($('#txtStart').val(), "DD/MM/YYYY H:mm").toDate();
+                 var endDate = moment($('#txtEnd').val(), "DD/MM/YYYY H:mm").toDate();
                  if (startDate > endDate) {
                      alert('Invalid end date');
                      return;
