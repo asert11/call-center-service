@@ -25,5 +25,7 @@ namespace CallCenterService.Models
 
         [Required]
         public Boolean IsFullDay { get; set; }
+
+        public String ResourceId { get; set; }
     }
 }

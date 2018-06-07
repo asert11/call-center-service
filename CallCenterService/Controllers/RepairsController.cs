@@ -213,7 +213,8 @@ namespace CallCenterService.Controllers
                     Description = repairTmp.Description,
                     Start = (DateTime)repairTmp.Date,
                     ThemeColor = "purple",
-                    IsFullDay = false
+                    IsFullDay = false,
+                    ResourceId = repairTmp.ServicerId
                 };
 
                 SaveRepairEvent(calendarEvent);

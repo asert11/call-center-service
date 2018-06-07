@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CallCenterService.Models;
@@ -21,6 +22,11 @@ namespace CallCenterService.Controllers
         }
 
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult Calendar()
         {
             return View();
         }
@@ -81,6 +87,7 @@ namespace CallCenterService.Controllers
                     v.Description = e.Description;
                     v.IsFullDay = e.IsFullDay;
                     v.ThemeColor = e.ThemeColor;
+                    v.ResourceId = e.ResourceId;
                 }
                 var repair = _context.Repairs.Include(x => x.CalendarEvent).SingleOrDefault(x => x.CalendarEvent.EventId == e.EventId);
                 if (repair != null)
@@ -99,6 +106,28 @@ namespace CallCenterService.Controllers
 
             // ViewData["SaveStatus"] = status;
             return new JsonResult(status);
+        }
+
+        [HttpGet]
+        public IActionResult GetServicersAsResources()
+        {
+            List<ServicersResource> resources = new List<ServicersResource>();
+            var repairs = _context.Repairs.ToList();
+            
+            foreach (var item in repairs)
+            {
+                ServicersResource sr = new ServicersResource
+                {
+                    RepairId = item.RepairId,
+                    ServicerId = item.ServicerId,
+                    FirstName = _context.Users.Where(m => m.Id.Equals(item.ServicerId)).Select(m => m.FirstName).SingleOrDefault(),
+                    LastName = _context.Users.Where(m => m.Id.Equals(item.ServicerId)).Select(m => m.LastName).SingleOrDefault()
+                };
+
+                resources.Add(sr);
+            }
+
+            return new JsonResult(resources);
         }
 
         [HttpPost]

@@ -16,5 +16,6 @@ namespace CallCenterService.Models
         public DbSet<Specialization> Specialization { get; set; }
         public DbSet<ServicerSpecializations> ServicerSpecializations { get; set; }
         public DbSet<CalendarEvent> CalendarEvents { get; set; }
+        public DbSet<WorkTime> WorkTime { get; set; }
     }
 }
