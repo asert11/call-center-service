@@ -31,5 +31,8 @@ namespace CallCenterService.Models
 
         [Required]
         public DateTime Date { get; set; }
+
+        [NotMapped]
+        public string UserName { get; set; }
     }
 }

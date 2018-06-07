@@ -108,7 +108,18 @@
                     @Html.DisplayFor(modelItem => item.ClientDescription)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Status)
+                    @if(item.Status == "Open")
+                    {
+                        <span>Otwarty</span>
+                    }
+                    else if(item.Status == "Done")
+                    {
+                        <span>Zamknięty</span>
+                    }
+                    else if(item.Status == "In progress")
+                    {
+                        <span>W trakcie</span>
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ApplicationDate)

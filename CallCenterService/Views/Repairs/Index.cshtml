@@ -54,6 +54,9 @@
 </script>
 
 <h2>Twoje zlecenia</h2>
+<p>
+    <a asp-action="Closed">Zamknięte usterki</a>
+</p>
 
 <p>
     @*<a asp-action="Create">Create New</a>*@ &nbsp;
@@ -132,7 +135,7 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.RepairId">Edytuj</a> |
                 <a asp-action="Details" asp-route-id="@item.RepairId">Szczegóły</a> |
-                @*<a asp-action="Delete" asp-route-id="@item.RepairId">Delete</a> |*@
+                <a asp-action="Delete" asp-route-id="@item.RepairId">Delete</a> |
                 <a href="javascript:checkIfDone(@item.RepairId);" id="done">Oznacz jako wykonane</a>
             </td>
         </tr>
