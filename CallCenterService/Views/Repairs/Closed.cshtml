@@ -130,7 +130,9 @@
             @Html.DisplayFor(modelItem => item.PartsPrice)
         </td>*@
             <td>
-                <a asp-action="Details" asp-route-id="@item.RepairId">Szczegóły</a>
+                <a asp-action="Edit" asp-route-id="@item.RepairId">Edytuj</a> |
+                <a asp-action="Details" asp-route-id="@item.RepairId">Szczegóły</a> |
+                <a asp-action="Delete" asp-route-id="@item.RepairId">Delete</a> |
             </td>
         </tr>
         }

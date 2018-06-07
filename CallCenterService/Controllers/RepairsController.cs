@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CallCenterService.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace CallCenterService.Controllers
 {
@@ -14,12 +15,14 @@ namespace CallCenterService.Controllers
     {
         private readonly DatabaseContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         public string id;
 
-        public RepairsController(DatabaseContext context, UserManager<ApplicationUser> userManager)
+        public RepairsController(DatabaseContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         // GET: Repairs
@@ -54,8 +57,13 @@ namespace CallCenterService.Controllers
                 return NotFound();
 
             var repairs = name.Include(r => r.Fault)
-                .Include(r => r.Fault.Product).Include(r => r.Fault.Product.Client).Where(s => s.ServicerId == id)
+                .Include(r => r.Fault.Product).Include(r => r.Fault.Product.Client)
                 .Where(s => s.Fault.Status == "In progress");
+
+            if (!await _userManager.IsInRoleAsync(usr, "Admin") && !await _userManager.IsInRoleAsync(usr, "Kierownik"))
+            {
+                repairs = repairs.Where(s => s.ServicerId == id);
+            }
 
             return View(await repairs.ToListAsync());
         }
@@ -68,8 +76,13 @@ namespace CallCenterService.Controllers
                 return NotFound();
 
             var repairs = _context.Repairs.Include(r => r.Fault)
-                .Include(r => r.Fault.Product).Include(r => r.Fault.Product.Client).Where(s => s.ServicerId == id)
+                .Include(r => r.Fault.Product).Include(r => r.Fault.Product.Client)
                 .Where(s => s.Fault.Status == "Done");
+
+            if (!await _userManager.IsInRoleAsync(usr, "Admin") && !await _userManager.IsInRoleAsync(usr, "Kierownik"))
+            {
+                repairs = repairs.Where(s => s.ServicerId == id);
+            }
 
             return View(await repairs.ToListAsync());
         }
@@ -340,9 +353,61 @@ namespace CallCenterService.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var repair = await _context.Repairs.SingleOrDefaultAsync(m => m.RepairId == id);
-            _context.Repairs.Remove(repair);
-            await _context.SaveChangesAsync();
+            var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
+            string loggedId = loggedUser?.Id;
+            if (loggedId == null)
+                return NotFound();
+
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                EventHistory history;
+
+                var repair = await _context.Repairs.Include(m => m.Fault)
+                    .Include(m => m.Fault.Product).SingleOrDefaultAsync(m => m.RepairId == id);
+
+                history = new EventHistory
+                {
+                    Date = DateTime.Now,
+                    UserId = loggedUser.Id,
+                    Operation = "delete repair",
+                    Table = "Repairs",
+                    Description = "Date{" + repair.Date + "} " +
+                                  "Description{" + repair.Description + "} " +
+                                  "FaultId{" + repair.Fault.FaultId + "} " +
+                                  "PartsPrice{" + repair.PartsPrice + "} " +
+                                  "Price{" + repair.Price + "} " +
+                                  "RepairId{" + repair.RepairId + "} " +
+                                  "ServicerId{" + repair.ServicerId + "}"
+                };
+                _context.EventHistory.Add(history);
+                _context.SaveChanges();
+
+                repair.Fault.Status = "Open";
+
+                history = new EventHistory
+                {
+                    Date = DateTime.Now,
+                    UserId = loggedUser.Id,
+                    Operation = "edit fault",
+                    Table = "Faults",
+                    Description = "ApplicationDate{" + repair.Fault.ApplicationDate + "} " +
+                                  "ClientDescription{" + repair.Fault.ClientDescription + "} " +
+                                  "FaultId{" + repair.Fault.FaultId + "} " +
+                                  "Status{" + repair.Fault.Status + "} " +
+                                  "ProductID{" + repair.Fault.Product.ProductID + "}"
+                };
+                _context.EventHistory.Add(history);
+                _context.SaveChanges();
+
+                _context.Faults.Update(repair.Fault);
+
+                _context.Repairs.Remove(repair);
+
+                _context.SaveChanges();
+
+                transaction.Commit();
+            }
+
             return RedirectToAction("Index");
         }
 
