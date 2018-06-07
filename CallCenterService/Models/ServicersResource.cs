@@ -11,5 +11,6 @@ namespace CallCenterService.Models
         public String ServicerId { get; set; }
         public String FirstName { get; set; }
         public String LastName { get; set; }
+        public String Specialization { get; set; }
     }
 }

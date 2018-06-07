@@ -527,7 +527,8 @@ namespace CallCenterService.Controllers
                         user.WorkTime.WednesdayStart = vm.Worktime.WednesdayStart ?? "00:00";
                         user.WorkTime.WednesdayEnd = vm.Worktime.WednesdayEnd ?? "00:00";
                         user.WorkTime.ThursdayStart = vm.Worktime.ThursdayStart ?? "00:00";
-                        user.WorkTime.ThursdayEnd = vm.Worktime.FridayStart ?? "00:00";
+                        user.WorkTime.ThursdayEnd = vm.Worktime.ThursdayEnd ?? "00:00";
+                        user.WorkTime.FridayStart = vm.Worktime.FridayStart ?? "00:00";
                         user.WorkTime.FridayEnd = vm.Worktime.FridayEnd ?? "00:00";
                         user.WorkTime.SaturdayStart = vm.Worktime.SaturdayStart ?? "00:00";
                         user.WorkTime.SaturdayEnd = vm.Worktime.SaturdayEnd ?? "00:00";

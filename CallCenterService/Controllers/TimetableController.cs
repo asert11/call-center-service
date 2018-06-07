@@ -121,13 +121,18 @@ namespace CallCenterService.Controllers
             
             foreach (var item in repairs)
             {
+                var specialization = _context.ServicerSpecializations.Include(m => m.Spec).Where(m => m.ServicerId.Equals(item.ServicerId))
+                    .Select(m => m.Spec.Type).SingleOrDefault();
+               // var specialization = _context.Specialization.Where(m => m.Id == specId).Select(m => m.Type).SingleOrDefault();
+
                 ServicersResource sr = new ServicersResource
                 {
                     RepairId = item.RepairId,
                     ServicerId = item.ServicerId,
                     FirstName = _context.Users.Where(m => m.Id.Equals(item.ServicerId)).Select(m => m.FirstName).SingleOrDefault(),
-                    LastName = _context.Users.Where(m => m.Id.Equals(item.ServicerId)).Select(m => m.LastName).SingleOrDefault()
-                };
+                    LastName = _context.Users.Where(m => m.Id.Equals(item.ServicerId)).Select(m => m.LastName).SingleOrDefault(),
+                    Specialization = specialization
+            };
 
                 resources.Add(sr);
             }

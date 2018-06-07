@@ -1,3 +1,7 @@
+<form>
+    <input id="searchInput" type="text" />
+</form>
+
 <div id="calendar"></div>
 
 <div id="myModal" class="modal fade" role="dialog">
@@ -119,13 +123,8 @@
                     $.each(data, function (i, v) {
                         resources.push({
                             id: v.servicerId,
-                            title: v.firstName.concat(" ", v.lastName)
-                            //businessHours: [
-                            //    {
-                            //        dow: [1, 2, 3, 4, 5],
-                            //        start: '08:00',
-                            //        end: '16:00',
-                            //    }]
+                            title: v.firstName.concat(" ", v.lastName),
+                            specialization: v.specialization
                         });
                     });
                     GenerateEvents(resources, view);
@@ -164,18 +163,9 @@
         }
 
         function GenerateCalendar(events, resources, view, backgroundEvents) {
-            //events.concat(backgroundEvents[0][0], backgroundEvents[0][1], backgroundEvents[0][2], backgroundEvents[0][3],
-            //    backgroundEvents[0][4], backgroundEvents[0][5], backgroundEvents[0][6], backgroundEvents[0][7], backgroundEvents[0][8],
-            //    backgroundEvents[0][9], backgroundEvents[0][10], backgroundEvents[0][11], backgroundEvents[0][12], backgroundEvents[0][13],
-            //    backgroundEvents[0][14], backgroundEvents[0][15], backgroundEvents[0][16], backgroundEvents[0][17], backgroundEvents[0][18],
-            //    backgroundEvents[0][19], backgroundEvents[0][20]),
-
             var concatedEvents = Object.keys(backgroundEvents).reduce(function (arr, key) {
                 return arr.concat(backgroundEvents[key]);
             }, []);
-            //console.log(concatedEvents);
-            //concatedEvents.concat(events);
-            //console.log(concatedEvents);
 
             $('#calendar').fullCalendar({
                 lang: 'pl',
@@ -187,28 +177,17 @@
                     center: 'title',
                     right: 'timelineYear,timelineMonth,timelineWeek,timelineDay'
                 },
-                views: {
-                    agendaSevenDay: {
-                        type: 'timeline',
-                        duration: { weeks: 1 },
-                        slotDuration: '24:00:00',
-                    }
-                },
                 timeFormat: 'H(:mm)',
                 firstDay: 1,
                 contentHeight: 600,
-                resourceAreaWidth: '13%',
+                resourceAreaWidth: '16%',
                 allDaySlot: false,
                 minTime: '07:00:00',
                 nowIndicator: true,
                 editable: true,
-                eventLimit: true, // allow "more" link when too many events
-                //events: events.concat(backgroundEvents[0][0], backgroundEvents[0][1], backgroundEvents[0][2], backgroundEvents[0][3],
-                //    backgroundEvents[0][4], backgroundEvents[0][5], backgroundEvents[0][6], backgroundEvents[0][7], backgroundEvents[0][8],
-                //    backgroundEvents[0][9], backgroundEvents[0][10], backgroundEvents[0][11], backgroundEvents[0][12], backgroundEvents[0][13],
-                //    backgroundEvents[0][14], backgroundEvents[0][15], backgroundEvents[0][16], backgroundEvents[0][17], backgroundEvents[0][18],
-                //    backgroundEvents[0][19], backgroundEvents[0][20]),
+                eventLimit: true, // allow "more" link when too many events   
                 events: concatedEvents.concat(events),
+                resourceGroupField: 'specialization',
                 resourceLabelText: 'Serwisant',
                 resources: resources,
                 eventClick: function (calEvent, jsEvent, view) {
@@ -225,20 +204,6 @@
                     $('#myModal').modal();
                 },
                 selectable: isAdmin,
-                //select: function (start, end) {
-                //    selectedEvent = {
-                //        eventId: 0,
-                //        title: '',
-                //        description: '',
-                //        start: start,
-                //        end: end,
-                //        allDay: false,
-                //        color: '',
-                //        resourceId: 0
-                //    };
-                //    openAddEditForm();
-                //    $('#calendar').fullCalendar('unselect');
-                //},
                 dayClick: function (date, jsEvent, view) {
                     $('#calendar').fullCalendar('changeView', 'timelineDay', date);
                 },
