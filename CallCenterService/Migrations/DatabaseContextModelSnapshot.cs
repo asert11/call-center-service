@@ -275,35 +275,35 @@ namespace CallCenterService.Migrations
                     b.Property<int>("WorkTimeId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("FridayEnd");
+                    b.Property<string>("FridayEnd");
 
-                    b.Property<DateTime>("FridayStart");
+                    b.Property<string>("FridayStart");
 
-                    b.Property<DateTime>("MondayEnd");
+                    b.Property<string>("MondayEnd");
 
-                    b.Property<DateTime>("MondayStart");
+                    b.Property<string>("MondayStart");
 
-                    b.Property<DateTime>("SaturdayEnd");
+                    b.Property<string>("SaturdayEnd");
 
-                    b.Property<DateTime>("SaturdayStart");
+                    b.Property<string>("SaturdayStart");
 
                     b.Property<string>("ServicerId");
 
-                    b.Property<DateTime>("SundayEnd");
+                    b.Property<string>("SundayEnd");
 
-                    b.Property<DateTime>("SundayStart");
+                    b.Property<string>("SundayStart");
 
-                    b.Property<DateTime>("ThursdayEnd");
+                    b.Property<string>("ThursdayEnd");
 
-                    b.Property<DateTime>("ThursdayStart");
+                    b.Property<string>("ThursdayStart");
 
-                    b.Property<DateTime>("TuesdayEnd");
+                    b.Property<string>("TuesdayEnd");
 
-                    b.Property<DateTime>("TuesdayStart");
+                    b.Property<string>("TuesdayStart");
 
-                    b.Property<DateTime>("WednesdayEnd");
+                    b.Property<string>("WednesdayEnd");
 
-                    b.Property<DateTime>("WednesdayStart");
+                    b.Property<string>("WednesdayStart");
 
                     b.HasKey("WorkTimeId");
 

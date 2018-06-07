@@ -10,19 +10,19 @@ namespace CallCenterService.Models
     {
         public int WorkTimeId { get; set; }
         public String ServicerId { get; set; }
-        public DateTime MondayStart { get; set; }
-        public DateTime MondayEnd { get; set; }
-        public DateTime TuesdayStart { get; set; }
-        public DateTime TuesdayEnd { get; set; }
-        public DateTime WednesdayStart { get; set; }
-        public DateTime WednesdayEnd { get; set; }
-        public DateTime ThursdayStart { get; set; }
-        public DateTime ThursdayEnd { get; set; }
-        public DateTime FridayStart { get; set; }
-        public DateTime FridayEnd { get; set; }
-        public DateTime SaturdayStart { get; set; }
-        public DateTime SaturdayEnd { get; set; }
-        public DateTime SundayStart { get; set; }
-        public DateTime SundayEnd { get; set; }
+        public String MondayStart { get; set; }
+        public String MondayEnd { get; set; }
+        public String TuesdayStart { get; set; }
+        public String TuesdayEnd { get; set; }
+        public String WednesdayStart { get; set; }
+        public String WednesdayEnd { get; set; }
+        public String ThursdayStart { get; set; }
+        public String ThursdayEnd { get; set; }
+        public String FridayStart { get; set; }
+        public String FridayEnd { get; set; }
+        public String SaturdayStart { get; set; }
+        public String SaturdayEnd { get; set; }
+        public String SundayStart { get; set; }
+        public String SundayEnd { get; set; }
     }
 }
