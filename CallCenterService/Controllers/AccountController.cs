@@ -399,7 +399,6 @@ namespace CallCenterService.Controllers
             {
                 wtime = new WorkTime
                 {
-                    ServicerId = user.Id,
                     MondayStart = user.WorkTime.MondayStart ?? "00:00",    //przepraszam za to
                     MondayEnd = user.WorkTime.MondayEnd ?? "00:00",
                     TuesdayStart = user.WorkTime.TuesdayStart ?? "00:00",
@@ -416,8 +415,12 @@ namespace CallCenterService.Controllers
                 };
             }
 
+            var role = _dbContext.UserRoles.SingleOrDefault(m => m.UserId == id);
+            var roleName = _dbContext.Roles.SingleOrDefault(m => m.Id == role.RoleId);
+
             var vm = new EditUserViewModel
             {
+                Role = roleName.Name,
                 Roles = GetUserRoles(),
                 UserId = id,
                 Email = user.Email,
@@ -451,20 +454,20 @@ namespace CallCenterService.Controllers
 
             if (ModelState.IsValid)
             {
-                if (vm.Role == "Admin")
-                {
-                    vm.Email = user.Email;
-                    vm.UserName = user.UserName;
-                    vm.FirstName = user.FirstName;
-                    vm.LastName = user.LastName;
-                    vm.Street = user.Street;
-                    vm.StreetNumber = user.StreetNumber;
-                    vm.ApartmentNumber = user.ApartmentNumber;
-                    vm.PostCode = user.PostCode;
-                    vm.City = user.City;
-                    vm.Roles = GetUserRoles();
-                    return View(vm);
-                }
+                //if (vm.Role == "Admin")
+                //{
+                //    vm.Email = user.Email;
+                //    vm.UserName = user.UserName;
+                //    vm.FirstName = user.FirstName;
+                //    vm.LastName = user.LastName;
+                //    vm.Street = user.Street;
+                //    vm.StreetNumber = user.StreetNumber;
+                //    vm.ApartmentNumber = user.ApartmentNumber;
+                //    vm.PostCode = user.PostCode;
+                //    vm.City = user.City;
+                //    vm.Roles = GetUserRoles();
+                //    return View(vm);
+                //}
 
                 var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
                 string id = loggedUser?.Id;
@@ -496,6 +499,10 @@ namespace CallCenterService.Controllers
                     };
 
                     _dbContext.EventHistory.Add(history);
+
+                    var worktimeToDelete = _dbContext.WorkTime.Where(m => m.ServicerId == vm.UserId);
+                    _dbContext.WorkTime.RemoveRange(worktimeToDelete);
+                    _dbContext.SaveChanges();
 
                     user.FirstName = vm.FirstName;
                     user.LastName = vm.LastName;

@@ -130,6 +130,13 @@ namespace CallCenterService.Controllers
             return new JsonResult(resources);
         }
 
+        [HttpGet]
+        public IActionResult GetWorktime()
+        {
+            var worktime = _context.WorkTime.ToList();
+            return new JsonResult(worktime);
+        }
+
         [HttpPost]
         public IActionResult DeleteRepairEvent(int id)
         {
