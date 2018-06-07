@@ -56,7 +56,8 @@ namespace CallCenterService.Controllers
 
             if (role.Contains("Serwisant"))
             {
-                var repairEvents = _context.Repairs.Include(m => m.CalendarEvent).Where(m => m.ServicerId == id).Select(m => m.CalendarEvent).ToList();
+                var repairEvents = _context.Repairs.Include(m => m.CalendarEvent).Include(m => m.Fault).Where(m => m.ServicerId == id)
+                    .Select(m => m.CalendarEvent).ToList();
                 repairEvents.RemoveAll(m => m == null);
                 return new JsonResult(repairEvents);
             }
@@ -88,13 +89,17 @@ namespace CallCenterService.Controllers
                     v.IsFullDay = e.IsFullDay;
                     v.ThemeColor = e.ThemeColor;
                     v.ResourceId = e.ResourceId;
+
+                    //var repair = _context.Repairs.Include(m => m.Fault).Include(m => m.FaultId).Include(m => m.CalendarEvent)
+                    //    .SingleOrDefault(m => m.RepairId == v.RepairId);
                 }
-                var repair = _context.Repairs.Include(x => x.CalendarEvent).SingleOrDefault(x => x.CalendarEvent.EventId == e.EventId);
+                var repair = _context.Repairs.Include(x => x.CalendarEvent).Include(m => m.Fault).SingleOrDefault(x => x.CalendarEvent.EventId == e.EventId);
                 if (repair != null)
                 {
                     repair.CalendarEvent = v;
                     repair.Date = v.Start;
                     repair.Description = v.Description;
+                    repair.ServicerId = v.ResourceId;
                 }
             }
             else

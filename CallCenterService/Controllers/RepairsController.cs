@@ -154,7 +154,7 @@ namespace CallCenterService.Controllers
                 return NotFound();
             }
 
-            var repair = await _context.Repairs.Include(m => m.CalendarEvent).SingleOrDefaultAsync(m => m.RepairId == id);
+            var repair = await _context.Repairs.Include(m => m.CalendarEvent).Include(m => m.Fault).SingleOrDefaultAsync(m => m.RepairId == id);
             if (repair == null)
             {
                 return NotFound();
@@ -179,6 +179,15 @@ namespace CallCenterService.Controllers
                     v.Description = e.Description;
                     v.IsFullDay = e.IsFullDay;
                     v.ThemeColor = e.ThemeColor;
+                    v.ResourceId = e.ResourceId;
+                }
+                var repair = _context.Repairs.Include(x => x.CalendarEvent).Include(m => m.Fault).SingleOrDefault(x => x.CalendarEvent.EventId == e.EventId);
+                if (repair != null)
+                {
+                    repair.CalendarEvent = v;
+                    repair.Date = v.Start;
+                    repair.Description = v.Description;
+                    repair.ServicerId = v.ResourceId;
                 }
             }
             else
@@ -188,6 +197,7 @@ namespace CallCenterService.Controllers
             _context.SaveChanges();
             status = true;
 
+            // ViewData["SaveStatus"] = status;
             return new JsonResult(status);
         }
 

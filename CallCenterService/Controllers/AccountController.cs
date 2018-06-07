@@ -394,7 +394,8 @@ namespace CallCenterService.Controllers
                     return RedirectToAction("Index");
             }
 
-            WorkTime wtime = new WorkTime();
+            var wtime = _dbContext.WorkTime.SingleOrDefault(m => m.ServicerId == user.Id);
+
             if (user.WorkTime != null)
             {
                 wtime = new WorkTime
@@ -406,7 +407,8 @@ namespace CallCenterService.Controllers
                     WednesdayStart = user.WorkTime.WednesdayStart ?? "00:00",
                     WednesdayEnd = user.WorkTime.WednesdayEnd ?? "00:00",
                     ThursdayStart = user.WorkTime.ThursdayStart ?? "00:00",
-                    ThursdayEnd = user.WorkTime.FridayStart ?? "00:00",
+                    ThursdayEnd = user.WorkTime.ThursdayEnd ?? "00:00",
+                    FridayStart = user.WorkTime.FridayStart ?? "00:00",
                     FridayEnd = user.WorkTime.FridayEnd ?? "00:00",
                     SaturdayStart = user.WorkTime.SaturdayStart ?? "00:00",
                     SaturdayEnd = user.WorkTime.SaturdayEnd ?? "00:00",
@@ -432,7 +434,7 @@ namespace CallCenterService.Controllers
                 PostCode = user.PostCode,
                 City = user.City,
                 UserName = user.UserName,
-                Worktime = wtime ?? null
+                Worktime = wtime
             };
             return View(vm);
         }
