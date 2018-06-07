@@ -6,22 +6,32 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CallCenterService.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace CallCenterService.Controllers
 {
     public class EventHistoryController : Controller
     {
         private readonly DatabaseContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public EventHistoryController(DatabaseContext context)
+        public EventHistoryController(DatabaseContext context, UserManager<ApplicationUser> userManager)
         {
-            _context = context;    
+            _context = context;
+            _userManager = userManager;
         }
 
         // GET: EventHistory
         public async Task<IActionResult> Index()
         {
-            return View(await _context.EventHistory.ToListAsync());
+            var list = await _context.EventHistory.OrderByDescending(m => m.Date).ToListAsync();
+
+            foreach(var e in list)
+            {
+                e.UserName = (await _userManager.FindByIdAsync(e.UserId)).UserName;
+            }
+
+            return View(list);
         }
 
         // GET: EventHistory/Details/5

@@ -12,21 +12,18 @@
 <table class="table">
     <thead>
         <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Table)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Operation)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.UserId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Date)
-                </th>
+            <th>
+                Operacja
+            </th>
+            <th>
+                Modyfikacji dokona³
+            </th>
+            <th>
+                Stan bazy po zmianie
+            </th>
+            <th>
+                Data
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -34,24 +31,127 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Table)
+                @{
+                    if (item.Operation == "add user")
+                    {
+                        @:Dodano u¿ytkownika
+                    }
+                    else if (item.Operation == "edit user")
+                    {
+                        @:Edytowano u¿ytkownika
+                    }
+                    else if (item.Operation == "delete user")
+                    {
+                        @:Usuniêto u¿ytkownika
+                    }
+                    else if (item.Operation == "add user role")
+                    {
+                        @:Dodano rolê u¿ytkownikowi
+                    }
+                    else if (item.Operation == "edit user role")
+                    {
+                        @:Edytowano rolê u¿ytkonika
+                    }
+                    else if (item.Operation == "delete user role")
+                    {
+                        @:Usuniêto rolê u¿ytkownika
+                    }
+                    else if (item.Operation == "add fault")
+                    {
+                        @:Dodano usterkê
+                    }
+                    else if (item.Operation == "edit fault")
+                    {
+                        @:Edytowano usterkê
+                    }
+                    else if (item.Operation == "delete fault")
+                    {
+                        @:Usuniêto usterkê
+                    }
+                    else if (item.Operation == "add repair")
+                    {
+                        @:Dodano naprawê
+                    }
+                    else if (item.Operation == "edit repair")
+                    {
+                        @:Edytowano naprawê
+                    }
+                    else if (item.Operation == "delete repair")
+                    {
+                        @:Usuniêto naprawê
+                    }
+                    else if (item.Operation == "add servicer specialization")
+                    {
+                        @:Dodano specjalizacjê serwisantowi
+                    }
+                    else if (item.Operation == "delete servicer specialization")
+                    {
+                        @:Usuniêto specjalizacjê serwisantowi
+                    }
+                    else if (item.Operation == "add specialization")
+                    {
+                        @:Dodano specjalizacjê
+                    }
+                    else if (item.Operation == "edit specialization")
+                    {
+                        @:Edytowano specializacjê
+                    }
+                    else if (item.Operation == "delete specialization")
+                    {
+                        @:Usuniêto specjalizacjê
+                    }
+                    else if (item.Operation == "add product")
+                    {
+                        @:Dodano produkt
+                    }
+                    else if (item.Operation == "edit product")
+                    {
+                        @:Edytowano produkt
+                    }
+                    else if (item.Operation == "delete product")
+                    {
+                        @:Usuniêto produkt
+                    }
+                    else if (item.Operation == "add client")
+                    {
+                        @:Dodano klienta
+                    }
+                    else if (item.Operation == "edit client")
+                    {
+                        @:Edytowano klienta
+                    }
+                    else if (item.Operation == "delete client")
+                    {
+                        @:Usuniêto klienta
+                    }
+                }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Operation)
+                @Html.DisplayFor(modelItem => item.UserName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UserId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
+                @{
+                    var data = item.Description.Substring(0, item.Description.Length - 1).Split('}');
+                    foreach (var text in data)
+                    {
+                        var text2 = text.Split('{');
+                        <b>@Html.DisplayFor(modelItem => text2[0]): </b>
+
+                        if (text2.Length > 1)
+                        {
+                            @Html.DisplayFor(modelItem => text2[1])
+                        }
+                        <br />
+                    }
+                }   
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
             <td>
                 @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
             </td>
         </tr>
 }
