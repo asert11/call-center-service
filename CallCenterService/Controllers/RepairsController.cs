@@ -60,6 +60,20 @@ namespace CallCenterService.Controllers
             return View(await repairs.ToListAsync());
         }
 
+        public async Task<IActionResult> Closed()
+        {
+            ApplicationUser usr = await _userManager.GetUserAsync(HttpContext.User);
+            string id = usr?.Id;
+            if (id == null)
+                return NotFound();
+
+            var repairs = _context.Repairs.Include(r => r.Fault)
+                .Include(r => r.Fault.Product).Include(r => r.Fault.Product.Client).Where(s => s.ServicerId == id)
+                .Where(s => s.Fault.Status == "Done");
+
+            return View(await repairs.ToListAsync());
+        }
+
         // GET: Repairs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
