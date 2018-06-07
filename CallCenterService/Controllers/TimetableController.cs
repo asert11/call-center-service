@@ -153,9 +153,11 @@ namespace CallCenterService.Controllers
             var status = false;
 
             var v = _context.CalendarEvents.Where(x => x.EventId == id).FirstOrDefault();
+            var repair = _context.Repairs.Include(x => x.CalendarEvent).Where(x => x.CalendarEvent == v).SingleOrDefault();
             if (v != null)
             {
                 _context.CalendarEvents.Remove(v);
+                _context.Repairs.Remove(repair);
                 _context.SaveChanges();
                 status = true;
             }
