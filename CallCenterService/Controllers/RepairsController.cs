@@ -239,30 +239,9 @@ namespace CallCenterService.Controllers
 
             repairTmp.Date = repair.Date;
             repairTmp.Description = repair.Description;
-            //repairTmp.Price = repair.Price;
-            if (ModelState.IsValid)
-            {
-                
-                string priceDot = repair.PriceDot;
-                if (priceDot.Contains('.'))
-                {
-                    priceDot = priceDot.Replace('.', ',');
-                }
-                decimal decimalVal = System.Convert.ToDecimal(priceDot);
-                repairTmp.Price = decimalVal;
-                
-                //repairTmp.PartsPrice = repair.PartsPrice;
+           
 
-                priceDot = repair.PartsPriceDot;
-                if (priceDot.Contains('.'))
-                {
-                    priceDot = priceDot.Replace('.', ',');
-                }
-                decimalVal = System.Convert.ToDecimal(priceDot);
-                repairTmp.PartsPrice = decimalVal;
 
-                return RedirectToAction("Index");
-            }
 
             if (repairTmp.CalendarEvent == null)
             {
@@ -291,6 +270,23 @@ namespace CallCenterService.Controllers
 
             if (ModelState.IsValid)
             {
+                string priceDot = repair.PriceDot;
+                if (priceDot.Contains('.'))
+                {
+                    priceDot = priceDot.Replace('.', ',');
+                }
+                decimal decimalVal = System.Convert.ToDecimal(priceDot);
+                repairTmp.Price = decimalVal;
+
+
+                priceDot = repair.PartsPriceDot;
+                if (priceDot.Contains('.'))
+                {
+                    priceDot = priceDot.Replace('.', ',');
+                }
+                decimalVal = System.Convert.ToDecimal(priceDot);
+                repairTmp.PartsPrice = decimalVal;
+
                 try
                 {
                     var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
