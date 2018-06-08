@@ -387,15 +387,42 @@ namespace CallCenterService.Controllers
                 return RedirectToAction("Index");
 
             var rolesForUser = await _userManager.GetRolesAsync(user);
-            
+
             foreach (var item in rolesForUser.ToList())
             {
                 if (item == "Admin")
                     return RedirectToAction("Index");
             }
 
+            var wtime = _dbContext.WorkTime.SingleOrDefault(m => m.ServicerId == user.Id);
+
+            if (user.WorkTime != null)
+            {
+                wtime = new WorkTime
+                {
+                    MondayStart = user.WorkTime.MondayStart ?? "00:00",    //przepraszam za to
+                    MondayEnd = user.WorkTime.MondayEnd ?? "00:00",
+                    TuesdayStart = user.WorkTime.TuesdayStart ?? "00:00",
+                    TuesdayEnd = user.WorkTime.TuesdayEnd ?? "00:00",
+                    WednesdayStart = user.WorkTime.WednesdayStart ?? "00:00",
+                    WednesdayEnd = user.WorkTime.WednesdayEnd ?? "00:00",
+                    ThursdayStart = user.WorkTime.ThursdayStart ?? "00:00",
+                    ThursdayEnd = user.WorkTime.ThursdayEnd ?? "00:00",
+                    FridayStart = user.WorkTime.FridayStart ?? "00:00",
+                    FridayEnd = user.WorkTime.FridayEnd ?? "00:00",
+                    SaturdayStart = user.WorkTime.SaturdayStart ?? "00:00",
+                    SaturdayEnd = user.WorkTime.SaturdayEnd ?? "00:00",
+                    SundayStart = user.WorkTime.SundayStart ?? "00:00",
+                    SundayEnd = user.WorkTime.SundayEnd ?? "00:00"
+                };
+            }
+
+            var role = _dbContext.UserRoles.SingleOrDefault(m => m.UserId == id);
+            var roleName = _dbContext.Roles.SingleOrDefault(m => m.Id == role.RoleId);
+
             var vm = new EditUserViewModel
             {
+                Role = roleName.Name,
                 Roles = GetUserRoles(),
                 UserId = id,
                 Email = user.Email,
@@ -406,7 +433,8 @@ namespace CallCenterService.Controllers
                 ApartmentNumber = user.ApartmentNumber,
                 PostCode = user.PostCode,
                 City = user.City,
-                UserName = user.UserName
+                UserName = user.UserName,
+                Worktime = wtime
             };
             return View(vm);
         }
@@ -428,20 +456,20 @@ namespace CallCenterService.Controllers
 
             if (ModelState.IsValid)
             {
-                if (vm.Role == "Admin")
-                {
-                    vm.Email = user.Email;
-                    vm.UserName = user.UserName;
-                    vm.FirstName = user.FirstName;
-                    vm.LastName = user.LastName;
-                    vm.Street = user.Street;
-                    vm.StreetNumber = user.StreetNumber;
-                    vm.ApartmentNumber = user.ApartmentNumber;
-                    vm.PostCode = user.PostCode;
-                    vm.City = user.City;
-                    vm.Roles = GetUserRoles();
-                    return View(vm);
-                }
+                //if (vm.Role == "Admin")
+                //{
+                //    vm.Email = user.Email;
+                //    vm.UserName = user.UserName;
+                //    vm.FirstName = user.FirstName;
+                //    vm.LastName = user.LastName;
+                //    vm.Street = user.Street;
+                //    vm.StreetNumber = user.StreetNumber;
+                //    vm.ApartmentNumber = user.ApartmentNumber;
+                //    vm.PostCode = user.PostCode;
+                //    vm.City = user.City;
+                //    vm.Roles = GetUserRoles();
+                //    return View(vm);
+                //}
 
                 var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
                 string id = loggedUser?.Id;
@@ -474,6 +502,10 @@ namespace CallCenterService.Controllers
 
                     _dbContext.EventHistory.Add(history);
 
+                    var worktimeToDelete = _dbContext.WorkTime.Where(m => m.ServicerId == vm.UserId);
+                    _dbContext.WorkTime.RemoveRange(worktimeToDelete);
+                    _dbContext.SaveChanges();
+
                     user.FirstName = vm.FirstName;
                     user.LastName = vm.LastName;
                     user.Street = vm.Street;
@@ -481,6 +513,28 @@ namespace CallCenterService.Controllers
                     user.ApartmentNumber = vm.ApartmentNumber;
                     user.PostCode = vm.PostCode;
                     user.City = vm.City;
+
+                    //user.WorkTime = vm.Worktime;
+                    user.WorkTime = vm.Worktime;
+
+                    if (user.WorkTime != null)
+                    {
+                        user.WorkTime.ServicerId = vm.UserId;
+                        user.WorkTime.MondayStart = vm.Worktime.MondayStart ?? "00:00";   //przepraszam za to tez
+                        user.WorkTime.MondayEnd = vm.Worktime.MondayEnd ?? "00:00";
+                        user.WorkTime.TuesdayStart = vm.Worktime.TuesdayStart ?? "00:00";
+                        user.WorkTime.TuesdayEnd = vm.Worktime.TuesdayEnd ?? "00:00";
+                        user.WorkTime.WednesdayStart = vm.Worktime.WednesdayStart ?? "00:00";
+                        user.WorkTime.WednesdayEnd = vm.Worktime.WednesdayEnd ?? "00:00";
+                        user.WorkTime.ThursdayStart = vm.Worktime.ThursdayStart ?? "00:00";
+                        user.WorkTime.ThursdayEnd = vm.Worktime.ThursdayEnd ?? "00:00";
+                        user.WorkTime.FridayStart = vm.Worktime.FridayStart ?? "00:00";
+                        user.WorkTime.FridayEnd = vm.Worktime.FridayEnd ?? "00:00";
+                        user.WorkTime.SaturdayStart = vm.Worktime.SaturdayStart ?? "00:00";
+                        user.WorkTime.SaturdayEnd = vm.Worktime.SaturdayEnd ?? "00:00";
+                        user.WorkTime.SundayStart = vm.Worktime.SundayStart ?? "00:00";
+                        user.WorkTime.SundayEnd = vm.Worktime.SundayEnd ?? "00:00";
+                    }
 
                     await _userManager.UpdateAsync(user);
 

@@ -8,7 +8,7 @@ using CallCenterService.Models;
 namespace CallCenterService.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20180604130009_initial")]
+    [Migration("20180608110538_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -77,6 +77,8 @@ namespace CallCenterService.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
 
+                    b.Property<int?>("WorkTimeId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -85,6 +87,8 @@ namespace CallCenterService.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasName("UserNameIndex");
+
+                    b.HasIndex("WorkTimeId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -99,6 +103,8 @@ namespace CallCenterService.Migrations
                     b.Property<DateTime>("End");
 
                     b.Property<bool>("IsFullDay");
+
+                    b.Property<string>("ResourceId");
 
                     b.Property<DateTime>("Start");
 
@@ -265,6 +271,46 @@ namespace CallCenterService.Migrations
                     b.ToTable("Specialization");
                 });
 
+            modelBuilder.Entity("CallCenterService.Models.WorkTime", b =>
+                {
+                    b.Property<int>("WorkTimeId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("FridayEnd");
+
+                    b.Property<string>("FridayStart");
+
+                    b.Property<string>("MondayEnd");
+
+                    b.Property<string>("MondayStart");
+
+                    b.Property<string>("SaturdayEnd");
+
+                    b.Property<string>("SaturdayStart");
+
+                    b.Property<string>("ServicerId");
+
+                    b.Property<string>("SundayEnd");
+
+                    b.Property<string>("SundayStart");
+
+                    b.Property<string>("ThursdayEnd");
+
+                    b.Property<string>("ThursdayStart");
+
+                    b.Property<string>("TuesdayEnd");
+
+                    b.Property<string>("TuesdayStart");
+
+                    b.Property<string>("WednesdayEnd");
+
+                    b.Property<string>("WednesdayStart");
+
+                    b.HasKey("WorkTimeId");
+
+                    b.ToTable("WorkTime");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -370,6 +416,13 @@ namespace CallCenterService.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("CallCenterService.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("CallCenterService.Models.WorkTime", "WorkTime")
+                        .WithMany()
+                        .HasForeignKey("WorkTimeId");
                 });
 
             modelBuilder.Entity("CallCenterService.Models.Fault", b =>

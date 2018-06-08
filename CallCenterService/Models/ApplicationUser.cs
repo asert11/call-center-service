@@ -29,6 +29,8 @@ namespace CallCenterService.Models
         [RegularExpression("^[0-9]{2}-[0-9]{3}$")]
         public String PostCode { get; set; }
 
+        public virtual WorkTime WorkTime { get; set; }
+
         public string Specialization { get; set; }
     }
 }

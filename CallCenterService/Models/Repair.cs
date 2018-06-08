@@ -25,15 +25,15 @@ namespace CallCenterService.Models
 
         [NotMapped]
         public ApplicationUser user { get; set; }
-        
+
         [NotMapped]
         [Required]
-        [RegularExpression("^[0-9]+[.|,]?[0-9]{0,2}$")]
+        [RegularExpression("^[0-9]+[.|,]?[0-9]{0,2}$", ErrorMessage = "Incorrect data")]
         public string PriceDot { get; set; }
 
         [NotMapped]
         [Required]
-        [RegularExpression("^[0-9]+[.|,]?[0-9]{0,2}$")]
+        [RegularExpression("^[0-9]+[.|,]?[0-9]{0,2}$", ErrorMessage = "Incorrect data")]
         public string PartsPriceDot { get; set; }
 
 

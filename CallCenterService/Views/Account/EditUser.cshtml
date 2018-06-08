@@ -68,6 +68,46 @@
                 <select asp-for="Role" asp-items="Model.Roles" class="form-control"></select>
             </div>
         </div>
+
+        @if (Model.Role == "Serwisant")
+        {
+        <div>
+            <label asp-for="Worktime.MondayStart">Poniedziałek: </label>
+            <input asp-for="Worktime.MondayStart" />
+            <input asp-for="Worktime.MondayEnd" />
+        </div>
+        <div>
+            <label asp-for="Worktime.TuesdayStart">Wtorek: </label>
+            <input asp-for="Worktime.TuesdayStart" />
+            <input asp-for="Worktime.TuesdayEnd" />
+        </div>
+        <div>
+            <label asp-for="Worktime.WednesdayStart">Środa: </label>
+            <input asp-for="Worktime.WednesdayStart" />
+            <input asp-for="Worktime.WednesdayEnd" />
+        </div>
+        <div>
+            <label asp-for="Worktime.ThursdayStart">Czwartek: </label>
+            <input asp-for="Worktime.ThursdayStart" />
+            <input asp-for="Worktime.ThursdayEnd" />
+        </div>
+        <div>
+            <label asp-for="Worktime.FridayStart">Piątek: </label>
+            <input asp-for="Worktime.FridayStart" />
+            <input asp-for="Worktime.FridayEnd" />
+        </div>
+        <div>
+            <label asp-for="Worktime.SaturdayStart">Sobota: </label>
+            <input asp-for="Worktime.SaturdayStart" />
+            <input asp-for="Worktime.SaturdayEnd" />
+        </div>
+        <div>
+            <label asp-for="Worktime.SundayStart">Niedziela: </label>
+            <input asp-for="Worktime.SundayStart" />
+            <input asp-for="Worktime.SundayEnd" />
+        </div>
+        }
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Edytuj" class="btn btn-default" />

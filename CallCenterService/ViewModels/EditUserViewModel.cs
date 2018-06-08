@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using CallCenterService.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,6 +12,8 @@ namespace CallCenterService.ViewModels
     {
         public string UserId { get; set; }
         public string Role { get; set; }
+
+        public WorkTime Worktime { get; set; }
 
         [Required, EmailAddress, MaxLength(256), Display(Name = "Email Address")]
         public string Email { get; set; }

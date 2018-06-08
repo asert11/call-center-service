@@ -181,7 +181,7 @@ namespace CallCenterService.Controllers
                 return NotFound();
             }
 
-            var repair = await _context.Repairs.Include(m => m.CalendarEvent).SingleOrDefaultAsync(m => m.RepairId == id);
+            var repair = await _context.Repairs.Include(m => m.CalendarEvent).Include(m => m.Fault).SingleOrDefaultAsync(m => m.RepairId == id);
             if (repair == null)
             {
                 return NotFound();
@@ -206,6 +206,15 @@ namespace CallCenterService.Controllers
                     v.Description = e.Description;
                     v.IsFullDay = e.IsFullDay;
                     v.ThemeColor = e.ThemeColor;
+                    v.ResourceId = e.ResourceId;
+                }
+                var repair = _context.Repairs.Include(x => x.CalendarEvent).Include(m => m.Fault).SingleOrDefault(x => x.CalendarEvent.EventId == e.EventId);
+                if (repair != null)
+                {
+                    repair.CalendarEvent = v;
+                    repair.Date = v.Start;
+                    repair.Description = v.Description;
+                    repair.ServicerId = v.ResourceId;
                 }
             }
             else
@@ -215,6 +224,7 @@ namespace CallCenterService.Controllers
             _context.SaveChanges();
             status = true;
 
+            // ViewData["SaveStatus"] = status;
             return new JsonResult(status);
         }
 
@@ -229,30 +239,9 @@ namespace CallCenterService.Controllers
 
             repairTmp.Date = repair.Date;
             repairTmp.Description = repair.Description;
-            //repairTmp.Price = repair.Price;
-            if (ModelState.IsValid)
-            {
-                
-                string priceDot = repair.PriceDot;
-                if (priceDot.Contains('.'))
-                {
-                    priceDot = priceDot.Replace('.', ',');
-                }
-                decimal decimalVal = System.Convert.ToDecimal(priceDot);
-                repairTmp.Price = decimalVal;
-                
-                //repairTmp.PartsPrice = repair.PartsPrice;
+           
 
-                priceDot = repair.PartsPriceDot;
-                if (priceDot.Contains('.'))
-                {
-                    priceDot = priceDot.Replace('.', ',');
-                }
-                decimalVal = System.Convert.ToDecimal(priceDot);
-                repairTmp.PartsPrice = decimalVal;
 
-                return RedirectToAction("Index");
-            }
 
             if (repairTmp.CalendarEvent == null)
             {
@@ -262,7 +251,8 @@ namespace CallCenterService.Controllers
                     Description = repairTmp.Description,
                     Start = (DateTime)repairTmp.Date,
                     ThemeColor = "purple",
-                    IsFullDay = false
+                    IsFullDay = false,
+                    ResourceId = repairTmp.ServicerId
                 };
 
                 SaveRepairEvent(calendarEvent);
@@ -280,6 +270,23 @@ namespace CallCenterService.Controllers
 
             if (ModelState.IsValid)
             {
+                string priceDot = repair.PriceDot;
+                if (priceDot.Contains('.'))
+                {
+                    priceDot = priceDot.Replace('.', ',');
+                }
+                decimal decimalVal = System.Convert.ToDecimal(priceDot);
+                repairTmp.Price = decimalVal;
+
+
+                priceDot = repair.PartsPriceDot;
+                if (priceDot.Contains('.'))
+                {
+                    priceDot = priceDot.Replace('.', ',');
+                }
+                decimalVal = System.Convert.ToDecimal(priceDot);
+                repairTmp.PartsPrice = decimalVal;
+
                 try
                 {
                     var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
