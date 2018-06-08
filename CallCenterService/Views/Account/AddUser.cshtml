@@ -3,72 +3,96 @@
 <h2>Dodaj użytkownika</h2>
 
 <form method="post" asp-controller="Account" asp-action="AddUser">
-    <div asp-validation-summary="All"></div>
-    <div>
-        <label asp-for="UserName">Login:</label>
-        <input asp-for="UserName" />
-        <span asp-validation-for="UserName"></span>
+    <div class="form-horizontal">
+        <hr />
+        <div asp-validation-summary="ModelOnly"></div>
+        <div class="form-group">
+            <label asp-for="UserName" class="col-md-2 control-label">Login:</label>
+            <div class="col-md-10">
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Email" class="col-md-2 control-label">Email:</label>
+            <div class="col-md-10">
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="FirstName" class="col-md-2 control-label">Imię:</label>
+            <div class="col-md-10">
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="LastName" class="col-md-2 control-label">Nazwisko:</label>
+            <div class="col-md-10">
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Street" class="col-md-2 control-label">Ulica:</label>
+            <div class="col-md-10">
+                <input asp-for="Street" class="form-control" />
+                <span asp-validation-for="Street" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="StreetNumber" class="col-md-2 control-label">Nr ulicy:</label>
+            <div class="col-md-10">
+                <input asp-for="StreetNumber" class="form-control" />
+                <span asp-validation-for="StreetNumber" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="ApartmentNumber" class="col-md-2 control-label">Nr mieszkania:</label>
+            <div class="col-md-10">
+                <input asp-for="ApartmentNumber" class="form-control" />
+                <span asp-validation-for="ApartmentNumber" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="PostCode" class="col-md-2 control-label">Kod pocztowy:</label>
+            <div class="col-md-10">
+                <input asp-for="PostCode" class="form-control" />
+                <span asp-validation-for="PostCode" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="City" class="col-md-2 control-label">Miasto:</label>
+            <div class="col-md-10">
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Password" class="col-md-2 control-label">Hasło:</label>
+            <div class="col-md-10">
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="ConfirmPassword" class="col-md-2 control-label">Potwierdź hasło:</label>
+            <div class="col-md-10">
+                <input asp-for="ConfirmPassword" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Role" class="col-md-2 control-label">Rola:</label>
+            <div class="col-md-10">
+                <select asp-for="Role" asp-items="Model.Roles" class="form-control"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Dodaj" class="btn btn-default" />
+            </div>
+        </div>
     </div>
-    <br />
-    <div>
-        <label asp-for="Email">Email:</label>
-        <input asp-for="Email" />
-        <span asp-validation-for="Email"></span>
-    </div>
-    <br />
-    <div>
-        <label asp-for="FirstName">Imię:</label>
-        <input asp-for="FirstName" />
-        <span asp-validation-for="FirstName"></span>
-    </div>
-    <br />
-    <div>
-        <label asp-for="LastName">Nazwisko:</label>
-        <input asp-for="LastName" />
-        <span asp-validation-for="LastName"></span>
-    </div>
-    <br />
-    <div>
-        <label asp-for="Street">Ulica:</label>
-        <input asp-for="Street" />
-        <span asp-validation-for="Street"></span>
-    </div>
-    <div>
-        <label asp-for="StreetNumber">Nr ulicy:</label>
-        <input asp-for="StreetNumber" />
-        <span asp-validation-for="StreetNumber"></span>
-    </div>
-    <div>
-        <label asp-for="ApartmentNumber">Nr mieszkania:</label>
-        <input asp-for="ApartmentNumber" />
-        <span asp-validation-for="ApartmentNumber"></span>
-    </div>
-    <div>
-        <label asp-for="PostCode">Kod pocztowy:</label>
-        <input asp-for="PostCode" />
-        <span asp-validation-for="PostCode"></span>
-    </div>
-    <div>
-        <label asp-for="City">Miasto</label>
-        <input asp-for="City" />
-        <span asp-validation-for="City"></span>
-    </div>
-    <div>
-        <label asp-for="Password">Hasło:</label>
-        <input asp-for="Password" />
-        <span asp-validation-for="Password"></span>
-    </div>
-    <br />
-    <div>
-        <label asp-for="ConfirmPassword">Potwierdź hasło:</label>
-        <input asp-for="ConfirmPassword" />
-        <span asp-validation-for="ConfirmPassword"></span>
-    </div>
-    <br />
-    <div>
-        <b>Rola:</b>
-        <select asp-for="Role" asp-items="Model.Roles"></select>
-    </div>
-    <br />
-    <div><input type="submit" value="Dodaj" /></div>
 </form>
