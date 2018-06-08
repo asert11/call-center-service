@@ -71,41 +71,74 @@
 
         @if (Model.Role == "Serwisant")
         {
-        <div>
-            <label asp-for="Worktime.MondayStart">Poniedziałek: </label>
-            <input asp-for="Worktime.MondayStart" />
-            <input asp-for="Worktime.MondayEnd" />
-        </div>
-        <div>
-            <label asp-for="Worktime.TuesdayStart">Wtorek: </label>
-            <input asp-for="Worktime.TuesdayStart" />
-            <input asp-for="Worktime.TuesdayEnd" />
-        </div>
-        <div>
-            <label asp-for="Worktime.WednesdayStart">Środa: </label>
-            <input asp-for="Worktime.WednesdayStart" />
-            <input asp-for="Worktime.WednesdayEnd" />
-        </div>
-        <div>
-            <label asp-for="Worktime.ThursdayStart">Czwartek: </label>
-            <input asp-for="Worktime.ThursdayStart" />
-            <input asp-for="Worktime.ThursdayEnd" />
-        </div>
-        <div>
-            <label asp-for="Worktime.FridayStart">Piątek: </label>
-            <input asp-for="Worktime.FridayStart" />
-            <input asp-for="Worktime.FridayEnd" />
-        </div>
-        <div>
-            <label asp-for="Worktime.SaturdayStart">Sobota: </label>
-            <input asp-for="Worktime.SaturdayStart" />
-            <input asp-for="Worktime.SaturdayEnd" />
-        </div>
-        <div>
-            <label asp-for="Worktime.SundayStart">Niedziela: </label>
-            <input asp-for="Worktime.SundayStart" />
-            <input asp-for="Worktime.SundayEnd" />
-        </div>
+
+            <div class="form-group">
+                <label asp-for="Worktime.MondayStart" class="col-md-1 control-label">Poniedziałek: </label>
+                <div class="col-md-1">
+                    <input asp-for="Worktime.MondayStart" class="form-control" />
+                </div>
+                <div class="col-md-1">
+                    <input asp-for="Worktime.MondayEnd" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Worktime.TuesdayStart" class="col-md-1 control-label">Wtorek: </label>
+                <div class="col-md-1">
+                    <input asp-for="Worktime.TuesdayStart" class="form-control" />
+                </div>
+                <div class="col-md-1">
+                    <input asp-for="Worktime.TuesdayEnd" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Worktime.WednesdayStart" class="col-md-1 control-label">Środa: </label>
+                <div class="col-md-1">
+                    <input asp-for="Worktime.WednesdayStart" class="form-control" />
+                </div>
+                <div class="col-md-1">
+                    <input asp-for="Worktime.WednesdayEnd" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Worktime.ThursdayStart" class="col-md-1 control-label">Czwartek: </label>
+                <div class="col-md-1">
+                    <input asp-for="Worktime.ThursdayStart" class="form-control" />
+                </div>
+                <div class="col-md-1">
+                    <input asp-for="Worktime.ThursdayEnd" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Worktime.FridayStart" class="col-md-1 control-label">Piątek: </label>
+                <div class="col-md-1">
+                    <input asp-for="Worktime.FridayStart" class="form-control" />
+                </div>
+                <div class="col-md-1">
+                    <input asp-for="Worktime.FridayEnd" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Worktime.SaturdayStart" class="col-md-1 control-label">Sobota: </label>
+                <div class="col-md-1">
+                    <input asp-for="Worktime.SaturdayStart" class="form-control" />
+                </div>
+                <div class="col-md-1">
+                    <input asp-for="Worktime.SaturdayEnd" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Worktime.SundayStart" class="col-md-1 control-label">Niedziela: </label>
+                <div class="col-md-1">
+                    <input asp-for="Worktime.SundayStart" class="form-control" />
+                </div>
+                <div class="col-md-1">
+                    <input asp-for="Worktime.SundayEnd" class="form-control" />
+                </div>
+            </div>
+
+
+
+
         }
 
         <div class="form-group">
