@@ -189,6 +189,8 @@ namespace CallCenterService.Controllers
             }
 
             var repair = await _context.Repairs.Include(m => m.CalendarEvent).Include(m => m.Fault).SingleOrDefaultAsync(m => m.RepairId == id);
+            repair.PriceDot = repair.Price.ToString();
+            repair.PartsPriceDot = repair.PartsPrice.ToString();
             if (repair == null)
             {
                 return NotFound();
