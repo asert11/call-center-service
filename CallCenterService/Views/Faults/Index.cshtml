@@ -88,6 +88,12 @@
             <th>
                 Miasto
             </th>
+            <th>
+                Imię serwisanta
+            </th>
+            <th>
+                Nazwisko serwisanta
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -107,18 +113,18 @@
                 @Html.DisplayFor(modelItem => item.ClientDescription)
             </td>
             <td class="resultsStatus">
-                @if(item.Status == "Open")
-                    {
-                        <span>Otwarty</span>
-                    }
-                    else if(item.Status == "Done")
-                    {
-                        <span>Zamknięty</span>
-                    }
-                    else if(item.Status == "In progress")
-                    {
-                        <span>W trakcie</span>
-                    }
+                @if (item.Status == "Open")
+        {
+            <span>Otwarty</span>
+}
+else if (item.Status == "Done")
+{
+        <span>Zamknięty</span>
+}
+else if (item.Status == "In progress")
+{
+        <span>W trakcie</span>
+}
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ApplicationDate)
@@ -140,6 +146,12 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Product.Client.PostCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Client.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Product.Client.City)

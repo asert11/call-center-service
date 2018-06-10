@@ -18,7 +18,8 @@ namespace CallCenterService.Models
 
         public virtual int ClientId { get; set; }
         public virtual Client Client { get; set; }
-        
+        public virtual Repair Repair { get; set; }
+
         [NotMapped]
         public List<Specialization> Specializations { get; set; }
 
