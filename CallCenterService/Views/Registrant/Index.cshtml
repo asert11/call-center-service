@@ -195,19 +195,6 @@ else if (item.Status == "In progress")
     var tbody = document.getElementById("searchBody");
     var trs = tbody.getElementsByTagName("tr");
 
-    function addHighlight(e) {
-        this.classList.toggle("selected");
-        if (this.className === "selected") {
-            this.style.color = "green";
-        } else {
-            this.style.color = "";
-        }
-
-    }
-
-    for (var i = 0; i < trs.length; i++) {
-        trs[i].addEventListener("click", addHighlight);
-    }
     var btn = document.getElementById("btn1").addEventListener("click", function (e) {
         e.preventDefault();
 

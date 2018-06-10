@@ -170,10 +170,6 @@ else if (item.Status == "In progress")
         var tbody = document.getElementById("searchBody");
         var trs = tbody.getElementsByTagName("tr");
 
-
-        for (var i = 0; i < trs.length; i++) {
-            trs[i].addEventListener("click", addHighlight);
-        }
         var btn = document.getElementById("btn1").addEventListener("click", function (e) {
             e.preventDefault();
 
