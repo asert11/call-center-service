@@ -20,8 +20,23 @@ namespace CallCenterService.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            ApplicationUser usr = await _userManager.GetUserAsync(HttpContext.User);
+            var role = await _userManager.GetRolesAsync(usr);
+
+            if (role.Contains("Admin") || role.Contains("Kierownik"))
+                return RedirectToAction("Index", "Timetable");
+
+            else if (role.Contains("Księgowa"))
+                return RedirectToAction("Index", "Accountant");
+
+            else if (role.Contains("Serwisant"))
+                return RedirectToAction("Index", "Timetable");
+
+            else if (role.Contains("Rejestrujący"))
+                return RedirectToAction("Index", "Registrant");
+
             return View();
         }
 

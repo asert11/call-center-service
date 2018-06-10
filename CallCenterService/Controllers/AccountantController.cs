@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using CallCenterService.Models;
 using System;
 using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 
 
 
@@ -13,6 +14,8 @@ using System.Globalization;
 
 namespace CallCenterService.Controllers
 {
+    [Authorize(Roles = "Admin, Kierownik, Księgowa")]
+
     public class AccountantController : Controller
     {
         private readonly DatabaseContext _context;

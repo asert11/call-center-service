@@ -6,9 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CallCenterService.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CallCenterService.Controllers
 {
+    [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
+
     public class FaultsHistoryController : Controller
     {
         private readonly DatabaseContext _context;

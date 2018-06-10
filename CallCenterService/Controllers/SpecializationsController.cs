@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CallCenterService.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CallCenterService.Controllers
 {
+    [Authorize(Roles = "Admin, Kierownik")]
+
     public class SpecializationsController : Controller
     {
         private readonly DatabaseContext _context;

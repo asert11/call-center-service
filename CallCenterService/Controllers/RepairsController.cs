@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using CallCenterService.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CallCenterService.Controllers
 {
@@ -26,6 +27,7 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Repairs
+        [Authorize(Roles = "Admin, Kierownik, Serwisant")]
         public async Task<IActionResult> Index(int? searchIdRepair, string searchClientName, string searchClientSurname, string searchNameProduct)
         {
             var name = from m in _context.Repairs
@@ -68,6 +70,7 @@ namespace CallCenterService.Controllers
             return View(await repairs.ToListAsync());
         }
 
+        [Authorize(Roles = "Admin, Kierownik, Serwisant")]
         public async Task<IActionResult> Closed()
         {
             ApplicationUser usr = await _userManager.GetUserAsync(HttpContext.User);
@@ -88,6 +91,7 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Repairs/Details/5
+        [Authorize(Roles = "Admin, Kierownik, Serwisant, Rejestruj¹cy")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -111,6 +115,7 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Repairs/Create
+        [Authorize(Roles = "Admin, Kierownik, Serwisant")]
         public IActionResult Create()
         {
             return View();
@@ -121,6 +126,7 @@ namespace CallCenterService.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Kierownik, Serwisant")]
         public async Task<IActionResult> Create([Bind("RepairId,Description,Date,Price,PartsPrice")] Repair repair)
         {
             var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
@@ -174,6 +180,7 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Repairs/Edit/5
+        [Authorize(Roles = "Admin, Kierownik, Serwisant")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -233,6 +240,7 @@ namespace CallCenterService.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Kierownik, Serwisant")]
         public async Task<IActionResult> Edit(int id, Repair repair)
         {
             var repairTmp = _context.Repairs.Include(m => m.CalendarEvent).Include(m => m.Fault).SingleOrDefault(m => m.RepairId == id);
@@ -338,6 +346,7 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Repairs/Delete/5
+        [Authorize(Roles = "Admin, Kierownik")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -358,6 +367,7 @@ namespace CallCenterService.Controllers
         // POST: Repairs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Kierownik")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
@@ -419,6 +429,7 @@ namespace CallCenterService.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, Kierownik, Serwisant")]
         public async Task<int> CheckIfDone(int? id)
         {
             if (id == null)
@@ -470,6 +481,7 @@ namespace CallCenterService.Controllers
             return 1;
         }
 
+        [Authorize(Roles = "Admin, Kierownik, Serwisant")]
         private bool RepairExists(int id)
         {
             return _context.Repairs.Any(e => e.RepairId == id);

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CallCenterService.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy, Serwisant")]
     public class TimetableController : Controller
     {
         private readonly DatabaseContext _context;

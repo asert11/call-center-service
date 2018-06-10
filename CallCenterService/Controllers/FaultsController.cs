@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CallCenterService.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CallCenterService.Controllers
 {
@@ -22,6 +23,7 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Faults
+        [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
         public async Task<IActionResult> Index(string searchFaultStatus, string searchClientName, string searchClientSurname, string searchClientAddress)
         {
 
@@ -52,6 +54,7 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Faults/Details/5
+        [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -70,6 +73,7 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Faults/Create
+        [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
         public IActionResult Create(int ? id)
         {
             if (id == null)
@@ -90,6 +94,7 @@ namespace CallCenterService.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
         public async Task<IActionResult> Create([Bind("FaultId,ClientId,ClientDescription,Status,ApplicationDate,ProductId")] Fault fault)
         {
 
@@ -141,6 +146,7 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Faults/Edit/5
+        [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -161,6 +167,7 @@ namespace CallCenterService.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
         public async Task<IActionResult> Edit(int id, [Bind("FaultId,ClientId,ClientDescription,Status,ApplicationDate")] Fault fault)
         {
             if (id != fault.FaultId)
@@ -220,6 +227,7 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Faults/Delete/5
+        [Authorize(Roles = "Admin, Kierownik")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -240,6 +248,7 @@ namespace CallCenterService.Controllers
         // POST: Faults/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Kierownik")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
@@ -306,6 +315,7 @@ namespace CallCenterService.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
         private bool FaultExists(int id)
         {
             return _context.Faults.Any(e => e.FaultId == id);

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CallCenterService.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CallCenterService.Controllers
 {
@@ -22,6 +23,7 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Products
+        [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
         public async Task<IActionResult> Index(int ? searchIdProduct, string searchNameProduct, string searchTypeProduct)
         {
 
@@ -46,6 +48,7 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Products/Details/5
+        [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -64,6 +67,7 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Products/Create
+        [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
         public IActionResult Create(int ? id)
         {
             if (id == null)
@@ -82,6 +86,7 @@ namespace CallCenterService.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
         public async Task<IActionResult> Create(int ? id, [Bind("ProductID,Name,Type,SelectedId")] Product product)
         {
             if (ModelState.IsValid)
@@ -129,6 +134,7 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Products/Edit/5
+        [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -151,6 +157,7 @@ namespace CallCenterService.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
         public async Task<IActionResult> Edit(int id, [Bind("ProductID,Name,Type,SelectedId")] Product product)
         {
             if (id != product.ProductID)
@@ -212,6 +219,7 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Products/Delete/5
+        [Authorize(Roles = "Admin, Kierownik")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -232,6 +240,7 @@ namespace CallCenterService.Controllers
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Kierownik")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
@@ -320,6 +329,7 @@ namespace CallCenterService.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
         private bool ProductExists(int id)
         {
             return _context.Products.Any(e => e.ProductID == id);

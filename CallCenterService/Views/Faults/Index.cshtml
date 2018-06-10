@@ -146,7 +146,9 @@
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.FaultId">Edytuj</a>
-                <a asp-action="Delete" asp-route-id="@item.FaultId">Usuń</a>
+                @if (User.IsInRole("Admin") || User.IsInRole("Kierownik")) {
+                    <a asp-action="Delete" asp-route-id="@item.FaultId">Usuń</a>
+                }
             </td>
         </tr>
         }

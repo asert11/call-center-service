@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using CallCenterService.Models;
 using CallCenterService.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CallCenterService.Controllers
 {
@@ -23,6 +24,7 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Clients
+        [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
         public async Task<IActionResult> Index(string searchClientName, string searchClientSurname, string searchClientAddress)
         {
             var name = from m in _context.Clients
@@ -48,12 +50,14 @@ namespace CallCenterService.Controllers
 
         }
         [HttpPost]
+        [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
         public string Index(string searchClientName, bool notUsed)
         {
             return "From [HttpPost]Index: filter on " + searchClientName ;
         }
 
         // GET
+        [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
         public async Task<IActionResult> History(int ? id)
         {
             ClientFaultHistoryViewModel vm = new ClientFaultHistoryViewModel();
@@ -63,6 +67,7 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Clients/Details/5
+        [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -81,6 +86,7 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Clients/Create
+        [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
         public IActionResult Create()
         {
             return View();
@@ -91,6 +97,7 @@ namespace CallCenterService.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
         public async Task<IActionResult> Create(
             [Bind("ClientId,FirstName,SecondName,Street,StreetNumber,ApartmentNumber,City,PostCode")] Client client)
         {
@@ -133,6 +140,7 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Clients/Edit/5
+        [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -153,6 +161,7 @@ namespace CallCenterService.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
         public async Task<IActionResult> Edit(int id, 
             [Bind("ClientId,FirstName,SecondName,Street,StreetNumber,ApartmentNumber,City,PostCode")] Client client)
         {
@@ -214,6 +223,7 @@ namespace CallCenterService.Controllers
         }
 
         // GET: Clients/Delete/5
+        [Authorize(Roles = "Admin, Kierownik")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -234,6 +244,7 @@ namespace CallCenterService.Controllers
         // POST: Clients/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Kierownik")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var loggedUser = await _userManager.GetUserAsync(HttpContext.User);
@@ -347,6 +358,7 @@ namespace CallCenterService.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
         private bool ClientExists(int id)
         {
             return _context.Clients.Any(e => e.ClientId == id);

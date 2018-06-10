@@ -4,12 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using CallCenterService.Models;
 using CallCenterService.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CallCenterService.Controllers
 {
+    [Authorize(Roles = "Admin, Kierownik, Rejestruj¹cy")]
+
     public class RegistrantController : Controller
     {
         private readonly DatabaseContext _context;

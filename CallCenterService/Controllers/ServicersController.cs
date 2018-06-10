@@ -14,6 +14,8 @@ using static CallCenterService.ViewModels.EditSpecializationViewModel;
 
 namespace CallCenterService.Controllers
 {
+    [Authorize(Roles = "Admin, Kierownik")]
+
     public class ServicersController : Controller
     {
         private readonly DatabaseContext _dbContext;

@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace CallCenterService.Controllers
 {
-    [Authorize(Roles = "Admin , Serwisant , Kierownik , Ksiêgowa , Rejestruj¹cy")]
+    [Authorize(Roles = "Admin, Kierownik")]
 
     public class AccountController : Controller
     {
@@ -577,6 +577,7 @@ namespace CallCenterService.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
