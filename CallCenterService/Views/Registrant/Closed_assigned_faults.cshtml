@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CallCenterService.Models.Fault>
+﻿@model IEnumerable<CallCenterService.Models.Repair>
 @{
     ViewData["Title"] = "Zamknięte usterki";
 }
@@ -51,9 +51,6 @@
                 Opis klienta
             </th>
             <th>
-                Status
-            </th>
-            <th>
                 Data zgłoszenia
             </th>
             <th>
@@ -63,7 +60,10 @@
                 Nazwisko klienta
             </th>
             <th>
-                Adres klienta
+                Imię serwisanta
+            </th>
+            <th>
+                Nazwisko serwisanta
             </th>
             <th>
 
@@ -74,44 +74,33 @@
     <tbody id="searchBody">
         @foreach (var item in Model)
         {
-            var clientName = item.Product.Client.FirstName;
-            var clientSurname = item.Product.Client.SecondName;
-            var status = item.Status;
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FaultId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClientDescription)
-            </td>
-            <td class="resultsStatus">
-                @if(item.Status == "Open")
-                    {
-                        <span>Otwarty</span>
-                    }
-                    else if(item.Status == "Done")
-                    {
-                        <span>Zamknięty</span>
-                    }
-                    else if(item.Status == "In progress")
-                    {
-                        <span>W trakcie</span>
-                    }
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ApplicationDate)
-            </td>
-            <td class="resultsclientName">
-                @Html.DisplayFor(modelItem => item.Product.Client.FirstName)
-            </td>
-            <td class="resultsclientSurname">
-                @Html.DisplayFor(modelItem => item.Product.Client.SecondName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Product.Client.Street)
-            </td>
-            <td><a asp-action="GoToRepair" asp-route-id="@item.FaultId">Przejdź do naprawy</a></td>
-        </tr>
+            var clientName = item.Fault.Product.Client.FirstName;
+            var clientSurname = item.Fault.Product.Client.SecondName;
+            var status = item.Fault.Status;
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FaultId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fault.ClientDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fault.ApplicationDate)
+                </td>
+                <td class="resultsclientName">
+                    @Html.DisplayFor(modelItem => item.Fault.Product.Client.FirstName)
+                </td>
+                <td class="resultsclientSurname">
+                    @Html.DisplayFor(modelItem => item.Fault.Product.Client.SecondName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.user.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.user.LastName)
+                </td>
+                <td><a asp-action="GoToRepair" asp-route-id="@item.FaultId">Przejdź do naprawy</a></td>
+            </tr>
         }
     </tbody>
 </table>

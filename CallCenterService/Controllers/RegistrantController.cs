@@ -26,7 +26,7 @@ namespace CallCenterService.Controllers
             var name = from m in _context.Faults
                        select m;
 
-            if (searchIDFault!=null)
+            if (searchIDFault != null)
             {
                 name = name.Where(s => s.FaultId.Equals(searchIDFault));
             }
@@ -52,21 +52,59 @@ namespace CallCenterService.Controllers
         }
 
         public async Task<IActionResult> Opened_faults()
-        {       
+        {
             return View(await _context.Faults.Include(f => f.Product).Include(f => f.Product.Client)
-                .Where(s => s.Status.Equals("Open")).ToListAsync());
+                    .Where(s => s.Status.Equals("Open")).ToListAsync());
         }
 
         public async Task<IActionResult> assigned_faults()
         {
-            return View(await _context.Faults.Include(f => f.Product).Include(f => f.Product.Client)
-                .Where(s => s.Status.Equals("In progress")).ToListAsync());
+            /*   var repair = await _context.Repairs
+                   .Include(f => f.Fault)
+                   .Include(f => f.Fault.Product)
+                   .Include(f => f.Fault.Product.Client)
+                   .SingleOrDefaultAsync(m => m.RepairId == id);*/
+
+            var repair = await _context.Repairs
+                           .Include(f => f.Fault)
+                           .Include(f => f.Fault.Product)
+                           .Include(f => f.Fault.Product.Client).Where(f => f.Fault.Status.Equals("In progress"))
+                           .ToListAsync();
+
+            if (repair == null)
+            {
+                return NotFound();
+            }
+
+            foreach (var item in repair)
+            {
+                item.user = await _userManager.FindByIdAsync(item.ServicerId);
+            }
+
+
+            return View(repair);
         }
 
         public async Task<IActionResult> Closed_assigned_faults()
         {
-            return View(await _context.Faults.Include(f => f.Product).Include(f => f.Product.Client)
-                .Where(s => s.Status.Equals("Done")).ToListAsync());
+            var repair = await _context.Repairs
+                       .Include(f => f.Fault)
+                       .Include(f => f.Fault.Product)
+                       .Include(f => f.Fault.Product.Client).Where(f => f.Fault.Status.Equals("In progress"))
+                       .ToListAsync();
+
+            if (repair == null)
+            {
+                return NotFound();
+            }
+
+            foreach (var item in repair)
+            {
+                item.user = await _userManager.FindByIdAsync(item.ServicerId);
+            }
+
+
+            return View(repair);
         }
 
         public IActionResult FaultsList()
@@ -75,12 +113,12 @@ namespace CallCenterService.Controllers
         }
 
 
-        public IActionResult GoToRepair(int ? id)
+        public IActionResult GoToRepair(int? id)
         {
             var repair = _context.Repairs.SingleOrDefault(m => m.FaultId == id);
             int new_id = repair.RepairId;
 
-            return RedirectToAction("Details", "Repairs", new { id = new_id});
+            return RedirectToAction("Details", "Repairs", new { id = new_id });
         }
 
         public IActionResult AddFault()
@@ -109,7 +147,7 @@ namespace CallCenterService.Controllers
             var Specializations = _context.ServicerSpecializations.Include(m => m.Spec)
                 .Where(m => m.Spec.Id == FaultTmp.Product.Type.Id).ToList();
 
-            foreach(var item in Specializations)
+            foreach (var item in Specializations)
             {
                 var user = await _userManager.FindByIdAsync(item.ServicerId);
                 vm.Servicers.Add(user);
@@ -129,7 +167,7 @@ namespace CallCenterService.Controllers
             var fault = await _context.Faults.Include(m => m.Product).Include(m => m.Product.Type)
                 .FirstOrDefaultAsync(f => f.FaultId == vm.FaultId);
 
-            if(vm.ServicerId == null)
+            if (vm.ServicerId == null)
             {
                 vm.Servicers = new List<ApplicationUser>();
                 vm.FaultData = fault;

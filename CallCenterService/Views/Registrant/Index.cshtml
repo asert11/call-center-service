@@ -90,6 +90,18 @@
             <th>
                 Adres klienta
             </th>
+            <th>
+                Numer domu
+            </th>
+            <th>
+                Numer mieszkania
+            </th>
+            <th>
+                Kod pocztowy
+            </th>
+            <th>
+                Miasto
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -108,15 +120,15 @@
                     @Html.DisplayFor(modelItem => item.ClientDescription)
                 </td>
                 <td>
-                    @if(item.Status == "Open")
+                    @if (item.Status == "Open")
                     {
                         <span>Otwarty</span>
                     }
-                    else if(item.Status == "Done")
+                    else if (item.Status == "Done")
                     {
                         <span>Zamknięty</span>
                     }
-                    else if(item.Status == "In progress")
+                    else if (item.Status == "In progress")
                     {
                         <span>W trakcie</span>
                     }
@@ -132,6 +144,18 @@
                 </td>
                 <td class="resultsclientAddres">
                     @Html.DisplayFor(modelItem => item.Product.Client.Street)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.Client.StreetNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.Client.ApartmentNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.Client.PostCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.Client.City)
                 </td>
                 <td>
                     <a asp-action="SetServicer" asp-route-id="@item.FaultId">Dodaj serwisanta</a>
