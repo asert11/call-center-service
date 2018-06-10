@@ -3,12 +3,47 @@
 @{
     ViewData["Title"] = "Index";
 }
+@section head {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.debug.js" integrity="sha384-CchuzHs077vGtfhGYl9Qtc7Vx64rXBXdIAZIPbItbNyWIRTdG0oYAqki3Ry13Yzu" crossorigin="anonymous"></script>
+
+    <style>
+        @@media print {
+            #search-history {
+                display: none;
+            }
+        }
+
+        /* SEARCH */
+        .searchInput {
+            background-image: url('https://www.w3schools.com/css/searchicon.png '); /* https://www.w3schools.com/css/searchicon.png */
+            background-position: 10px 12px;
+            background-repeat: no-repeat;
+            width: 200px;
+            font-size: 16px;
+            padding: 12px 20px 12px 40px;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+            margin-top: 6px;
+        }
+
+        .formUnit {
+            white-space: nowrap;
+        }
+    </style>
+}
 
 <h2>Historia</h2>
+<form id="search-history">
+    <p>
+        <span class="formUnit">Operacja: <input type="text" id="searchOpearation" class="searchInput" onkeyup="searchingEngine()" /></span>
+        <span class="formUnit">Osoba dokonujaca: <input type="text" id="searchPerson" class="searchInput" onkeyup="searchingEngine()" /></span>
+        <span class="formUnit">Data: <input type="text" id="searchDate" class="searchInput" onkeyup="searchingEngine()" /></span>
 
+    </p>
+</form>
 @*<p>
-    <a asp-action="Create">Create New</a>
-</p>*@
+        <a asp-action="Create">Create New</a>
+    </p>*@
 <table class="table">
     <thead>
         <tr>
@@ -27,133 +62,195 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
-@foreach (var item in Model) {
+    <tbody id="searchBody">
+        @foreach (var item in Model)
+        {
+            var operation = item.Operation;
+            var person = item.UserName;
+            var date = item.Date;
+
         <tr>
-            <td>
+            <td class="resultsOperation">
                 @{
-                    if (item.Operation == "add user")
-                    {
-                        @:Dodano u¿ytkownika
-                    }
-                    else if (item.Operation == "edit user")
-                    {
-                        @:Edytowano u¿ytkownika
-                    }
-                    else if (item.Operation == "delete user")
-                    {
-                        @:Usuniêto u¿ytkownika
-                    }
-                    else if (item.Operation == "add user role")
-                    {
-                        @:Dodano rolê u¿ytkownikowi
-                    }
-                    else if (item.Operation == "edit user role")
-                    {
-                        @:Edytowano rolê u¿ytkonika
-                    }
-                    else if (item.Operation == "delete user role")
-                    {
-                        @:Usuniêto rolê u¿ytkownika
-                    }
-                    else if (item.Operation == "add fault")
-                    {
-                        @:Dodano usterkê
-                    }
-                    else if (item.Operation == "edit fault")
-                    {
-                        @:Edytowano usterkê
-                    }
-                    else if (item.Operation == "delete fault")
-                    {
-                        @:Usuniêto usterkê
-                    }
-                    else if (item.Operation == "add repair")
-                    {
-                        @:Dodano naprawê
-                    }
-                    else if (item.Operation == "edit repair")
-                    {
-                        @:Edytowano naprawê
-                    }
-                    else if (item.Operation == "delete repair")
-                    {
-                        @:Usuniêto naprawê
-                    }
-                    else if (item.Operation == "add servicer specialization")
-                    {
-                        @:Dodano specjalizacjê serwisantowi
-                    }
-                    else if (item.Operation == "delete servicer specialization")
-                    {
-                        @:Usuniêto specjalizacjê serwisantowi
-                    }
-                    else if (item.Operation == "add specialization")
-                    {
-                        @:Dodano specjalizacjê
-                    }
-                    else if (item.Operation == "edit specialization")
-                    {
-                        @:Edytowano specializacjê
-                    }
-                    else if (item.Operation == "delete specialization")
-                    {
-                        @:Usuniêto specjalizacjê
-                    }
-                    else if (item.Operation == "add product")
-                    {
-                        @:Dodano produkt
-                    }
-                    else if (item.Operation == "edit product")
-                    {
-                        @:Edytowano produkt
-                    }
-                    else if (item.Operation == "delete product")
-                    {
-                        @:Usuniêto produkt
-                    }
-                    else if (item.Operation == "add client")
-                    {
-                        @:Dodano klienta
-                    }
-                    else if (item.Operation == "edit client")
-                    {
-                        @:Edytowano klienta
-                    }
-                    else if (item.Operation == "delete client")
-                    {
-                        @:Usuniêto klienta
-                    }
+            if (item.Operation == "add user")
+            {
+                @:Dodano u¿ytkownika
+    }
+    else if (item.Operation == "edit user")
+    {
+        @:Edytowano u¿ytkownika
+}
+else if (item.Operation == "delete user")
+{
+        @:Usuniêto u¿ytkownika
+}
+else if (item.Operation == "add user role")
+{
+        @:Dodano rolê u¿ytkownikowi
+}
+else if (item.Operation == "edit user role")
+{
+        @:Edytowano rolê u¿ytkonika
+}
+else if (item.Operation == "delete user role")
+{
+        @:Usuniêto rolê u¿ytkownika
+}
+else if (item.Operation == "add fault")
+{
+        @:Dodano usterkê
+}
+else if (item.Operation == "edit fault")
+{
+        @:Edytowano usterkê
+}
+else if (item.Operation == "delete fault")
+{
+        @:Usuniêto usterkê
+}
+else if (item.Operation == "add repair")
+{
+        @:Dodano naprawê
+}
+else if (item.Operation == "edit repair")
+{
+        @:Edytowano naprawê
+}
+else if (item.Operation == "delete repair")
+{
+        @:Usuniêto naprawê
+}
+else if (item.Operation == "add servicer specialization")
+{
+        @:Dodano specjalizacjê serwisantowi
+}
+else if (item.Operation == "delete servicer specialization")
+{
+        @:Usuniêto specjalizacjê serwisantowi
+}
+else if (item.Operation == "add specialization")
+{
+        @:Dodano specjalizacjê
+}
+else if (item.Operation == "edit specialization")
+{
+        @:Edytowano specializacjê
+}
+else if (item.Operation == "delete specialization")
+{
+        @:Usuniêto specjalizacjê
+}
+else if (item.Operation == "add product")
+{
+        @:Dodano produkt
+}
+else if (item.Operation == "edit product")
+{
+        @:Edytowano produkt
+}
+else if (item.Operation == "delete product")
+{
+        @:Usuniêto produkt
+}
+else if (item.Operation == "add client")
+{
+        @:Dodano klienta
+}
+else if (item.Operation == "edit client")
+{
+        @:Edytowano klienta
+}
+else if (item.Operation == "delete client")
+{
+        @:Usuniêto klienta
+}
                 }
             </td>
-            <td>
+            <td class="resultsUserName">
                 @Html.DisplayFor(modelItem => item.UserName)
             </td>
             <td>
                 @{
-                    var data = item.Description.Substring(0, item.Description.Length - 1).Split('}');
-                    foreach (var text in data)
-                    {
-                        var text2 = text.Split('{');
-                        <b>@Html.DisplayFor(modelItem => text2[0]): </b>
+            var data = item.Description.Substring(0, item.Description.Length - 1).Split('}');
+            foreach (var text in data)
+            {
+                var text2 = text.Split('{');
+                <b>@Html.DisplayFor(modelItem => text2[0]): </b>
 
-                        if (text2.Length > 1)
-                        {
-                            @Html.DisplayFor(modelItem => text2[1])
-                        }
-                        <br />
-                    }
-                }   
+        if (text2.Length > 1)
+        {
+            @Html.DisplayFor(modelItem => text2[1])
+}
+        <br />
+}
+                }
             </td>
-            <td>
+            <td class="resultsDate">
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
             <td>
                 @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
+            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
             </td>
         </tr>
-}
+        }
     </tbody>
 </table>
+<script>
+
+    function searchingEngine() {
+        var tbody, trs, tr, searchByOperation, searchByPerson, searchByDate, display, i;
+        tbody = document.getElementById("searchBody");
+        trs = tbody.getElementsByTagName("tr");
+
+        searchByOperation = document.forms['search-history'].querySelector("#searchOpearation");
+        searchByPerson = document.forms['search-history'].querySelector("#searchPerson");
+        searchByDate = document.forms['search-history'].querySelector("#searchDate");
+
+        for (i = 0; i < trs.length; i++) {
+            tr = trs[i];
+            if (
+                checkFilter(tr, searchByOperation, "resultsOperation") &&
+                checkFilter(tr, searchByPerson, "resultsUserName") &&
+                checkFilter(tr, searchByDate, "resultsDate")
+            ) {
+                display = "";
+            }
+            else {
+                display = "none";
+            }
+
+            tr.style.display = display;
+        }
+
+    }
+
+    function checkFilter(tr, input, resultClass)
+    {
+        var inputValue = (input.value || "").toUpperCase();
+        var resultValue = tr.getElementsByClassName(resultClass)[0].textContent.toUpperCase();
+        return resultValue.indexOf(inputValue) > -1;
+    }
+
+    var tbody = document.getElementById("searchBody");
+    var trs = tbody.getElementsByTagName("tr");
+
+    for (var i = 0; i < trs.length; i++) {
+        trs[i].addEventListener("click", addHighlight);
+    }
+    var btn = document.getElementById("btn1").addEventListener("click", function (e)
+    {
+        e.preventDefault();
+
+    })
+    class User {
+        constructor(operation, person, date) {
+            this.operation = operation;
+            this.person = person;
+            this.date = date;
+
+        }
+    }
+
+</script>

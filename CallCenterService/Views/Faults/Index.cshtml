@@ -43,7 +43,7 @@
     <p>
         <span class="formUnit">Imię klienta: <input type="text" id="searchClientName" class="searchInput" onkeyup="searchingEngine()" /></span>
         <span class="formUnit">Nazwisko klienta: <input type="text" id="searchClientSurname" class="searchInput" onkeyup="searchingEngine()" /></span>
-        <span class="formUnit">Adres klienta: <input type="text" id="searchClientAddres" class="searchInput" onkeyup="searchingEngine()" /></span>
+        <span class="formUnit">Ulica klienta: <input type="text" id="searchClientAddres" class="searchInput" onkeyup="searchingEngine()" /></span>
         <span class="formUnit">Status: <input type="text" id="searchStatus" class="searchInput" onkeyup="searchingEngine()" /></span>
 
     </p>
@@ -75,12 +75,6 @@
             </th>
             <th>
                 Ulica
-            </th>
-            <th>
-                Numer domu
-            </th>
-            <th>
-                Numer mieszkania
             </th>
             <th>
                 Kod pocztowy
@@ -130,13 +124,12 @@
                 @Html.DisplayFor(modelItem => item.Product.Client.SecondName)
             </td>
             <td class="resultsclientAddres">
-                @Html.DisplayFor(modelItem => item.Product.Client.Street)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Product.Client.StreetNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Product.Client.ApartmentNumber)
+            @item.Product.Client.Street @if (item.Product.Client.StreetNumber != null && item.Product.Client.ApartmentNumber != null)
+              { @item.Product.Client.StreetNumber<span>/</span>@item.Product.Client.ApartmentNumber; }
+                else if (@item.Product.Client.StreetNumber != null && @item.Product.Client.ApartmentNumber == null)
+                { @item.Product.Client.StreetNumber;}
+                else if (@item.Product.Client.StreetNumber == null && @item.Product.Client.ApartmentNumber != null)
+                { @item.Product.Client.ApartmentNumber; }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Product.Client.PostCode)

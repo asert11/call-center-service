@@ -1,52 +1,154 @@
 @model CallCenterService.ViewModels.ClientFaultHistoryViewModel
+@section head {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.debug.js" integrity="sha384-CchuzHs077vGtfhGYl9Qtc7Vx64rXBXdIAZIPbItbNyWIRTdG0oYAqki3Ry13Yzu" crossorigin="anonymous"></script>
 
-    <h2>History</h2>
+    <style>
+        @@media print {
+            #search-history {
+                display: none;
+            }
+        }
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    ID usterki
-                </th>
-                <th>
-                    Opis klienta
-                </th>
-                <th>
-                    Status
-                </th>
-                <th>
-                    ID produktu
-                </th>
-                <th>
-                    Nazwa produktu
-                </th>
-                <th>
-                    
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var fault in Model.Faults)
-            {
+        /* SEARCH */
+        .searchInput {
+            background-image: url('https://www.w3schools.com/css/searchicon.png '); /* https://www.w3schools.com/css/searchicon.png */
+            background-position: 10px 12px;
+            background-repeat: no-repeat;
+            width: 200px;
+            font-size: 16px;
+            padding: 12px 20px 12px 40px;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+            margin-top: 6px;
+        }
+
+        .formUnit {
+            white-space: nowrap;
+        }
+    </style>
+}
+<h2>History</h2>
+<form id="search-history">
+    <p>
+        <span class="formUnit">Status: <input type="text" id="searchStatus" class="searchInput" onkeyup="searchingEngine()" /></span>
+        <span class="formUnit">Nazwa produktu: <input type="text" id="searchName" class="searchInput" onkeyup="searchingEngine()" /></span>
+      
+
+    </p>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                ID usterki
+            </th>
+            <th>
+                Opis klienta
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                ID produktu
+            </th>
+            <th>
+                Nazwa produktu
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody id="searchBody">
+        @foreach (var fault in Model.Faults)
+        {
+            var status = fault.Status;
+            var name = fault.Product.Name;
+
             <tr>
                 <td>@fault.FaultId</td>
                 <td>@fault.ClientDescription</td>
-                <td>@if(fault.Status == "Open")
+                <td class="resultsStatus">
+                    @if (fault.Status == "Open")
                     {
                         <span>Otwarty</span>
                     }
-                    else if(fault.Status == "Done")
+                    else if (fault.Status == "Done")
                     {
                         <span>Zamkniety</span>
                     }
-                    else if(fault.Status == "In progress")
+                    else if (fault.Status == "In progress")
                     {
                         <span>W trakcie</span>
-                    }</td>
+                    }
+                </td>
                 <td>@fault.Product.ProductID</td>
-                <td>@fault.Product.Name</td>
+                <td class="resultsName">
+                    @fault.Product.Name
+                </td>
                 <td><a asp-controller="Repairs" asp-action="Details" asp-route-id="@fault.FaultId">Przejdü do naprawy</a></td>
             </tr>
+        }
+    </tbody>
+</table>
+<script>
+
+    function searchingEngine() {
+        var tbody, trs, tr, searchByStatus, searchByName, display, i;
+        tbody = document.getElementById("searchBody");
+        trs = tbody.getElementsByTagName("tr");
+
+        searchByStatus = document.forms['search-history'].querySelector("#searchStatus");
+        searchByName = document.forms['search-history'].querySelector("#searchName");
+
+        for (i = 0; i < trs.length; i++) {
+            tr = trs[i];
+            if (
+                checkFilter(tr, searchByStatus, "resultsStatus") &&
+                checkFilter(tr, searchByName, "resultsName")
+            ) {
+                display = "";
             }
-        </tbody>
-    </table>
+            else {
+                display = "none";
+            }
+
+            tr.style.display = display;
+        }
+
+    }
+
+    function checkFilter(tr, input, resultClass) {
+        var inputValue = (input.value || "").toUpperCase();
+        var resultValue = tr.getElementsByClassName(resultClass)[0].textContent.toUpperCase();
+        return resultValue.indexOf(inputValue) > -1;
+    }
+
+    var tbody = document.getElementById("searchBody");
+    var trs = tbody.getElementsByTagName("tr");
+
+    function addHighlight(e) {
+        this.classList.toggle("selected");
+        if (this.className === "selected") {
+            this.style.color = "green";
+        } else {
+            this.style.color = "";
+        }
+
+    }
+
+    for (var i = 0; i < trs.length; i++) {
+        trs[i].addEventListener("click", addHighlight);
+    }
+    var btn = document.getElementById("btn1").addEventListener("click", function (e) {
+        e.preventDefault();
+
+    })
+    class User {
+        constructor(status, name) {
+            this.status = status;
+            this.name = name;
+        }
+    }
+
+</script>

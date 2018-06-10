@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CallCenterService.Models.Fault>
+﻿@model IEnumerable<CallCenterService.Models.Repair>
 @{
     ViewData["Title"] = "Przypisane usterki";
 }
@@ -40,7 +40,9 @@
 <form id="search-faults">
     <p>
         <span class="formUnit">Imię klienta: <input type="text" id="searchClientName" class="searchInput" onkeyup="searchingEngine()" /></span>
-        <span class="formUnit">Nazwisko klienta: <input type="text" id="searchClientSurname" class="searchInput" onkeyup="searchingEngine()" /></span>
+        <span class="formUnit">Nazwisko klienta: <input type="text" id="searchClientSurname" class="searchInput" onkeyup="searchingEngine()" /></span><br />
+        <span class="formUnit">Imię serwisanta: <input type="text" id="searchServicerName" class="searchInput" onkeyup="searchingEngine()" /></span>
+        <span class="formUnit">Nazwisko serwisanta: <input type="text" id="searchServicerSurname" class="searchInput" onkeyup="searchingEngine()" /></span>
 
     </p>
 </form>
@@ -67,7 +69,10 @@
                 Nazwisko klienta
             </th>
             <th>
-                Adres klienta
+                Imie serwisanta
+            </th>
+            <th>
+                Nazwisko serwisanta
             </th>
             <th>
 
@@ -78,63 +83,71 @@
     <tbody id="searchBody">
         @foreach (var item in Model)
         {
-            var clientName = item.Product.Client.FirstName;
-            var clientSurname = item.Product.Client.SecondName;
-            var status = item.Status;
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FaultId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ClientDescription)
-                </td>
-                <td >
-                    @if(item.Status == "Open")
-                    {
-                        <span>Otwarty</span>
-                    }
-                    else if(item.Status == "Done")
-                    {
-                        <span>Zamknięty</span>
-                    }
-                    else if(item.Status == "In progress")
-                    {
-                        <span>W trakcie</span>
-                    }
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ApplicationDate)
-                </td>
-                <td class="resultsclientName">
-                    @Html.DisplayFor(modelItem => item.Product.Client.FirstName)
-                </td>
-                <td class="resultsclientSurname">
-                    @Html.DisplayFor(modelItem => item.Product.Client.SecondName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Product.Client.Street)
-                </td>
-                <td><a asp-action="GoToRepair" asp-route-id="@item.FaultId">Przejdź do naprawy</a></td>
-            </tr>
+            var clientName = item.Fault.Product.Client.FirstName;
+            var clientSurname = item.Fault.Product.Client.SecondName;
+            var servicerName = item.user.FirstName;
+            var servicerSurname = item.user.LastName;
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FaultId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fault.ClientDescription)
+            </td>
+            <td>
+                @if (item.Fault.Status == "Open")
+        {
+            <span>Otwarty</span>
+}
+else if (item.Fault.Status == "Done")
+{
+        <span>Zamknięty</span>
+}
+else if (item.Fault.Status == "In progress")
+{
+        <span>W trakcie</span>
+}
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fault.ApplicationDate)
+            </td>
+            <td class="resultsclientName">
+                @Html.DisplayFor(modelItem => item.Fault.Product.Client.FirstName)
+            </td>
+            <td class="resultsclientSurname">
+                @Html.DisplayFor(modelItem => item.Fault.Product.Client.SecondName)
+            </td>
+            <td class="resultsServicerName">
+                @Html.DisplayFor(modelItem => item.user.FirstName)
+            </td>
+            <td class="resultsServicerSurname">
+                @Html.DisplayFor(modelItem => item.user.LastName)
+            </td>
+            <td><a asp-action="GoToRepair" asp-route-id="@item.FaultId">Przejdź do naprawy</a></td>
+        </tr>
         }
     </tbody>
 </table>
 <script>
 
     function searchingEngine() {
-        var tbody, trs, tr, searchByName, searchBySurname, searchByStatus, display, i;
+        var tbody, trs, tr, searchByName, searchBySurname, searchByServName, searchByServSurname , display, i;
         tbody = document.getElementById("searchBody");
         trs = tbody.getElementsByTagName("tr");
 
         searchByName = document.forms['search-faults'].querySelector("#searchClientName");
         searchBySurname = document.forms['search-faults'].querySelector("#searchClientSurname");
+        searchByServName = document.forms['search-faults'].querySelector("#searchServicerName");
+        searchByServSurname = document.forms['search-faults'].querySelector("#searchServicerSurname");
 
 
         for (i = 0; i < trs.length; i++) {
             tr = trs[i];
             if (
                 checkFilter(tr, searchByName, "resultsclientName") &&
-                checkFilter(tr, searchBySurname, "resultsclientSurname")
+                checkFilter(tr, searchBySurname, "resultsclientSurname") &&
+                checkFilter(tr, searchByServName, "resultsServicerName") &&
+                checkFilter(tr, searchByServSurname, "resultsServicerSurname")
             ) {
                 display = "";
             }
@@ -174,10 +187,14 @@
 
     })
     class User {
-        constructor(clientName, clientSurname) {
+        constructor(clientName, clientSurname, servicerName, servicerSurname) {
             this.clientName = clientName;
             this.clientSurname = clientSurname;
-  
+            this.servicerName = servicerName;
+            this.servicerSurname = servicerSurname;
+
+
+
         }
     }
 

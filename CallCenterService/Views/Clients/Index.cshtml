@@ -40,9 +40,10 @@
 
 <form id="search-clients">
     <p>
-        <span class="formUnit">Imię klienta: <input type="text" id="searchClientName" class="searchInput" onkeyup="searchingEngine()" /></span>
-        <span class="formUnit">Nazwisko klienta: <input type="text" id="searchClientSurname" class="searchInput" onkeyup="searchingEngine()" /></span>
-        <span class="formUnit">Adres klienta : <input type="text" id="searchClientAddres" class="searchInput" onkeyup="searchingEngine()" /></span>
+        <span class="formUnit">Imię: <input type="text" id="searchClientName" class="searchInput" onkeyup="searchingEngine()" /></span>
+        <span class="formUnit">Nazwisko: <input type="text" id="searchClientSurname" class="searchInput" onkeyup="searchingEngine()" /></span>
+        <span class="formUnit">Ulica: <input type="text" id="searchClientAddres" class="searchInput" onkeyup="searchingEngine()" /></span>
+        <span class="formUnit">Miasto: <input type="text" id="searchClientCity" class="searchInput" onkeyup="searchingEngine()" /></span>
 
     </p>
 </form>
@@ -63,12 +64,6 @@
                 Ulica
             </th>
             <th>
-                Numer domu
-            </th>
-            <th>
-                Numer mieszkania
-            </th>
-            <th>
                 Kod pocztowy
             </th>
             <th>
@@ -83,6 +78,8 @@
             var clientName = item.FirstName;
             var clientSurname = item.SecondName;
             var clientAdress = item.Street;
+            var clientCity = item.City;
+
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.ClientId)
@@ -94,18 +91,18 @@
                 @Html.DisplayFor(modelItem => item.SecondName)
             </td>
             <td class="resultsclientAddres">
-                @Html.DisplayFor(modelItem => item.Street)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StreetNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ApartmentNumber)
+              @item.Street @if (item.StreetNumber != null && item.ApartmentNumber != null)
+
+              { @item.StreetNumber<span>/</span>@item.ApartmentNumber; }
+                else if (item.StreetNumber != null && item.ApartmentNumber == null)
+                { @item.StreetNumber;}
+                else if (@item.StreetNumber == null && @item.ApartmentNumber != null)
+                { @item.ApartmentNumber; }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PostCode)
             </td>
-            <td>
+            <td class="resultsclientCity">
                 @Html.DisplayFor(modelItem => item.City)
             </td>
             <td>
@@ -125,20 +122,23 @@
 <script>
 
     function searchingEngine() {
-        var tbody, trs, tr, searchByName, searchBySurname, searchByAddress, display, i;
+        var tbody, trs, tr, searchByName, searchBySurname, searchByAddress, searchByCity, display, i;
         tbody = document.getElementById("searchBody");
         trs = tbody.getElementsByTagName("tr");
 
         searchByName = document.forms['search-clients'].querySelector("#searchClientName");
         searchBySurname = document.forms['search-clients'].querySelector("#searchClientSurname");
         searchByAddress = document.forms['search-clients'].querySelector("#searchClientAddres");
+        searchByCity = document.forms['search-clients'].querySelector("#searchClientCity");
+
 
         for (i = 0; i < trs.length; i++) {
             tr = trs[i];
             if (
                 checkFilter(tr, searchByName, "resultsclientName") &&
                 checkFilter(tr, searchBySurname, "resultsclientSurname") &&
-                checkFilter(tr, searchByAddress, "resultsclientAddres")
+                checkFilter(tr, searchByAddress, "resultsclientAddres")&&
+                checkFilter(tr, searchByCity, "resultsclientCity")
             ) {
                 display = "";
             }
@@ -166,10 +166,12 @@
 
     })
     class User {
-        constructor(clientName, clientSurname, clientAdress) {
+        constructor(clientName, clientSurname, clientAdress, clientCity) {
             this.clientName = clientName;
             this.clientSurname = clientSurname;
             this.clientAdress = clientAdress;
+            this.clientCity = clientCity;
+
         }
     }
 
