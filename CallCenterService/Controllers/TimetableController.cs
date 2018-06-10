@@ -118,23 +118,29 @@ namespace CallCenterService.Controllers
         {
             List<ServicersResource> resources = new List<ServicersResource>();
             var repairs = _context.Repairs.ToList();
-            
-            foreach (var item in repairs)
+            var servicers = _context.Users.ToList();
+
+            foreach (var item in servicers)
             {
-                var specialization = _context.ServicerSpecializations.Include(m => m.Spec).Where(m => m.ServicerId.Equals(item.ServicerId))
+                var roleId = _context.UserRoles.Where(m => m.UserId == item.Id).Select(m => m.RoleId).SingleOrDefault();
+                var role = _context.Roles.Where(m => m.Id == roleId).Select(m => m.Name).SingleOrDefault();
+
+                var specialization = _context.ServicerSpecializations.Include(m => m.Spec).Where(m => m.ServicerId.Equals(item.Id))
                     .Select(m => m.Spec.Type).SingleOrDefault();
-               // var specialization = _context.Specialization.Where(m => m.Id == specId).Select(m => m.Type).SingleOrDefault();
 
-                ServicersResource sr = new ServicersResource
+                if (role == "Serwisant")
                 {
-                    RepairId = item.RepairId,
-                    ServicerId = item.ServicerId,
-                    FirstName = _context.Users.Where(m => m.Id.Equals(item.ServicerId)).Select(m => m.FirstName).SingleOrDefault(),
-                    LastName = _context.Users.Where(m => m.Id.Equals(item.ServicerId)).Select(m => m.LastName).SingleOrDefault(),
-                    Specialization = specialization
-            };
+                    ServicersResource sr = new ServicersResource
+                    {
+                        //RepairId = item.RepairId,
+                        ServicerId = item.Id,
+                        FirstName = _context.Users.Where(m => m.Id.Equals(item.Id)).Select(m => m.FirstName).SingleOrDefault(),
+                        LastName = _context.Users.Where(m => m.Id.Equals(item.Id)).Select(m => m.LastName).SingleOrDefault(),
+                        Specialization = specialization
+                    };
 
-                resources.Add(sr);
+                    resources.Add(sr);
+                }
             }
 
             return new JsonResult(resources);
