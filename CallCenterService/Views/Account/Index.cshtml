@@ -53,8 +53,6 @@
             <th>Imię</th>
             <th>Nazwisko</th>
             <th>Ulica</th>
-            <th>Numer domu</th>
-            <th>Numer mieszkania</th>
             <th>Kod pocztowy</th>
             <th>Miasto</th>
             <th>Email</th>
@@ -74,9 +72,14 @@
                 </td>
                 <td>@user.FirstName</td>
                 <td>@user.LastName</td>
-                <td>@user.Street</td>
-                <td>@user.StreetNumber</td>
-                <td>@user.ApartmentNumber</td>
+                <td>
+                @user.Street @if (@user.StreetNumber != null && @user.ApartmentNumber != null)
+                {  @user.StreetNumber<span>/</span>@user.ApartmentNumber; }
+                else if (@user.StreetNumber != null && @user.ApartmentNumber == null)
+                { @user.StreetNumber}
+                else if (@user.StreetNumber == null && @user.ApartmentNumber != null)
+                { @user.ApartmentNumber; }
+                </td>
                 <td>@user.PostCode</td>
                 <td>@user.City</td>
                 <td class="resultUserEmail">

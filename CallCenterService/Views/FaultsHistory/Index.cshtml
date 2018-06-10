@@ -3,10 +3,44 @@
 @{
     ViewData["Title"] = "Index";
 }
+@section head {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.debug.js" integrity="sha384-CchuzHs077vGtfhGYl9Qtc7Vx64rXBXdIAZIPbItbNyWIRTdG0oYAqki3Ry13Yzu" crossorigin="anonymous"></script>
 
+    <style>
+        @@media print {
+            #search-history {
+                display: none;
+            }
+        }
+
+        /* SEARCH */
+        .searchInput {
+            background-image: url('https://www.w3schools.com/css/searchicon.png '); /* https://www.w3schools.com/css/searchicon.png */
+            background-position: 10px 12px;
+            background-repeat: no-repeat;
+            width: 200px;
+            font-size: 16px;
+            padding: 12px 20px 12px 40px;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+            margin-top: 6px;
+        }
+
+        .formUnit {
+            white-space: nowrap;
+        }
+    </style>
+}
 <h2>Faults History</h2>
 
+<form id="search-history">
+    <p>
+        <span class="formUnit">Status: <input type="text" id="searchStatus" class="searchInput" onkeyup="searchingEngine()" /></span>
+        <span class="formUnit">Data: <input type="text" id="searchDate" class="searchInput" onkeyup="searchingEngine()" /></span>
 
+
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -25,23 +59,80 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClientDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ApplicationDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FaultId)
-            </td>
+    <tbody id="searchBody">
+        @foreach (var item in Model)
+        {
+            var status = item.Status;
+            var date = item.ApplicationDate;
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClientDescription)
+                </td>
+                <td class="resultsStatus">
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td class="resultsDate">
+                    @Html.DisplayFor(modelItem => item.ApplicationDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FaultId)
+                </td>
 
-        </tr>
-}
+            </tr>
+        }
     </tbody>
 </table>
+<script>
+
+    function searchingEngine() {
+        var tbody, trs, tr, searchByStatus, searchByDate, display, i;
+        tbody = document.getElementById("searchBody");
+        trs = tbody.getElementsByTagName("tr");
+
+        searchByStatus = document.forms['search-history'].querySelector("#searchStatus");
+        searchByDate = document.forms['search-history'].querySelector("#searchDate");
+
+
+
+        for (i = 0; i < trs.length; i++) {
+            tr = trs[i];
+            if (
+                checkFilter(tr, searchByStatus, "resultsStatus") &&
+                checkFilter(tr, searchByDate, "resultsDate")
+
+
+            ) {
+                display = "";
+            }
+            else {
+                display = "none";
+            }
+
+            tr.style.display = display;
+        }
+
+    }
+
+    function checkFilter(tr, input, resultClass) {
+        var inputValue = (input.value || "").toUpperCase();
+        var resultValue = tr.getElementsByClassName(resultClass)[0].textContent.toUpperCase();
+        return resultValue.indexOf(inputValue) > -1;
+    }
+
+    var tbody = document.getElementById("searchBody");
+    var trs = tbody.getElementsByTagName("tr");
+
+
+    var btn = document.getElementById("btn1").addEventListener("click", function (e) {
+        e.preventDefault();
+
+    })
+    class User {
+        constructor(status, date) {
+            this.status = status;
+            this.date = date;
+
+        }
+    }
+
+</script>

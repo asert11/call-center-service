@@ -62,7 +62,7 @@
     <p>
         <span class="formUnit">Imię klienta: <input type="text" id="searchClientName" class="searchInput" onkeyup="searchingEngine()" /></span>
         <span class="formUnit">Nazwisko klienta: <input type="text" id="searchClientSurname" class="searchInput" onkeyup="searchingEngine()" /></span>
-        <span class="formUnit">Adres klienta : <input type="text" id="searchClientAddres" class="searchInput" onkeyup="searchingEngine()" /></span>
+        <span class="formUnit">Ulica klienta: <input type="text" id="searchClientAddres" class="searchInput" onkeyup="searchingEngine()" /></span>
 
     </p>
 </form>
@@ -89,6 +89,12 @@
             </th>
             <th>
                 Adres klienta
+            </th>            
+            <th>
+                Kod pocztowy
+            </th>
+            <th>
+                Miasto
             </th>
             <th></th>
         </tr>
@@ -100,50 +106,61 @@
             var clientSurname = item.Product.Client.SecondName;
             var clientAdress = item.Product.Client.Street;
 
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FaultId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ClientDescription)
-                </td>
-                <td>
-                    @if(item.Status == "Open")
-                    {
-                        <span>Otwarty</span>
-                    }
-                    else if(item.Status == "Done")
-                    {
-                        <span>Zamknięty</span>
-                    }
-                    else if(item.Status == "In progress")
-                    {
-                        <span>W trakcie</span>
-                    }
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ApplicationDate)
-                </td>
-                <td class="resultsclientName">
-                    @Html.DisplayFor(modelItem => item.Product.Client.FirstName)
-                </td>
-                <td class="resultsclientSurname">
-                    @Html.DisplayFor(modelItem => item.Product.Client.SecondName)
-                </td>
-                <td class="resultsclientAddres">
-                    @Html.DisplayFor(modelItem => item.Product.Client.Street)
-                </td>
-                <td>
-                    <a asp-action="SetServicer" asp-route-id="@item.FaultId">Dodaj serwisanta</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FaultId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientDescription)
+            </td>
+            <td>
+                @if (item.Status == "Open")
+        {
+            <span>Otwarty</span>
+}
+else if (item.Status == "Done")
+{
+        <span>Zamknięty</span>
+}
+else if (item.Status == "In progress")
+{
+        <span>W trakcie</span>
+}
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicationDate)
+            </td>
+            <td class="resultsclientName">
+                @Html.DisplayFor(modelItem => item.Product.Client.FirstName)
+            </td>
+            <td class="resultsclientSurname">
+                @Html.DisplayFor(modelItem => item.Product.Client.SecondName)
+            </td>
+            <td class="resultsclientAddres">
+                  @item.Product.Client.Street @if (item.Product.Client.StreetNumber != null && item.Product.Client.ApartmentNumber != null)
+              { @item.Product.Client.StreetNumber<span>/</span>@item.Product.Client.ApartmentNumber; }
+                else if (@item.Product.Client.StreetNumber != null && @item.Product.Client.ApartmentNumber == null)
+                { @item.Product.Client.StreetNumber;}
+                else if (@item.Product.Client.StreetNumber == null && @item.Product.Client.ApartmentNumber != null)
+                { @item.Product.Client.ApartmentNumber; }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Client.PostCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Client.City)
+            </td>
+            <td>
+                <a asp-action="SetServicer" asp-route-id="@item.FaultId">Dodaj serwisanta</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>
 <script>
 
     function searchingEngine() {
-        var tbody, trs, tr, searchByName, searchBySurname, searchByAddress, display, i;
+        var tbody, trs, tr, searchByName, searchBySurname, searchByAddress,  display, i;
         tbody = document.getElementById("searchBody");
         trs = tbody.getElementsByTagName("tr");
 
@@ -178,7 +195,19 @@
     var tbody = document.getElementById("searchBody");
     var trs = tbody.getElementsByTagName("tr");
 
-   
+    function addHighlight(e) {
+        this.classList.toggle("selected");
+        if (this.className === "selected") {
+            this.style.color = "green";
+        } else {
+            this.style.color = "";
+        }
+
+    }
+
+    for (var i = 0; i < trs.length; i++) {
+        trs[i].addEventListener("click", addHighlight);
+    }
     var btn = document.getElementById("btn1").addEventListener("click", function (e) {
         e.preventDefault();
 
@@ -188,6 +217,7 @@
             this.clientName = clientName;
             this.clientSurname = clientSurname;
             this.clientAdress = clientAdress;
+
         }
     }
 
