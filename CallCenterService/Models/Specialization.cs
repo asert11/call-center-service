@@ -11,8 +11,5 @@ namespace CallCenterService.Models
 
         [Required]
         public String Type { get; set; }
-
-        [NotMapped]
-        public bool Checked { get; set; }
     }
 }

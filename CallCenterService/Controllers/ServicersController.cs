@@ -87,10 +87,11 @@ namespace CallCenterService.Controllers
 
             foreach(var spec in vm.Specializations)
             {
-                if (_dbContext.ServicerSpecializations.FirstOrDefault(x => x.ServicerId == user.Id && x.Spec == spec) == null)
-                    spec.Checked = false;
-                else
-                    spec.Checked = true;
+                if (_dbContext.ServicerSpecializations.FirstOrDefault(x => x.ServicerId == user.Id && x.Spec == spec) != null)
+                    vm.SpecId = spec.Id;
+                    //spec.Checked = false;
+                //else
+                    //spec.Checked = true;
             }
 
             return View(vm);
@@ -132,28 +133,25 @@ namespace CallCenterService.Controllers
             using (var transaction = _dbContext.Database.BeginTransaction())
             {
                 foreach (var spec in servicerSpecializations)
-                {
-                    foreach (var item in vm.Specializations)
+                { 
+                    if (spec.Spec.Id != vm.SpecId)
                     {
-                        if (spec.Spec.Id == item.Id && item.Checked == false)
+                        history = new EventHistory
                         {
-                            history = new EventHistory
-                            {
-                                Date = DateTime.Now,
-                                UserId = loggedUser.Id,
-                                Operation = "delete servicer specialization",
-                                Table = "ServicerSpecializations",
-                                Description = "Id{" + spec.Id + "} " +
-                                      "ServicerId{" + spec.ServicerId + "} " +
-                                      "SpecId{" + spec.Spec.Id + "}"
-                            };
+                            Date = DateTime.Now,
+                            UserId = loggedUser.Id,
+                            Operation = "delete servicer specialization",
+                            Table = "ServicerSpecializations",
+                            Description = "Id{" + spec.Id + "} " +
+                                    "ServicerId{" + spec.ServicerId + "} " +
+                                    "SpecId{" + spec.Spec.Id + "}"
+                        };
 
-                            _dbContext.EventHistory.Add(history);
-                            _dbContext.ServicerSpecializations.Remove(spec);
-                            _dbContext.SaveChanges();
+                        _dbContext.EventHistory.Add(history);
+                        _dbContext.ServicerSpecializations.Remove(spec);
+                        _dbContext.SaveChanges();
 
-                            break;
-                        }
+                        break;
                     }
                 }
 
@@ -181,25 +179,22 @@ namespace CallCenterService.Controllers
                 servicerSpecializations = _dbContext.ServicerSpecializations
                 .Include(m => m.Spec).Where(x => x.ServicerId == user.Id).ToList();
 
-                foreach (var item in vm.Specializations)
+                bool add = true;
+
+                foreach (var spec in servicerSpecializations)
                 {
-                    bool add = true;
-
-                    foreach (var spec in servicerSpecializations)
+                    if (spec.Spec.Id == vm.SpecId)
                     {
-                        if (spec.Spec.Id == item.Id && item.Checked == true)
-                        {
-                            add = false;
-                            break;
-                        }
+                        add = false;
+                        break;
                     }
+                }
 
-                    if (add && item.Checked)
+                if (add)
+                {
+                    var spec = _dbContext.Specialization.Where(x => x.Id == vm.SpecId).FirstOrDefault();
+                    if (spec != null)
                     {
-                        var spec = _dbContext.Specialization.Where(x => x.Id == item.Id).FirstOrDefault();
-                        if (spec == null)
-                            continue;
-
                         var data = new ServicerSpecializations
                         {
                             ServicerId = user.Id,
@@ -216,8 +211,8 @@ namespace CallCenterService.Controllers
                             Operation = "add servicer specialization",
                             Table = "ServicerSpecializations",
                             Description = "Id{" + data.Id + "} " +
-                                      "ServicerId{" + data.ServicerId + "} " +
-                                      "SpecId{" + data.Spec.Id + "}"
+                                        "ServicerId{" + data.ServicerId + "} " +
+                                        "SpecId{" + data.Spec.Id + "}"
                         };
 
                         _dbContext.EventHistory.Add(history);

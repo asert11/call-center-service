@@ -17,5 +17,7 @@ namespace CallCenterService.ViewModels
         public string LastName { get; set; }
 
         public List<Specialization> Specializations { get; set; }
+
+        public int SpecId { get; set; }
     }
 }
