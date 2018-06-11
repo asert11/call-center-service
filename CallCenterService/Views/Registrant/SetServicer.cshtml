@@ -43,6 +43,7 @@
 <form asp-controller="Registrant" asp-action="SetServicer">
     <input asp-for="FaultId" type="hidden" />
     <div><input type="submit" value="Przypisz serwisanta" /></div>
+    <br />
     <table class="table">
         <thead>
             <tr>
@@ -55,9 +56,9 @@
                 <th>
                     Nazwisko
                 </th>
-                <th>
+                @*<th>
                     Specjalizacja
-                </th>
+                </th>*@
                 <th>
 
                 </th>
@@ -77,9 +78,9 @@
                 <td class="resultsServicerSurname">
                     @servicer.LastName
                 </td>
-                <td class="resultsServicerSpec">
+                @*<td class="resultsServicerSpec">
                     @servicer.Specialization
-                </td>
+                </td>*@
                 <td><input asp-for="ServicerId" value="@servicer.Id" type="radio" /></td>
             </tr>
     }
