@@ -1,7 +1,7 @@
 ﻿@model CallCenterService.ViewModels.LoginViewModel
 
 @section head  {
-    <link rel="stylesheet" href="~/css/loginView.css">
+    <link rel="stylesheet" href="~/css/loginPage.css">
 }
 
 @*
@@ -31,24 +31,20 @@
             </form>
     </div>*@
     <div class="container" id="LoginPanel">
-        <img alt="error" src="~/images/logo.png">
+        <img alt="error" src="~/images/logo2.png">
         <form method="post" asp-controller="Account" asp-action="Login">
             <br>
             <div class="form-group">
-                <label class="control-label col-sm-2" for="username"><span class="glyphicon glyphicon-user"></span></label>
-
-                <label asp-for="UserName">Login:</label>
-                <input asp-for="UserName" />
+                <label class="control-label col-sm-2" for="username"></label>
+                <input asp-for="UserName"value="Wpisz login..." onfocus="if(this.value=='' || this.value == 'Wpisz login...') this.value=''" onblur="if(this.value == '') {this.value=this.defaultValue}" onkeyup="keyUp();" type="text" />
                 <br>
                 <span asp-validation-for="UserName"></span>
                 <br>
             </div>
 
             <div class="form-group">
-                <label class="control-label col-sm-2" for="password"><span class="glyphicon glyphicon-briefcase"></span></label>
-
-                <label asp-for="Password">Hasło:</label>
-                <input asp-for="Password" />
+                <label class="control-label col-sm-2" for="password"></label>
+                <input asp-for="Password" value="Wpisz hasło..." onfocus="if(this.value=='' || this.value == 'Wpisz hasło...') this.value=''" onblur="if(this.value == '') {this.value=this.defaultValue}" onkeyup="keyUp();" type="password" />
                 <br>
                 <span asp-validation-for="Password"></span>
                 <br>
@@ -56,8 +52,7 @@
             </div>
             <div>
                 <label asp-for="RememberMe">Zapamiętaj mnie:</label>
-                <input asp-for="RememberMe" />
-
+                <input asp-for="RememberMe" id="RememberMe"/>
                 <span asp-validation-for="RememberMe"></span>
             </div>
             <br/>
