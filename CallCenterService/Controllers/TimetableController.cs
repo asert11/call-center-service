@@ -114,11 +114,16 @@ namespace CallCenterService.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetServicersAsResources()
+        public async Task<IActionResult> GetServicersAsResources()
         {
             List<ServicersResource> resources = new List<ServicersResource>();
             var repairs = _context.Repairs.ToList();
             var servicers = _context.Users.ToList();
+
+            ApplicationUser usr = await _userManager.GetUserAsync(HttpContext.User);
+            string id = usr?.Id;
+            var userRoleId = _context.UserRoles.Where(m => m.UserId == id).Select(m => m.RoleId).SingleOrDefault();
+            var userRole = _context.Roles.Where(m => m.Id == userRoleId).Select(m => m.Name).SingleOrDefault();
 
             foreach (var item in servicers)
             {
@@ -130,16 +135,31 @@ namespace CallCenterService.Controllers
 
                 if (role == "Serwisant")
                 {
-                    ServicersResource sr = new ServicersResource
+                    if (userRole == "Serwisant")
                     {
-                        //RepairId = item.RepairId,
-                        ServicerId = item.Id,
-                        FirstName = _context.Users.Where(m => m.Id.Equals(item.Id)).Select(m => m.FirstName).SingleOrDefault(),
-                        LastName = _context.Users.Where(m => m.Id.Equals(item.Id)).Select(m => m.LastName).SingleOrDefault(),
-                        Specialization = specialization
-                    };
-
-                    resources.Add(sr);
+                        ServicersResource sr = new ServicersResource
+                        {
+                            //RepairId = item.RepairId,
+                            ServicerId = id,
+                            FirstName = usr?.FirstName,
+                            LastName = usr?.LastName,
+                            Specialization = _context.ServicerSpecializations.Include(m => m.Spec).Where(m => m.ServicerId.Equals(id))
+                                .Select(m => m.Spec.Type).SingleOrDefault()
+                         };
+                        resources.Add(sr);
+                    }
+                    else
+                    {
+                        ServicersResource sr = new ServicersResource
+                        {
+                            //RepairId = item.RepairId,
+                            ServicerId = item.Id,
+                            FirstName = _context.Users.Where(m => m.Id.Equals(item.Id)).Select(m => m.FirstName).SingleOrDefault(),
+                            LastName = _context.Users.Where(m => m.Id.Equals(item.Id)).Select(m => m.LastName).SingleOrDefault(),
+                            Specialization = specialization
+                        };
+                        resources.Add(sr);
+                    }
                 }
             }
 

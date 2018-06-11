@@ -37,7 +37,7 @@ namespace CallCenterService.Controllers
             else if (role.Contains("Rejestrujący"))
                 return RedirectToAction("Index", "Registrant");
 
-            return View();
+            return RedirectToAction("Index", "TimetableController");
         }
 
         [HttpGet]
