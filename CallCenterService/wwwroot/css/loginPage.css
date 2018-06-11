@@ -1,0 +1,92 @@
+﻿body {
+    margin: 0 auto;
+    background: linear-gradient(to top right, #ffffcc 16%, #003366 100%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100vw;
+    min-height: 100vh;
+}
+
+hr, footer {
+    display: none;
+}
+
+#LoginPanel {
+    width: 430px;
+    min-height: 490px;
+    text-align: center;
+    background-color: rgba(240,248,255, 0.4);
+    border-radius: 4px;
+    margin: 0 auto;
+    margin-top: 5vh;
+    border-radius: 5px;
+}
+
+    #LoginPanel img {
+        width: 300px;
+        height: 200px;
+        margin-top: 5px;
+        margin-bottom: 0px;
+    }
+
+    #LoginPanel input[type="text"], input[type="password"] {
+        height: 45px;
+        width: 300px;
+        font-size: 18px;
+        margin-left: -200px;
+        margin-right: -100px;
+        margin-bottom: 5px;
+        margin-top: -20px;
+        padding-left: 10px;
+        padding-right: 0px;
+        border: 10px;
+        border-radius: 20px;
+        border-right: #FFFFFF 1px solid;
+        border-top: #FFFFFF 1px solid;
+        border-bottom: #FFFFFF 1px solid;
+        border-left: #FFFFFF 1px solid;
+        background-color: rgba(255, 255, 255, 0.3);
+    }
+
+
+    #LoginPanel input[id="RememberMe"] {
+        margin-bottom: 12px;
+        margin-top: -30px;
+        margin-left: -50px;
+    }
+
+
+    #LoginPanel span {
+        position: absolute;
+        left: 20px;
+        font-size: 30px;
+        color: black;
+        margin-top: 16px;
+    }
+
+    #LoginPanel label {
+        margin-right: 50px;
+        font-size: 15px;
+    }
+
+        #LoginPanel span.field-validation-error {
+            position: static;
+            font-size: 20px;
+            color: darkred;
+            margin-top: 22px;
+        }
+
+    #LoginPanel input[type="submit"] {
+        border: 10px;
+        border-radius: 20px;
+        border-right: #FFFFFF 1px solid;
+        border-top: #FFFFFF 1px solid;
+        border-bottom: #FFFFFF 1px solid;
+        border-left: #FFFFFF 1px solid;
+        background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    #LoginPanel a {
+        margin-right: 10px;
+    }
+
