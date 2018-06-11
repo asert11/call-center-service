@@ -28,6 +28,11 @@ namespace CallCenterService
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
 
+            //foreach (var f in new DirectoryInfo(@"...").GetFiles("*.cshtml", SearchOption.AllDirectories))
+            //{
+            //    string s = File.ReadAllText(f.FullName);
+            //    File.WriteAllText(f.FullName, s, Encoding.UTF8);
+            //}
         }
 
         public IConfigurationRoot Configuration { get; }

@@ -1,4 +1,4 @@
-@model IEnumerable<CallCenterService.Models.EventHistory>
+ï»¿@model IEnumerable<CallCenterService.Models.EventHistory>
 
 @{
     ViewData["Title"] = "Index";
@@ -51,7 +51,7 @@
                 Operacja
             </th>
             <th>
-                Modyfikacji dokona³
+                Modyfikacji dokonaï¿½
             </th>
             <th>
                 Stan bazy po zmianie
@@ -74,71 +74,71 @@
                 @{
             if (item.Operation == "add user")
             {
-                @:Dodano u¿ytkownika
+                @:Dodano uï¿½ytkownika
     }
     else if (item.Operation == "edit user")
     {
-        @:Edytowano u¿ytkownika
+        @:Edytowano uï¿½ytkownika
 }
 else if (item.Operation == "delete user")
 {
-        @:Usuniêto u¿ytkownika
+        @:Usuniï¿½to uï¿½ytkownika
 }
 else if (item.Operation == "add user role")
 {
-        @:Dodano rolê u¿ytkownikowi
+        @:Dodano rolï¿½ uï¿½ytkownikowi
 }
 else if (item.Operation == "edit user role")
 {
-        @:Edytowano rolê u¿ytkonika
+        @:Edytowano rolï¿½ uï¿½ytkonika
 }
 else if (item.Operation == "delete user role")
 {
-        @:Usuniêto rolê u¿ytkownika
+        @:Usuniï¿½to rolï¿½ uï¿½ytkownika
 }
 else if (item.Operation == "add fault")
 {
-        @:Dodano usterkê
+        @:Dodano usterkï¿½
 }
 else if (item.Operation == "edit fault")
 {
-        @:Edytowano usterkê
+        @:Edytowano usterkï¿½
 }
 else if (item.Operation == "delete fault")
 {
-        @:Usuniêto usterkê
+        @:Usuniï¿½to usterkï¿½
 }
 else if (item.Operation == "add repair")
 {
-        @:Dodano naprawê
+        @:Dodano naprawï¿½
 }
 else if (item.Operation == "edit repair")
 {
-        @:Edytowano naprawê
+        @:Edytowano naprawï¿½
 }
 else if (item.Operation == "delete repair")
 {
-        @:Usuniêto naprawê
+        @:Usuniï¿½to naprawï¿½
 }
 else if (item.Operation == "add servicer specialization")
 {
-        @:Dodano specjalizacjê serwisantowi
+        @:Dodano specjalizacjï¿½ serwisantowi
 }
 else if (item.Operation == "delete servicer specialization")
 {
-        @:Usuniêto specjalizacjê serwisantowi
+        @:Usuniï¿½to specjalizacjï¿½ serwisantowi
 }
 else if (item.Operation == "add specialization")
 {
-        @:Dodano specjalizacjê
+        @:Dodano specjalizacjï¿½
 }
 else if (item.Operation == "edit specialization")
 {
-        @:Edytowano specializacjê
+        @:Edytowano specializacjï¿½
 }
 else if (item.Operation == "delete specialization")
 {
-        @:Usuniêto specjalizacjê
+        @:Usuniï¿½to specjalizacjï¿½
 }
 else if (item.Operation == "add product")
 {
@@ -150,7 +150,7 @@ else if (item.Operation == "edit product")
 }
 else if (item.Operation == "delete product")
 {
-        @:Usuniêto produkt
+        @:Usuniï¿½to produkt
 }
 else if (item.Operation == "add client")
 {
@@ -162,7 +162,7 @@ else if (item.Operation == "edit client")
 }
 else if (item.Operation == "delete client")
 {
-        @:Usuniêto klienta
+        @:Usuniï¿½to klienta
 }
                 }
             </td>
